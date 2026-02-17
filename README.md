@@ -10,7 +10,7 @@ The platform analyzes developers’ GitHub activity and project data to automati
 ---
 
 ## 👥 Team Members
-- Hasfa Tarek  
+- Hafsa Tarek  
 - Mennatullah Ahmed  
-- Mennat'allah Fathii  
+- Mennatullah Fathii  
 - Mariam Gad  
