@@ -26,11 +26,8 @@ The goal is to reduce the time and effort needed to write strong portfolio secti
 #### 1) UX/UI & Product Design
 - Apply **Design Thinking** to define the problem, users, and solution direction.
 - Create:
-  - User personas (junior dev, job seeker, bootcamp grad)
-  - User journey + main flows
-  - Wireframes (low → mid fidelity)
+  - High Fidelity Wireframes
   - Basic style guide  (colors, typography, components)
-  - Accessibility basics (contrast, keyboard focus states, readable typography).
 
 #### 2) Core Frontend (React + Hooks)
 - React app with a **multi-step portfolio builder** form:
