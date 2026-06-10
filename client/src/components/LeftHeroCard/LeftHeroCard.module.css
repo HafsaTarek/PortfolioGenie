@@ -1,0 +1,52 @@
+.heroCard {
+  flex: 1;
+  background: var(--gradient-primary);
+  color: var(--white);
+  padding: var(--spacing-2xl);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.titleArea h2 {
+  margin-bottom: var(--spacing-3xl);
+}
+
+.featureList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-2xl);
+}
+
+.featureItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+}
+
+.checkIcon {
+  background: rgba(251, 243, 255, 0.2);
+  border-radius: var(--radius-full);
+  padding: var(--spacing-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--caption-size);
+  color: var(--white);
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.featureText h4 {
+  font-size: var(--body-size);
+  font-weight: var(--fw-semibold);
+  margin-bottom: var(--spacing-xs);
+}
+
+.featureText p {
+  font-size: var(--caption-size);
+  color: var(--gray-2);
+  line-height: var(--caption-line-height);
+}
