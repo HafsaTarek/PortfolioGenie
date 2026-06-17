@@ -1,16 +1,25 @@
-# React + Vite
+# Follow these simple steps to get the exact frontend branch running on your machine:
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### 1. Download and Switch to the Frontend Branch
+Open your terminal in your main workspace folder and run:
 
-Currently, two official plugins are available:
+```bash
+# 1. Clone the project
+git clone [https://github.com/HafsaTarek/PortfolioGenie.git](https://github.com/HafsaTarek/PortfolioGenie.git)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+# 2. Go into the project folder
+cd PortfolioGenie
 
-## React Compiler
+# 3. Switch to the frontend branch
+git checkout frontend
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## Expanding the ESLint configuration
+# ▶️ Running The Project
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Frontend
+
+```bash
+cd client
+npm install
+npm run dev
+```
