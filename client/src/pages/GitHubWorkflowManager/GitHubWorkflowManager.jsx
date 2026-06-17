@@ -59,14 +59,15 @@ export default function GitHubWorkflowManager() {
                 <p className="body-text text-muted mb-4 px-md-4">
                   Connect your GitHub account to import your projects and start building your professional portfolio in minutes.
                 </p>
-                <div className="d-grid gap-3 max-w-sm mx-auto" style={{ maxWidth: '400px' }}>
-                  <CTAButton variant="primary" size="large" fullWidth onClick={() => setCurrentStep('loading')}>
+                <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center mb-4">
+                  <CTAButton variant="primary" size="medium" onClick={() => setCurrentStep('loading')}>
                     Connect Github account
                   </CTAButton>
-                  <CTAButton variant="outline" size="large" fullWidth onClick={() => setCurrentStep('step2')}>
+                  <CTAButton variant="outline" size="medium" onClick={() => setCurrentStep('step2')}>
                     Skip for now
                   </CTAButton>
                 </div>
+
                 <p className="caption-text text-black-50 mt-4">
                   We'll only access your public repositories
                 </p>
@@ -93,10 +94,6 @@ export default function GitHubWorkflowManager() {
                   <div className="d-flex align-items-center gap-3">
                     <span>{loadingTicks.repos ? '✅' : '🔄'}</span>
                     <span className={loadingTicks.repos ? 'text-dark fw-medium' : 'text-muted'}>Importing repositories</span>
-                  </div>
-                  <div className="d-flex align-items-center gap-3">
-                    <span>{loadingTicks.patterns ? '✅' : '🔄'}</span>
-                    <span className={loadingTicks.patterns ? 'text-dark fw-medium' : 'text-muted'}>Analyzing code patterns</span>
                   </div>
                 </div>
               </div>
