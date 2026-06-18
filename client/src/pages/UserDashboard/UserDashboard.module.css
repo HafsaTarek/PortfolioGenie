@@ -1,0 +1,441 @@
+.dashboardPage {
+  min-height: 100vh;
+  padding: var(--spacing-xl) var(--spacing-md) var(--spacing-2xl);
+  background-color: #f4f7fb;
+}
+
+.pageContainer {
+  max-width: 1320px;
+  margin: 0 auto;
+}
+
+.navBar {
+  width: 100%;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.navBrand {
+  display: flex;
+  align-items: center;
+}
+
+.logoImage {
+  display: block;
+  width: auto;
+  height: auto;
+  max-height: 48px;
+  object-fit: contain;
+}
+
+.chartContainer {
+  min-height: 320px;
+  width: 100%;
+}
+
+.navLinks {
+  gap: var(--spacing-lg);
+}
+
+.navLink {
+  color: var(--gray-5);
+  text-decoration: none;
+  font-size: var(--body-size);
+  transition: color var(--transition-normal);
+}
+
+.navLink:hover,
+.navLink:focus-visible {
+  color: var(--primary-blue);
+}
+
+.userBlock {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-lg);
+  background: var(--gray-1);
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  background: var(--primary-blue);
+  color: var(--white);
+  display: grid;
+  place-items: center;
+  font-weight: var(--fw-bold);
+}
+
+.username {
+  font-weight: var(--fw-semibold);
+  color: var(--text-color);
+}
+
+.userRole {
+  font-size: var(--small-size);
+  color: var(--gray-5);
+}
+
+.mainContent {
+  margin-top: var(--spacing-2xl);
+}
+
+.heroSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding: var(--spacing-2xl) var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, rgba(37, 99, 235, 0.08), transparent 100%);
+  box-shadow: var(--shadow-sm);
+}
+
+.smallTitle {
+  font-size: var(--small-size);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--primary-blue);
+  margin-bottom: var(--spacing-sm);
+}
+
+.pageTitle {
+  font-size: clamp(2rem, 2.5vw, 3rem);
+  line-height: 1.05;
+  font-weight: var(--fw-bold);
+  color: var(--text-color);
+  margin-bottom: var(--spacing-sm);
+}
+
+.pageSubtitle {
+  max-width: 720px;
+  font-size: var(--body-size);
+  color: var(--gray-5);
+}
+
+.gridSection {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-2xl);
+}
+
+.card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: var(--spacing-lg);
+  border: 1px solid rgba(15, 23, 42, 0.05);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.cardTitle {
+  font-size: var(--h5-size);
+  font-weight: var(--fw-semibold);
+}
+
+.cardMeta {
+  font-size: var(--small-size);
+  color: var(--gray-5);
+}
+
+.statsCard {
+  grid-column: 1 / -1;
+}
+
+.statGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--spacing-md);
+}
+
+.statItem {
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  background: var(--gray-1);
+  text-align: center;
+}
+
+.statValue {
+  display: block;
+  font-size: 2rem;
+  font-weight: var(--fw-bold);
+  color: var(--text-color);
+  margin-bottom: var(--spacing-xs);
+}
+
+.statLabel {
+  color: var(--gray-5);
+  font-size: var(--small-size);
+}
+
+.chartCard,
+.analyticsCard,
+.progressCard {
+  min-height: 320px;
+}
+
+.chartPlaceholder {
+  position: relative;
+  min-height: 260px;
+  display: grid;
+  place-items: center;
+  padding: var(--spacing-md);
+  background: linear-gradient(180deg, rgba(37, 99, 235, 0.06), rgba(255, 255, 255, 0.85));
+  border-radius: var(--radius-md);
+}
+
+.radarCircle {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  border: 2px dashed rgba(37, 99, 235, 0.35);
+  box-shadow: inset 0 0 0 6px rgba(37, 99, 235, 0.08);
+}
+
+.radarRing {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 1px solid rgba(37, 99, 235, 0.18);
+}
+
+.radarLabel {
+  position: absolute;
+  bottom: var(--spacing-md);
+  font-size: var(--small-size);
+  color: var(--gray-5);
+}
+
+.areaPlaceholder {
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+}
+
+.areaGraph {
+  height: 180px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(180deg, rgba(37, 99, 235, 0.18) 0%, rgba(37, 99, 235, 0.02) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.areaGraph::before,
+.areaGraph::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 26px;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.45), rgba(37, 99, 235, 0.05));
+  transform: skewX(-20deg);
+  border-radius: 50%;
+}
+
+.areaGraph::before {
+  top: 28px;
+}
+
+.areaGraph::after {
+  bottom: 36px;
+  width: 55%;
+  left: 18%;
+}
+
+.areaLegend {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.areaLegend span {
+  width: 60px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.3);
+}
+
+.progressBody {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: var(--spacing-lg);
+  align-items: center;
+  min-height: 260px;
+}
+
+.progressCircle {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: conic-gradient(rgba(37, 99, 235, 0.75) 0 89%, rgba(37, 99, 235, 0.12) 89% 100%);
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+
+.progressCircle::before {
+  content: '';
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: var(--white);
+}
+
+.progressValue {
+  position: absolute;
+  font-size: 1.8rem;
+  font-weight: var(--fw-bold);
+  color: var(--text-color);
+}
+
+.checklist {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: var(--spacing-sm);
+}
+
+.checkItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--gray-5);
+  font-weight: var(--fw-medium);
+}
+
+.checkMark {
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  background: rgba(16, 185, 129, 0.12);
+  color: var(--light-success);
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+}
+
+.projectsSection {
+  margin-top: var(--spacing-2xl);
+}
+
+.sectionHeader {
+  margin-bottom: var(--spacing-lg);
+}
+
+.sectionTitle {
+  margin-bottom: var(--spacing-xs);
+  font-size: var(--h4-size);
+  font-weight: var(--fw-semibold);
+}
+
+.sectionSubtitle {
+  color: var(--gray-5);
+  font-size: var(--body-size);
+}
+
+.projectsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.projectCard {
+  display: grid;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-lg);
+  background: var(--white);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(15, 23, 42, 0.05);
+}
+
+.projectThumb {
+  min-height: 120px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.15), rgba(15, 23, 42, 0.08));
+}
+
+.projectBody {
+  display: grid;
+  gap: var(--spacing-xs);
+}
+
+.projectTitle {
+  font-size: var(--body-size);
+  font-weight: var(--fw-semibold);
+  color: var(--text-color);
+}
+
+.projectDate {
+  color: var(--gray-5);
+  font-size: var(--small-size);
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-size: var(--caption-size);
+  font-weight: var(--fw-semibold);
+  width: fit-content;
+}
+
+.badgeLive {
+  background: rgba(16, 185, 129, 0.12);
+  color: #047857;
+}
+
+.badgeReview {
+  background: rgba(251, 191, 36, 0.12);
+  color: #92400e;
+}
+
+.badgeDraft {
+  background: rgba(59, 130, 246, 0.12);
+  color: #1d4ed8;
+}
+
+@media (max-width: 1199px) {
+  .projectsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .navBar {
+    padding: var(--spacing-md);
+  }
+
+  .navLinks {
+    display: none !important;
+  }
+
+  .gridSection {
+    grid-template-columns: 1fr;
+  }
+
+  .progressBody {
+    grid-template-columns: 1fr;
+  }
+
+  .projectsGrid {
+    grid-template-columns: 1fr;
+  }
+}
