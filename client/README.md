@@ -5,7 +5,7 @@ Open your terminal in your main workspace folder and run:
 
 ```bash
 # 1. Clone the project
-git clone [https://github.com/HafsaTarek/PortfolioGenie.git](https://github.com/HafsaTarek/PortfolioGenie.git)
+git clone https://github.com/HafsaTarek/PortfolioGenie.git
 
 # 2. Go into the project folder
 cd PortfolioGenie
