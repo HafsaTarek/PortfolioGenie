@@ -1,5 +1,6 @@
 import { Area, AreaChart, CartesianGrid, Legend, PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import styles from './UserDashboard.module.css';
+import CTAButton from '../../components/shared/button/CTAButton';
 
 const stats = [
   { label: 'Repositories', value: '34' },
@@ -51,28 +52,28 @@ const statusClass = (status) => {
 
 export default function UserDashboard() {
   return (
-    <div className={`${styles.dashboardPage} bg-light`}> 
-      <div className={`${styles.pageContainer} container-fluid`}> 
-        <header className={`${styles.navBar} d-flex align-items-center justify-content-between flex-wrap`}> 
+    <div className={`${styles.dashboardPage} bg-light`}>
+      <div className={`${styles.pageContainer} container-fluid`}>
+        {/* <header className={`${styles.navBar} d-flex align-items-center justify-content-between flex-wrap`}>
           <div className={styles.navBrand}>
-           <img src="/portfolio-genie-logo.svg" alt="Portfolio Genie" />
+            <img src="/portfolio-genie-logo.svg" alt="Portfolio Genie" />
           </div>
 
-          <nav className={`${styles.navLinks} d-none d-md-flex align-items-center`}> 
+          <nav className={`${styles.navLinks} d-none d-md-flex align-items-center`}>
             <a href="#features" className={styles.navLink}>Features</a>
             <a href="#how-it-works" className={styles.navLink}>How It Works</a>
             <a href="#connect" className={styles.navLink}>Connect to GitHub</a>
             <a href="#portfolio" className={styles.navLink}>Portfolio</a>
           </nav>
 
-          <div className={`${styles.userBlock} d-flex align-items-center gap-2`}> 
+          <div className={`${styles.userBlock} d-flex align-items-center gap-2`}>
             <div className={styles.avatar}>S</div>
             <div>
               <div className={styles.username}>Sarah Williams</div>
               <div className={styles.userRole}>Product Designer</div>
             </div>
           </div>
-        </header>
+        </header> */}
 
         <main className={styles.mainContent}>
           <section className={styles.heroSection}>
@@ -86,7 +87,7 @@ export default function UserDashboard() {
           </section>
 
           <section className={styles.gridSection}>
-            <article className={`${styles.statsCard} ${styles.card}`}> 
+            <article className={`${styles.statsCard} ${styles.card}`}>
               <div className={styles.cardHeader}>
                 <h2 className={styles.cardTitle}>GitHub Stats</h2>
                 <span className={styles.cardMeta}>Live overview</span>
@@ -164,7 +165,7 @@ export default function UserDashboard() {
                 <div className={styles.progressCircle}>
                   <div className={styles.progressValue}>89%</div>
                 </div>
-                <ul className={styles.checklist}> 
+                <ul className={styles.checklist}>
                   {progressChecklist.map((item) => (
                     <li key={item} className={styles.checkItem}>
                       <span className={styles.checkMark}>✓</span>
@@ -177,12 +178,14 @@ export default function UserDashboard() {
           </section>
 
           <section className={styles.projectsSection}>
-            <div className={`${styles.sectionHeader} d-flex align-items-center justify-content-between flex-wrap`}> 
+            <div className={`${styles.sectionHeader} d-flex align-items-center justify-content-between flex-wrap`}>
               <div>
                 <h2 className={styles.sectionTitle}>Recent Projects</h2>
                 <p className={styles.sectionSubtitle}>All project summaries synced from GitHub and ready to publish.</p>
               </div>
-              <button type="button" className="btn btn-primary btn-sm">View all projects</button>
+              <CTAButton variant="primary" size="small">
+                view all projects
+              </CTAButton>
             </div>
 
             <div className={styles.projectsGrid}>
