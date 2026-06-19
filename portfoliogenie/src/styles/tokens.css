@@ -1,57 +1,54 @@
 /* ==========================================================================
-   Design Tokens — single source of truth for the visual system.
-   Every component consumes these custom properties instead of hard-coded
-   values so the design stays consistent and easy to re-theme.
+   Design Tokens — [UPDATED] Matching the exact bright colors from Image 1
    ========================================================================== */
 
 :root {
-  /* ---- Brand / primary (purple-indigo) ---- */
-  --color-primary-50: #ffffff;
-  --color-primary-100: #e4defd;
-  --color-primary-400: #8b7bf2;
-  --color-primary-500: #6d4ff0;
-  --color-primary-600: #5b3fe0;
-  --color-primary-700: #4c33c4;
-  --gradient-primary: linear-gradient(135deg, #6d4ff0 0%, #8b5cf6 100%);
+  /* ---- Brand / primary ---- */
+  --color-primary-50: #fafafa;
+  --color-primary-100: #e5e5e5;
+  --color-primary-400: #7c3aed; 
+  --color-primary-500: #2563eb; 
+  --color-primary-600: #5b21b6; 
+  --color-primary-700: #1d4ed8;
+  
+  --gradient-primary: linear-gradient(90deg, #2563eb 0%, #7c3aed 100%);
 
-  /* ---- Success / green (content score, healthy metrics) ---- */
-  --color-success-50: #ecfdf5;
-  --color-success-200: #a7f3d0;
-  --color-success-500: #10b981;
-  --color-success-600: #059669;
+  /* ---- Success / green (Exact bright green from Image 1) ---- */
+  --color-success-50: #eefdf4;  /* خلفية الأيقونة الفاتحة */
+  --color-success-200: #00c950; 
+  --color-success-500: #00c04b; /* الأخضر المشرق لخطوط التحميل والدرجة 87 */
+  --color-success-600: #00a33f; 
 
-  /* ---- Warning / amber (seo score, attention metrics) ---- */
-  --color-warning-50: #fffbeb;
+  /* ---- Warning / amber (Exact Orange/Gold from Image 1) ---- */
+  --color-warning-50: #fffbeb;   /* خلفية أيقونة البحث الفاتحة */
   --color-warning-200: #fde68a;
-  --color-warning-500: #f59e0b;
-  --color-warning-600: #d97706;
+  --color-warning-500: #d97706;  /* اللون البرتقالي/الذهبي للدرجة 78 والخطوط المتأخرة */
+  --color-warning-600: #b45309;
 
-  /* ---- Danger / red (delete actions) ---- */
-  --color-danger-500: #ef4444;
-  --color-danger-600: #dc2626;
+  /* ---- Danger / red ---- */
+  --color-danger-500: #e7000b; 
+  --color-danger-600: #b90008;
 
   /* ---- Neutrals ---- */
-  --color-white: #ffffff;
-  --color-gray-50: #f9fafb;
-  --color-gray-100: #f3f4f6;
-  --color-gray-200: #e5e7eb;
-  --color-gray-300: #d1d5db;
-  --color-gray-400: #9ca3af;
-  --color-gray-500: #6b7280;
-  --color-gray-600: #4b5563;
-  --color-gray-700: #374151;
-  --color-gray-800: #1f2937;
-  --color-gray-900: #111827;
+  --color-white: #fafafa; 
+  --color-gray-50: #f5f5f5;  
+  --color-gray-100: #f5f5f5; 
+  --color-gray-200: #e5e5e5; 
+  --color-gray-300: #e5e5e5; 
+  --color-gray-400: #d4d4d4; 
+  --color-gray-500: #a3a3a3; 
+  --color-gray-600: #737373; 
+  --color-gray-700: #292929; 
+  --color-gray-800: #292929;
+  --color-gray-900: #292929;
 
   /* ---- Surfaces ---- */
-  --surface-app: #ffffff;
-  --surface-card: var(--color-white);
-  --surface-tip: #eef2ff;
+  --surface-app: var(--color-white);
+  --surface-card: #ffffff;
+  --surface-tip: var(--color-gray-50);
 
   /* ---- Typography ---- */
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    Helvetica, Arial, sans-serif;
-
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --text-xs: clamp(0.72rem, 0.69rem + 0.12vw, 0.78rem);
   --text-sm: clamp(0.82rem, 0.79rem + 0.12vw, 0.875rem);
   --text-base: clamp(0.9rem, 0.87rem + 0.14vw, 1rem);
@@ -90,11 +87,11 @@
   --radius-full: 999px;
 
   /* ---- Shadows ---- */
-  --shadow-xs: 0 1px 2px rgba(17, 24, 39, 0.05);
-  --shadow-sm: 0 1px 3px rgba(17, 24, 39, 0.08);
-  --shadow-md: 0 6px 16px rgba(17, 24, 39, 0.07);
-  --shadow-lg: 0 16px 32px rgba(17, 24, 39, 0.1);
-  --shadow-primary: 0 8px 20px rgba(109, 79, 240, 0.28);
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.15);
+  --shadow-primary: 0 8px 20px rgba(37, 99, 235, 0.28);
 
   /* ---- Motion ---- */
   --transition-fast: 120ms ease;

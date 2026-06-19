@@ -2,8 +2,8 @@ import styles from './Button.module.css';
 
 /**
  * Reusable Button.
- * variant: 'primary' (solid gradient) | 'outline' (purple outline) | 'ghost' (text link style) | 'icon' (icon-only, circular)
- * size: 'sm' | 'md'
+ * variant: 'primary' | 'outline' | 'ghost' | 'icon'
+ * size: 'sm' | 'md' | 'medium' (تمت إضافة الدعم للحجم الجديد)
  */
 export default function Button({
   children,
@@ -11,6 +11,7 @@ export default function Button({
   size = 'md',
   icon = null,
   iconPosition = 'left',
+  fullWidth = false, // الميزة الجديدة التي تم نقلها
   className = '',
   as: Component = 'button',
   ...rest
@@ -20,6 +21,7 @@ export default function Button({
     styles[variant],
     styles[size],
     icon && !children ? styles.iconOnly : '',
+    fullWidth ? styles.fullWidth : '', // إضافة كلاس العرض الكامل ديناميكيًا
     className,
   ]
     .filter(Boolean)
@@ -32,7 +34,9 @@ export default function Button({
           {icon}
         </span>
       )}
+      
       {children && <span className={styles.label}>{children}</span>}
+      
       {icon && iconPosition === 'right' && (
         <span className={styles.icon} aria-hidden="true">
           {icon}
