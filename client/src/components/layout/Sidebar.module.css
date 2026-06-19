@@ -1,0 +1,20 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  min-width: 0;
+}
+
+/* On tablets there's enough width to let the two score cards sit
+   side-by-side, with Quick Tips spanning full width beneath them. */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .sidebar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .sidebar > :last-child {
+    grid-column: 1 / -1;
+  }
+}
