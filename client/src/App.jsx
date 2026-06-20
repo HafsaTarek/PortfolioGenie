@@ -7,6 +7,7 @@ import Register from './pages/Register';
 import Overview from './pages/Overview';
 import UserDashboard from './pages/UserDashboard/UserDashboard';
 import AdminDashboard from './pages/AdminDashboard/AdminDashboard';
+// import PortfolioPage from './pages/PortfolioPage';
 
 function Layout() {
   return (
@@ -31,6 +32,7 @@ const router = createBrowserRouter([
       { path: "connect", element: <GitHubWorkflowManager /> },
       { path: "user-dashboard", element: <UserDashboard /> },
       { path: "admin-dashboard", element: <AdminDashboard /> },
+      // { path: "portfolio", element: <PortfolioPage /> }, 
     ],
   },
 ]);
