@@ -45,7 +45,6 @@ export default function GitHubWorkflowManager() {
           <div className="col-12 col-lg-7 d-flex flex-column p-4 p-md-5 justify-content-center bg-white">
             {currentStep === 'step1' && (
               <div className="w-100 text-center py-4">
-                {/* تم استبدال الأخطبوط بحاوية الـ SVG مع الـ styles الجديدة */}
                 <div className={`${styles.gitIconContainer} mx-auto mb-4`}>
                   <svg 
                     viewBox="0 0 24 24" 
