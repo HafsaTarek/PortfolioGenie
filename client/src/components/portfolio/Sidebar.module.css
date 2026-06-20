@@ -1,6 +1,6 @@
 .container {
   display: flex;
-  gap: var(--spacing-xl);
+  gap: var(--spacing-lg);
   align-items: flex-start; 
   width: 100%;
 }
@@ -12,8 +12,11 @@
 
 .sidebar {
   width: 320px; 
+  gap: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
   flex-shrink: 0;
-  margin-top: 64px; 
+  margin-top: 80px;; 
 }
 
 @media (max-width: 1023px) {
