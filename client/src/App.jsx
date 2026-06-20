@@ -21,12 +21,10 @@ import {
 function Layout() {
   const location = useLocation();
   
-  // Check if the current route is the admin dashboard
   const isAdminRoute = location.pathname === '/admin-dashboard';
 
   return (
     <div className="App">
-      {/* Render NavBar only if it is NOT the admin route */}
       {!isAdminRoute && <NavBar />}
       
       <main className="main-content">
@@ -37,7 +35,6 @@ function Layout() {
     </div>
   );
 }
-
 const router = createBrowserRouter([
   {
     path: "/",
