@@ -111,3 +111,29 @@ two sample projects, score breakdowns, quick tips). In a real app this file woul
 replaced by data fetched from your backend; every component already accepts that
 shape as props, so wiring up a real API only means swapping the import in `App.jsx`
 for a fetch/query result.
+=======
+# Follow these simple steps to get the exact frontend branch running on your machine:
+
+### 1. Download and Switch to the Frontend Branch
+Open your terminal in your main workspace folder and run:
+
+```bash
+# 1. Clone the project
+git clone [https://github.com/HafsaTarek/PortfolioGenie.git](https://github.com/HafsaTarek/PortfolioGenie.git)
+
+# 2. Go into the project folder
+cd PortfolioGenie
+
+# 3. Switch to the frontend branch
+git checkout frontend
+
+
+# ▶️ Running The Project
+
+## Frontend
+
+```bash
+cd client
+npm install
+npm run dev
+```
