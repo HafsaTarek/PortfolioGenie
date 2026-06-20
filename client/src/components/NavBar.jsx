@@ -27,8 +27,11 @@ export default function NavBar() {
             to="/"
             style={{ color: "var(--primary-blue)", letterSpacing: "-0.5px" }}
           >
-            <span className="me-2" style={{ color: "var(--accent-cyan)" }}>✨</span>
-            PortfolioGenie
+            <img
+              src="/portfolio-genie-logo.svg"
+              alt="Portfolio Genie"
+              style={{ height: "24px", width: "auto", marginRight: "8px" }}
+            />
           </Link>
 
           <button
@@ -88,7 +91,7 @@ export default function NavBar() {
               <CTAButton
                 variant="primary"
                 size="small"
-                onClick={() => { navigate('/connect'); setIsOpen(false); }}
+                onClick={() => { navigate('/register'); setIsOpen(false); }}
               >
                 Get Started
               </CTAButton>
