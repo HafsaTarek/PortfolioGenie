@@ -1,20 +1,33 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import CTAButton from "../components/shared/button/CTAButton";
 
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const toggleNavbar = () => {
     setIsOpen(!isOpen);
   };
- let navigator = useNavigate();
+
   return (
     <>
-      <nav className="navbar navbar-expand-lg bg-body-tertiary">
-        <div className="container-fluid">
-          <a className=" text-decoration-none fw-bold fs-4 main-color" href="#">PortfolioGenie</a>
+      <nav
+        className="navbar navbar-expand-lg border-bottom py-3"
+        style={{ backgroundColor: "var(--white)", borderBottomColor: "var(--gray-2)" }}
+      >
+        <div className="container">
+          <Link
+            className="navbar-brand fw-bold h4 m-0 d-flex align-items-center text-decoration-none"
+            to="/"
+            style={{ color: "var(--primary-blue)", letterSpacing: "-0.5px" }}
+          >
+            <span className="me-2" style={{ color: "var(--accent-cyan)" }}>✨</span>
+            PortfolioGenie
+          </Link>
+
           <button
-            className={`navbar-toggler ${isOpen ? "" : "collapsed"}`}
+            className={`navbar-toggler border-0 ${isOpen ? "" : "collapsed"}`}
             type="button"
             onClick={toggleNavbar}
             aria-controls="navbarNav"
@@ -23,27 +36,57 @@ export default function NavBar() {
           >
             <span className="navbar-toggler-icon" />
           </button>
-          <div className={`collapse navbar-collapse ${isOpen ? "show" : ""}`} id="navbarNav" >
-            <div className="internal-nav d-flex justify-content-between w-75 mx-auto">
-              <div className="left-side w-50">
-              <ul className="navbar-nav">
-              <li className="nav-item">
-                <a className="nav-link active" aria-current="page" href="#" onClick={() => setIsOpen(false)}>Features</a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#" onClick={() => setIsOpen(false)}>How it Works</a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#" onClick={() => setIsOpen(false)}>Connect to Github</a>
-              </li>
-              
-            </ul>
-            </div>
-            <div className="right-side d-flex w-25">
-              <button className="border-0 bg-transparent me-2 " onClick={()=> navigator('/register')}>Sign in</button>
-              <button type="submit" className="btn_1 text-white button_main_color" onClick={()=> navigator('/connect')}>Get started</button>
 
-            </div>
+          <div className={`collapse navbar-collapse ${isOpen ? "show" : ""}`} id="navbarNav">
+            <ul className="navbar-nav mx-auto mb-2 mb-lg-0 gap-lg-4">
+              <li className="nav-item">
+                <a
+                  className="nav-link body-text fw-medium"
+                  style={{ color: "var(--gray-5)" }}
+                  href="#features"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Features
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  className="nav-link body-text fw-medium"
+                  style={{ color: "var(--gray-5)" }}
+                  href="#how-it-works"
+                  onClick={() => setIsOpen(false)}
+                >
+                  How It Works
+                </a>
+              </li>
+              <li className="nav-item">
+                <Link
+                  className="nav-link body-text fw-medium"
+                  style={{ color: "var(--gray-5)" }}
+                  to="/connect"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Connect to GitHub
+                </Link>
+              </li>
+            </ul>
+
+            <div className="d-flex align-items-center gap-3">
+              <button
+                className="btn btn-link body-text text-decoration-none fw-medium px-3 py-2"
+                style={{ color: "var(--gray-5)" }}
+                onClick={() => { navigate('/login'); setIsOpen(false); }}
+              >
+                Sign In
+              </button>
+
+              <CTAButton
+                variant="primary"
+                size="small"
+                onClick={() => { navigate('/connect'); setIsOpen(false); }}
+              >
+                Get Started
+              </CTAButton>
             </div>
           </div>
         </div>
