@@ -14,11 +14,21 @@
 .tab {
   position: relative;
   flex-shrink: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
   padding: var(--spacing-md) var(--spacing-xs);
+  font-family: var(--font-family-primary);
   font-size: var(--small-size);
   font-weight: var(--fw-medium);
   color: var(--gray-5);
   transition: color var(--transition-fast);
+}
+
+.tab:focus-visible {
+  outline: 2px solid var(--primary-blue);
+  outline-offset: -2px;
+  border-radius: var(--radius-sm);
 }
 
 .tab::after {

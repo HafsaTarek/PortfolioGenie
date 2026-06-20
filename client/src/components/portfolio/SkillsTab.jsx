@@ -1,14 +1,21 @@
-import { useState } from 'react';
-import { Card, SectionHeader, Button } from '../common';
+import { useState, useEffect } from 'react';
+import { Card, SectionHeader } from '../common';
 import AITipBox from '../common/AITipBox';
 import SkillItem from './SkillItem';
+import CTAButton from '../shared/button/CTAButton';
 import { RefreshIcon, PlusIcon } from '../icons/icons';
 import styles from './SkillsTab.module.css';
 
 let nextSkillId = 1000;
 
 export default function SkillsTab({ skills: initialSkills, aiTip, onRegenerate }) {
-  const [skills, setSkills] = useState(initialSkills);
+  const [skills, setSkills] = useState(initialSkills || []);
+
+  useEffect(() => {
+    if (initialSkills) {
+      setSkills(initialSkills);
+    }
+  }, [initialSkills]);
 
   const handleChangeName = (id, name) => {
     setSkills((current) => current.map((s) => (s.id === id ? { ...s, name } : s)));
@@ -30,14 +37,14 @@ export default function SkillsTab({ skills: initialSkills, aiTip, onRegenerate }
       <SectionHeader
         title="Skills"
         actions={
-          <>
-            <Button variant="outline" size="sm" icon={<RefreshIcon />} onClick={onRegenerate}>
+          <div className={styles.actionsContainer}>
+            <CTAButton variant="outline" size="small" icon={<RefreshIcon />} onClick={onRegenerate}>
               Regenerate with AI
-            </Button>
-            <Button variant="primary" size="sm" icon={<PlusIcon />} onClick={handleAdd}>
+            </CTAButton>
+            <CTAButton variant="primary" size="small" icon={<PlusIcon />} onClick={handleAdd}>
               Add Skill
-            </Button>
-          </>
+            </CTAButton>
+          </div>
         }
       />
 
@@ -52,9 +59,11 @@ export default function SkillsTab({ skills: initialSkills, aiTip, onRegenerate }
         ))}
       </div>
 
-      <div className={styles.tip}>
-        <AITipBox>{aiTip}</AITipBox>
-      </div>
+      {aiTip && (
+        <div className={styles.tip}>
+          <AITipBox>{aiTip}</AITipBox>
+        </div>
+      )}
     </Card>
   );
 }

@@ -1,10 +1,5 @@
 import styles from './Field.module.css';
 
-/**
- * Labeled form control. Renders a <textarea> when `as="textarea"`,
- * otherwise a standard text <input>. `hint` renders small helper text
- * below the control (e.g. character counts).
- */
 export default function Field({
   id,
   label,

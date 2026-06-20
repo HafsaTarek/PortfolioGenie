@@ -8,8 +8,11 @@
 }
 
 .title {
+  font-family: var(--font-family-primary);
   font-size: var(--h5-size);
+  font-weight: var(--fw-bold);
   color: var(--text-color);
+  margin: 0;
 }
 
 .actions {

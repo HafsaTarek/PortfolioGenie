@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Tabs from '../common/Tabs';
-import Sidebar from '../layout/Sidebar';
+import Sidebar from './Sidebar';
 import AboutMeTab from './AboutMeTab';
 import SkillsTab from './SkillsTab';
 import ProjectsTab from './ProjectsTab';
@@ -23,8 +23,6 @@ export default function PortfolioContent({
   const [activeTab, setActiveTab] = useState('about');
 
   const handleRegenerate = (section) => {
-    // Placeholder hook for wiring up a real "Regenerate with AI" API call.
-    // eslint-disable-next-line no-console
     console.log('Regenerate section:', section);
   };
 
@@ -55,7 +53,7 @@ export default function PortfolioContent({
           {activeTab === 'skills' && (
             <SkillsTab
               skills={skills}
-              aiTip={aboutMe.aiTip}
+              aiTip={aboutMe?.aiTip}
               onRegenerate={() => handleRegenerate('skills')}
             />
           )}

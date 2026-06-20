@@ -1,5 +1,23 @@
 .fields {
   display: flex;
   flex-direction: column;
-  gap: var(--space-5);
+  gap: var(--spacing-lg);
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.charCounter {
+  font-family: var(--font-family-primary);
+  font-size: var(--caption-size);
+  color: var(--gray-5);
+}
+
+.recommendedHint {
+  font-family: var(--font-family-primary);
+  font-size: var(--caption-size);
+  color: var(--gray-4);
 }

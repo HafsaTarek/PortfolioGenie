@@ -1,13 +1,7 @@
 import { useRef } from 'react';
 import styles from './Tabs.module.css';
-import CTAButton from '../shared/button/CTAButton';
 
-/**
- * Accessible tab list following the WAI-ARIA tabs pattern: arrow keys move
- * focus between tabs, Home/End jump to first/last. `tabs` is an array of
- * { id, label }; the active tab is controlled via `activeId`/`onChange`.
- */
-export default function Tabs({ tabs, activeId, onChange, idPrefix = 'tab' }) {
+export default function Tabs({ tabs = [], activeId, onChange, idPrefix = 'tab' }) {
   const tabRefs = useRef([]);
 
   const handleKeyDown = (event, index) => {
@@ -21,7 +15,10 @@ export default function Tabs({ tabs, activeId, onChange, idPrefix = 'tab' }) {
     if (nextIndex !== null) {
       event.preventDefault();
       onChange(tabs[nextIndex].id);
-      tabRefs.current[nextIndex]?.focus();
+      
+      setTimeout(() => {
+        tabRefs.current[nextIndex]?.focus();
+      }, 0);
     }
   };
 
@@ -30,8 +27,9 @@ export default function Tabs({ tabs, activeId, onChange, idPrefix = 'tab' }) {
       {tabs.map((tab, index) => {
         const isActive = tab.id === activeId;
         return (
-          <CTAButton
+          <button
             key={tab.id}
+            type="button"
             ref={(el) => (tabRefs.current[index] = el)}
             role="tab"
             id={`${idPrefix}-${tab.id}`}
@@ -43,7 +41,7 @@ export default function Tabs({ tabs, activeId, onChange, idPrefix = 'tab' }) {
             onKeyDown={(event) => handleKeyDown(event, index)}
           >
             {tab.label}
-          </CTAButton>
+          </button>
         );
       })}
     </div>

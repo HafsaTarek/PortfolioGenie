@@ -1,13 +1,21 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Field from '../common/Field';
 import CTAButton from '../shared/button/CTAButton'; 
 import { RefreshIcon, TrashIcon, CheckCircleIcon } from '../icons/icons';
 import styles from './ProjectCard.module.css';
 
 export default function ProjectCard({ project, index, onRegenerate, onRemove }) {
-  const [title, setTitle] = useState(project.title);
-  const [description, setDescription] = useState(project.description);
-  const [technologies, setTechnologies] = useState(project.technologies);
+  const [title, setTitle] = useState(project?.title || '');
+  const [description, setDescription] = useState(project?.description || '');
+  const [technologies, setTechnologies] = useState(project?.technologies || '');
+
+  useEffect(() => {
+    if (project) {
+      setTitle(project.title || '');
+      setDescription(project.description || '');
+      setTechnologies(project.technologies || '');
+    }
+  }, [project]);
 
   return (
     <article className={styles.card}>
@@ -15,21 +23,22 @@ export default function ProjectCard({ project, index, onRegenerate, onRemove }) 
         <h3 className={styles.title}>Project {index + 1}</h3>
         <div className={styles.headerActions}>
           <CTAButton
-            variant="ghost"
-            size="sm"
+            variant="outline"
+            size="small"
             icon={<RefreshIcon size={14} />}
             onClick={() => onRegenerate(project.id)}
           >
             Regenerate
           </CTAButton>
-          <button
-            type="button"
-            className={styles.deleteIcon}
-            aria-label={`Remove project ${index + 1}`}
+          
+          <CTAButton
+            variant="ghost"
+            size="small"
             onClick={() => onRemove(project.id)}
+            aria-label={`Remove project ${index + 1}`}
           >
-            <TrashIcon size={16} />
-          </button>
+            <TrashIcon size={16} className={styles.deleteIconText} />
+          </CTAButton>
         </div>
       </header>
 
@@ -59,17 +68,19 @@ export default function ProjectCard({ project, index, onRegenerate, onRemove }) 
           placeholder="React, TypeScript, Tailwind CSS"
         />
 
-        <div className={styles.highlights}>
-          <span className={styles.highlightsLabel}>Key Highlights</span>
-          <ul className={styles.highlightsList}>
-            {project.highlights.map((highlight) => (
-              <li key={highlight} className={styles.highlightItem}>
-                <CheckCircleIcon size={16} className={styles.highlightIcon} />
-                <span>{highlight}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
+        {project?.highlights && project.highlights.length > 0 && (
+          <div className={styles.highlights}>
+            <span className={styles.highlightsLabel}>Key Highlights</span>
+            <ul className={styles.highlightsList}>
+              {project.highlights.map((highlight, idx) => (
+                <li key={idx} className={styles.highlightItem}>
+                  <CheckCircleIcon size={16} className={styles.highlightIcon} />
+                  <span>{highlight}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </article>
   );

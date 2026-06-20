@@ -24,10 +24,12 @@
   font-size: var(--small-size);
   font-weight: var(--fw-semibold);
   color: var(--text-color);
+  margin: 0;
 }
 
 .text {
   font-size: var(--small-size);
   color: var(--gray-5);
   line-height: 1.4;
+  margin: 0;
 }

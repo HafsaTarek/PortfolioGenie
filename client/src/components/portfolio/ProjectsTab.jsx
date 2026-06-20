@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Card, SectionHeader, Button } from '../common';
+import { Card, SectionHeader } from '../common';
 import ProjectCard from './ProjectCard';
+import CTAButton from '../shared/button/CTAButton';
 import { PlusIcon } from '../icons/icons';
 import styles from './ProjectsTab.module.css';
 
@@ -27,8 +28,6 @@ export default function ProjectsTab({ projects: initialProjects }) {
   };
 
   const handleRegenerate = (id) => {
-    // Placeholder hook for wiring up an AI regeneration call per project.
-    // eslint-disable-next-line no-console
     console.log('Regenerate project', id);
   };
 
@@ -37,9 +36,9 @@ export default function ProjectsTab({ projects: initialProjects }) {
       <SectionHeader
         title="Projects"
         actions={
-          <Button variant="primary" size="sm" icon={<PlusIcon />} onClick={handleAdd}>
+          <CTAButton variant="primary" size="small" icon={<PlusIcon />} onClick={handleAdd}>
             Add Project
-          </Button>
+          </CTAButton>
         }
       />
 

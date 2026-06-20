@@ -14,11 +14,12 @@
 .textarea {
   width: 100%;
   border: 1px solid var(--gray-2);
-  border-radius: var(--radius-md);
-  padding: 0.7rem 0.875rem;
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-family: var(--font-family-primary);
   font-size: var(--small-size);
   color: var(--text-color);
-  background: var(--white);
+  background: #ffffff;
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
@@ -36,14 +37,13 @@
 .textarea:focus {
   outline: none;
   border-color: var(--primary-blue);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .textarea {
-  min-height: 9rem;
+  min-height: 120px;
   resize: vertical;
   line-height: var(--body-line-height);
-  font-family: inherit;
 }
 
 .hintRow {
@@ -55,5 +55,5 @@
 
 .hint {
   font-size: var(--caption-size);
-  color: var(--gray-4);
+  color: var(--gray-5);
 }

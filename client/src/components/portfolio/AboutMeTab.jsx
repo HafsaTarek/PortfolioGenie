@@ -1,5 +1,6 @@
-import { useState } from 'react';
-import { Card, SectionHeader, Button } from '../common';
+import { useState, useEffect } from 'react';
+import { Card, SectionHeader } from '../common';
+import CTAButton from '../shared/button/CTAButton';
 import Field from '../common/Field';
 import AITipBox from '../common/AITipBox';
 import { RefreshIcon } from '../icons/icons';
@@ -9,18 +10,26 @@ const BIO_MIN = 250;
 const BIO_MAX = 500;
 
 export default function AboutMeTab({ data, onRegenerate }) {
-  const [headline, setHeadline] = useState(data.headline);
-  const [biography, setBiography] = useState(data.biography);
-  const [interests, setInterests] = useState(data.interests);
+  const [headline, setHeadline] = useState(data?.headline || '');
+  const [biography, setBiography] = useState(data?.biography || '');
+  const [interests, setInterests] = useState(data?.interests || '');
+
+  useEffect(() => {
+    if (data) {
+      setHeadline(data.headline || '');
+      setBiography(data.biography || '');
+      setInterests(data.interests || '');
+    }
+  }, [data]);
 
   return (
     <Card>
       <SectionHeader
         title="About Me"
         actions={
-          <Button variant="outline" size="sm" icon={<RefreshIcon />} onClick={onRegenerate}>
+          <CTAButton variant="outline" size="small" icon={<RefreshIcon />} onClick={onRegenerate}>
             Regenerate with AI
-          </Button>
+          </CTAButton>
         }
       />
 
@@ -52,7 +61,7 @@ export default function AboutMeTab({ data, onRegenerate }) {
           placeholder="e.g. Web Development, Open Source, UI/UX Design"
         />
 
-        <AITipBox>{data.aiTip}</AITipBox>
+        {data?.aiTip && <AITipBox>{data.aiTip}</AITipBox>}
       </div>
     </Card>
   );

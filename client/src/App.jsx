@@ -9,6 +9,15 @@ import UserDashboard from './pages/UserDashboard/UserDashboard';
 import AdminDashboard from './pages/AdminDashboard/AdminDashboard';
 import PortfolioPage from './pages/PortfolioPage';
 
+import {
+  aboutMeInitial,
+  skillsInitial,
+  projectsInitial,
+  contentScore,
+  seoScore,
+  quickTips
+} from './data/mockData'; 
+
 function Layout() {
   return (
     <div className="App">
@@ -32,7 +41,20 @@ const router = createBrowserRouter([
       { path: "connect", element: <GitHubWorkflowManager /> },
       { path: "user-dashboard", element: <UserDashboard /> },
       { path: "admin-dashboard", element: <AdminDashboard /> },
-      { path: "portfolio", element: <PortfolioPage /> }, 
+      { 
+        path: "portfolio", 
+        element: (
+          <PortfolioPage 
+            aboutMe={aboutMeInitial}
+            skills={skillsInitial}
+            projects={projectsInitial}
+            contentScore={contentScore}
+            seoScore={seoScore}
+            quickTips={quickTips}
+            onPreview={() => console.log('Open portfolio preview')}
+          />
+        ) 
+      }, 
     ],
   },
 ]);

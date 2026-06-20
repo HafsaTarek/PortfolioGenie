@@ -1,9 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { ChevronDownIcon } from '../icons/icons';
 import styles from './UserMenu.module.css';
-
-// 1. استيراد الأيقونات الحقيقية المطابقة للتصميم من مكتبة Lucide
-import { LuUser, LuLayoutDashboard, LuLogOut } from 'react-icons/lu';
+import { LuUser, LuLayoutDashboard, LuLogOut } from 'react-react-icons/lu';
 
 const MENU_ITEMS = [
   { id: 'profile', label: 'View Profile', icon: LuUser },
@@ -52,20 +50,17 @@ export default function UserMenu({ user }) {
       {open && (
         <ul className={styles.menu} role="menu">
           {MENU_ITEMS.map((item) => {
-            // هنا بنخلي الجافاسكريبت تقرأ الأيقونة كمكون React وتعملها رندر
             const IconComponent = item.icon;
-            
+
             return (
               <li key={item.id} role="none">
-                <button 
-                  type="button" 
-                  role="menuitem" 
-                  className={`${styles.menuItem} ${item.id === 'logout' ? styles.logoutItem : ''}`} 
+                <button
+                  type="button"
+                  role="menuitem"
+                  className={`${styles.menuItem} ${item.id === 'logout' ? styles.logoutItem : ''}`}
                   onClick={() => setOpen(false)}
                 >
-                  {/* رندر الأيقونة الحقيقية هنا مع إعطائها كلاس لتنسيق حجمها */}
-                  <IconComponent className={styles.menuIcon} size={18} />
-                  
+                  <IconComponent className={styles.menuIcon} size={16} />
                   <span className={styles.menuLabel}>{item.label}</span>
                 </button>
               </li>

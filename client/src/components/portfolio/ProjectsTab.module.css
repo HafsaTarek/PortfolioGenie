@@ -1,13 +1,16 @@
 .list {
   display: flex;
   flex-direction: column;
+  gap: var(--spacing-lg);
 }
 
 .empty {
-  font-size: var(--text-sm);
-  color: var(--color-gray-500);
+  font-family: var(--font-family-primary);
+  font-size: var(--small-size);
+  color: var(--gray-5);
   text-align: center;
-  padding: var(--space-8) var(--space-4);
-  border: 1px dashed var(--color-gray-300);
+  padding: var(--spacing-2xl) var(--spacing-lg);
+  border: 1px dashed var(--gray-3);
   border-radius: var(--radius-md);
+  background: var(--gray-1);
 }

@@ -1,90 +1,89 @@
 .card {
-  border: 1px solid var(--color-gray-200);
-  border-radius: var(--radius-lg);
-  padding: var(--space-5);
+  border: 1px solid var(--gray-2);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  background: #ffffff;
 }
 
 .card + .card {
-  margin-top: var(--space-5);
+  margin-top: var(--spacing-lg);
 }
 
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-3);
-  margin-bottom: var(--space-4);
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
   flex-wrap: wrap;
 }
 
 .title {
-  font-size: var(--text-md);
-  color: var(--color-gray-900);
+  font-size: var(--body-size);
+  font-weight: var(--fw-semibold);
+  color: var(--text-color);
+  margin: 0;
 }
 
 .headerActions {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--spacing-sm);
 }
 
-.deleteIcon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  border-radius: var(--radius-sm);
-  color: var(--color-gray-400);
-  transition: color var(--transition-base), background-color var(--transition-base);
+.deleteIconText {
+  color: var(--gray-4);
+  transition: color var(--transition-fast);
 }
 
-.deleteIcon:hover {
-  color: var(--color-danger-600);
-  background: rgba(239, 68, 68, 0.08);
+.headerActions :global(.button):hover .deleteIconText {
+  color: var(--danger-color);
 }
 
 .fields {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--spacing-md);
 }
 
 .descriptionField textarea {
-  min-height: 6rem;
+  min-height: 100px;
 }
 
 .highlights {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--spacing-sm);
 }
 
 .highlightsLabel {
-  font-size: var(--text-sm);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-gray-700);
+  font-size: var(--small-size);
+  font-weight: var(--fw-semibold);
+  color: var(--gray-5);
 }
 
 .highlightsList {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--spacing-xs);
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .highlightItem {
   display: flex;
-  align-items: flex-start;
-  gap: var(--space-2);
-  font-size: var(--text-sm);
-  color: var(--color-gray-700);
-  background: var(--color-gray-50);
+  align-items: start;
+  gap: var(--spacing-sm);
+  font-size: var(--small-size);
+  color: var(--text-color);
+  background: var(--gray-1);
   border-radius: var(--radius-sm);
-  padding: var(--space-2) var(--space-3);
+  padding: var(--spacing-sm) var(--spacing-md);
 }
 
 .highlightIcon {
   flex-shrink: 0;
-  color: var(--color-success-600);
+  color: var(--light-success);
   margin-top: 2px;
 }
