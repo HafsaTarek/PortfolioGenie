@@ -1,4 +1,4 @@
-import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, Outlet, RouterProvider, useLocation } from 'react-router-dom';
 import GitHubWorkflowManager from './pages/GitHubWorkflowManager/GitHubWorkflowManager';
 import NavBar from './components/NavBar';
 import Footer from './components/Footer';
@@ -19,12 +19,20 @@ import {
 } from './data/mockData'; 
 
 function Layout() {
+  const location = useLocation();
+  
+  // Check if the current route is the admin dashboard
+  const isAdminRoute = location.pathname === '/admin-dashboard';
+
   return (
     <div className="App">
-      <NavBar />
+      {/* Render NavBar only if it is NOT the admin route */}
+      {!isAdminRoute && <NavBar />}
+      
       <main className="main-content">
         <Outlet />
       </main>
+      
       <Footer />
     </div>
   );

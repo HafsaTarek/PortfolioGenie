@@ -24,16 +24,16 @@
   display: flex;
   flex-direction: column;
   background-color: var(--white);
+  justify-content: center;
 }
 
 .innerContent {
-  margin: auto 0;
   width: 100%;
 }
 
 .centerHeaderBlock {
   text-align: center;
-  margin-bottom: var(--spacing-2xl);
+  margin-bottom: var(--spacing-xl);
 }
 
 .gitIconContainer {
@@ -44,40 +44,22 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: var(--h3-size);
+  margin: 0 auto var(--spacing-lg) auto;
   color: var(--gray-5);
 }
 
-.repoScroller {
-  max-height: 240px;
-  overflow-y: auto;
-  padding-right: var(--spacing-xs);
-}
-
-.repoScroller::-webkit-scrollbar {
-  width: 6px;
-}
-.repoScroller::-webkit-scrollbar-thumb {
-  background: var(--gray-3);
-  border-radius: var(--radius-full);
-}
-
-.loaderIcon {
-  border: 4px solid var(--gray-2);
-  border-top: 4px solid var(--primary-blue);
-  border-radius: var(--radius-full);
-  width: 48px;
-  height: 48px;
-  animation: spin 1s linear infinite;
-  margin: 0 auto var(--spacing-lg) auto;
+.loaderIconContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--spacing-lg);
 }
 
 .checkListGroup {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-sm);
-  margin-top: var(--spacing-2xl);
-  max-width: 280px;
+  margin-top: var(--spacing-xl);
+  max-width: 320px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -90,10 +72,9 @@
   color: var(--gray-5);
 }
 
-/* Step 2 Profile Info Layout Rules */
 .successToast {
   background-color: #ecfdf5;
-  border: 1px solid var(--very-light-success);
+  border: 1px solid #d1fae5;
   color: var(--dark-success);
   padding: var(--spacing-md);
   border-radius: var(--radius-sm);
@@ -102,14 +83,16 @@
   font-weight: var(--fw-medium);
   display: flex;
   align-items: center;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-sm);
 }
 
 .profileCard {
   border: 1px solid var(--gray-2);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   padding: var(--spacing-md);
   margin-bottom: var(--spacing-lg);
+  background-color: var(--white);
+  box-shadow: var(--shadow-sm);
 }
 
 .profileHeader {
@@ -126,15 +109,15 @@
 }
 
 .avatar {
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   border-radius: var(--radius-full);
   object-fit: cover;
 }
 
 .statusBadge {
   background-color: #ecfdf5;
-  color: var(--light-success);
+  color: #10b981;
   font-size: var(--caption-size);
   font-weight: var(--fw-semibold);
   padding: var(--spacing-xs) var(--spacing-sm);
@@ -152,7 +135,7 @@
   background: var(--gray-1);
   padding: var(--spacing-sm);
   border-radius: var(--radius-sm);
-  text-align: left;
+  text-align: center;
 }
 
 .metricValue {
@@ -170,6 +153,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--spacing-xs);
+  justify-content: center;
   margin-top: var(--spacing-xs);
 }
 
@@ -179,16 +163,26 @@
   font-size: var(--caption-size);
   padding: 2px 6px;
   border-radius: var(--radius-sm);
+  font-family: var(--font-family-monospace);
 }
 
 .repoScroller {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-sm);
-  max-height: 220px;
+  max-height: 240px;
   overflow-y: auto;
   margin-bottom: var(--spacing-lg);
   padding-right: var(--spacing-xs);
+}
+
+.repoScroller::-webkit-scrollbar {
+  width: 6px;
+}
+
+.repoScroller::-webkit-scrollbar-thumb {
+  background: var(--gray-3);
+  border-radius: var(--radius-full);
 }
 
 .actionFooter {
@@ -197,4 +191,5 @@
   justify-content: space-between;
   margin-top: auto;
   padding-top: var(--spacing-md);
+  border-top: 1px solid var(--gray-2);
 }
