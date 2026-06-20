@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, NavLink } from "react-router-dom";
 import CTAButton from "../components/shared/button/CTAButton";
 
 export default function NavBar() {
@@ -9,6 +9,11 @@ export default function NavBar() {
   const toggleNavbar = () => {
     setIsOpen(!isOpen);
   };
+
+  const navLinkStyle = ({ isActive }) => ({
+    color: isActive ? "var(--primary-blue)" : "var(--gray-5)",
+    transition: "color var(--transition-fast)"
+  });
 
   return (
     <>
@@ -40,34 +45,34 @@ export default function NavBar() {
           <div className={`collapse navbar-collapse ${isOpen ? "show" : ""}`} id="navbarNav">
             <ul className="navbar-nav mx-auto mb-2 mb-lg-0 gap-lg-4">
               <li className="nav-item">
-                <a
-                  className="nav-link body-text fw-medium"
-                  style={{ color: "var(--gray-5)" }}
-                  href="#features"
+                <NavLink
+                  className="nav-link body-text fw-semibold"
+                  style={navLinkStyle}
+                  to="/user-dashboard"
                   onClick={() => setIsOpen(false)}
                 >
-                  Features
-                </a>
+                  Dashboard
+                </NavLink>
               </li>
               <li className="nav-item">
-                <a
-                  className="nav-link body-text fw-medium"
-                  style={{ color: "var(--gray-5)" }}
-                  href="#how-it-works"
+                <NavLink
+                  className="nav-link body-text fw-semibold"
+                  style={navLinkStyle}
+                  to="/portfolio"
                   onClick={() => setIsOpen(false)}
                 >
-                  How It Works
-                </a>
+                  Portfolio
+                </NavLink>
               </li>
               <li className="nav-item">
-                <Link
-                  className="nav-link body-text fw-medium"
-                  style={{ color: "var(--gray-5)" }}
+                <NavLink
+                  className="nav-link body-text fw-semibold"
+                  style={navLinkStyle}
                   to="/connect"
                   onClick={() => setIsOpen(false)}
                 >
                   Connect to GitHub
-                </Link>
+                </NavLink>
               </li>
             </ul>
 
