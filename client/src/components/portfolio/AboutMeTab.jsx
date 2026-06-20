@@ -3,13 +3,13 @@ import { Card, SectionHeader } from '../common';
 import CTAButton from '../shared/button/CTAButton';
 import Field from '../common/Field';
 import AITipBox from '../common/AITipBox';
-import { RefreshIcon } from '../icons/icons';
 import styles from './AboutMeTab.module.css';
 
 const BIO_MIN = 250;
 const BIO_MAX = 500;
 
-export default function AboutMeTab({ data, onRegenerate }) {
+
+export default function AboutMeTab({ data }) {
   const [headline, setHeadline] = useState(data?.headline || '');
   const [biography, setBiography] = useState(data?.biography || '');
   const [interests, setInterests] = useState(data?.interests || '');
@@ -26,11 +26,7 @@ export default function AboutMeTab({ data, onRegenerate }) {
     <Card>
       <SectionHeader
         title="About Me"
-        actions={
-          <CTAButton variant="outline" size="small" icon={<RefreshIcon />} onClick={onRegenerate}>
-            Regenerate with AI
-          </CTAButton>
-        }
+        
       />
 
       <div className={styles.fields}>

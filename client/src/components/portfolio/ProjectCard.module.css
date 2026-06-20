@@ -32,9 +32,10 @@
 }
 
 .deleteIconText {
-  color: var(--gray-4);
+  color: #000000 !important; 
   transition: color var(--transition-fast);
 }
+
 
 .headerActions :global(.button):hover .deleteIconText {
   color: var(--danger-color);

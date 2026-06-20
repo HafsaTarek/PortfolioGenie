@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import Field from '../common/Field';
 import CTAButton from '../shared/button/CTAButton'; 
-import { RefreshIcon, TrashIcon, CheckCircleIcon } from '../icons/icons';
+import { TrashIcon, CheckCircleIcon } from '../icons/icons'; 
 import styles from './ProjectCard.module.css';
 
-export default function ProjectCard({ project, index, onRegenerate, onRemove }) {
+export default function ProjectCard({ project, index, onRemove }) { 
   const [title, setTitle] = useState(project?.title || '');
   const [description, setDescription] = useState(project?.description || '');
   const [technologies, setTechnologies] = useState(project?.technologies || '');
@@ -22,14 +22,7 @@ export default function ProjectCard({ project, index, onRegenerate, onRemove }) 
       <header className={styles.header}>
         <h3 className={styles.title}>Project {index + 1}</h3>
         <div className={styles.headerActions}>
-          <CTAButton
-            variant="outline"
-            size="small"
-            icon={<RefreshIcon size={14} />}
-            onClick={() => onRegenerate(project.id)}
-          >
-            Regenerate
-          </CTAButton>
+          {}
           
           <CTAButton
             variant="ghost"

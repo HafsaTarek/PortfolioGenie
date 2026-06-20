@@ -3,12 +3,12 @@ import { Card, SectionHeader } from '../common';
 import AITipBox from '../common/AITipBox';
 import SkillItem from './SkillItem';
 import CTAButton from '../shared/button/CTAButton';
-import { RefreshIcon, PlusIcon } from '../icons/icons';
+import { PlusIcon } from '../icons/icons'; 
 import styles from './SkillsTab.module.css';
 
 let nextSkillId = 1000;
 
-export default function SkillsTab({ skills: initialSkills, aiTip, onRegenerate }) {
+export default function SkillsTab({ skills: initialSkills, aiTip }) {
   const [skills, setSkills] = useState(initialSkills || []);
 
   useEffect(() => {
@@ -38,9 +38,6 @@ export default function SkillsTab({ skills: initialSkills, aiTip, onRegenerate }
         title="Skills"
         actions={
           <div className={styles.actionsContainer}>
-            <CTAButton variant="outline" size="small" icon={<RefreshIcon />} onClick={onRegenerate}>
-              Regenerate with AI
-            </CTAButton>
             <CTAButton variant="primary" size="small" icon={<PlusIcon />} onClick={handleAdd}>
               Add Skill
             </CTAButton>
