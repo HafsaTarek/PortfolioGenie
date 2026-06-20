@@ -1,18 +1,28 @@
-.sidebar {
+.container {
   display: flex;
-  flex-direction: column;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-xl);
+  align-items: flex-start; 
+  width: 100%;
+}
+
+.mainContent {
+  flex: 1;
   min-width: 0;
 }
 
-@media (min-width: 640px) and (max-width: 1023px) {
-  .sidebar {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--spacing-lg);
-  }
+.sidebar {
+  width: 320px; 
+  flex-shrink: 0;
+  margin-top: 64px; 
+}
 
-  .sidebar > :last-child {
-    grid-column: 1 / -1;
+@media (max-width: 1023px) {
+  .container {
+    flex-direction: column;
+  }
+  
+  .sidebar {
+    width: 100%;
+    margin-top: 0;
   }
 }

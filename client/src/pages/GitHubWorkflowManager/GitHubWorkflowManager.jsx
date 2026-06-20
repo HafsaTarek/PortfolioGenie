@@ -35,23 +35,17 @@ export default function GitHubWorkflowManager() {
   };
 
   return (
-    // Bootstrap: Centered viewport container with slight background tint
-    <div className="min-vh-100 d-flex align-items-center justify-content-center bg-light p-3">
-      {/* Container wrapper matching your high-fidelity card layout */}
+    <div className="min-vh-100 mt-3 d-flex align-items-center justify-content-center bg-light p-3">
       <div className="container bg-white rounded-3 shadow-lg overflow-hidden" style={{ maxWidth: '1140px', minHeight: '640px' }}>
 
-        {/* Bootstrap Responsive Grid Row */}
         <div className="row g-0 h-100 min-vh-md-75">
 
-          {/* Left Hero: Stacked on mobile (col-12), 5-columns width on desktop (col-lg-5) */}
           <div className="col-12 col-lg-5 d-flex">
             <LeftHeroCard />
           </div>
 
-          {/* Right Workflow Panel: Stacked on mobile (col-12), 7-columns width on desktop (col-lg-7) */}
           <div className="col-12 col-lg-7 d-flex flex-column p-4 p-md-5 justify-content-center bg-white">
 
-            {/* STEP 1: INITIAL CONNECT SCREEN */}
             {currentStep === 'step1' && (
               <div className="w-100 text-center py-4">
                 <div className={`${styles.gitIconContainer} mx-auto mb-4`}>🐙</div>
@@ -74,7 +68,6 @@ export default function GitHubWorkflowManager() {
               </div>
             )}
 
-            {/* STEP 1 LOADING: THE ANIMATED SPLASH */}
             {currentStep === 'loading' && (
               <div className="w-100 text-center py-4">
                 <div className="spinner-border text-primary mb-4" role="status" style={{ width: '3rem', height: '3rem' }}>
@@ -99,10 +92,8 @@ export default function GitHubWorkflowManager() {
               </div>
             )}
 
-            {/* STEP 2: METRICS BOARD AND SCRAPED REPOSITORIES */}
             {currentStep === 'step2' && (
               <div className="w-100 animate-fade-in">
-                {/* Bootstrap Alert Callout Box */}
                 <div className="alert alert-success d-flex align-items-center gap-2 mb-4 border-0" style={{ backgroundColor: '#ecfdf5', color: 'var(--dark-success)' }}>
                   <span className="fw-bold">✓ GitHub Connected Successfully!</span>
                   <span>We've imported {MOCK_REPOSITORIES.length} repositories from your account.</span>
@@ -110,7 +101,6 @@ export default function GitHubWorkflowManager() {
 
                 <h3 className="h5 mb-3 text-dark fw-bold">Connected GitHub Account</h3>
 
-                {/* Profile Metrics Board Container */}
                 <div className="border border-light-subtle rounded-3 p-3 mb-4 shadow-sm bg-white">
                   <div className="d-flex align-items-center justify-content-between mb-3">
                     <div className="d-flex align-items-center gap-3">
@@ -123,7 +113,6 @@ export default function GitHubWorkflowManager() {
                     <span className="badge rounded-pill text-success border border-success-subtle bg-success-subtle px-2 py-1">● Connected</span>
                   </div>
 
-                  {/* Internal Metrics Grid */}
                   <div className="row g-2">
                     <div className="col-4">
                       <div className="bg-light p-2 rounded text-center">
@@ -152,7 +141,6 @@ export default function GitHubWorkflowManager() {
 
                 <h3 className="h6 mb-2 fw-bold text-dark">Imported Repositories ({MOCK_REPOSITORIES.length})</h3>
 
-                {/* Scrollable Repository Subgrid */}
                 <div className={`${styles.repoScroller} d-flex flex-column gap-2 mb-4`}>
                   {MOCK_REPOSITORIES.map(repo => (
                     <RepoCard
@@ -164,7 +152,6 @@ export default function GitHubWorkflowManager() {
                   ))}
                 </div>
 
-                {/* Navigation Button Footer Row */}
                 <div className="d-flex justify-content-between align-items-center pt-2 border-top border-light-subtle">
                   <CTAButton variant="outline" onClick={() => setCurrentStep('step1')}>Skip</CTAButton>
                   <CTAButton variant="primary" onClick={() => alert(`Generated content layout for repo IDs: ${selectedRepos.join(', ')}`)}>
