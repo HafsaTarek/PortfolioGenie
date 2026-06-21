@@ -36,6 +36,13 @@
   width: 100%;
 }
 
+.radarContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-sm);
+}
+
 .navLinks {
   gap: var(--spacing-lg);
 }
@@ -80,14 +87,16 @@
 }
 
 .mainContent {
-  margin-top: var(--spacing-2xl);
+  /* Reduce top spacing so dashboard content starts higher */
+  margin-top: var(--spacing-lg);
 }
 
 .heroSection {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
-  padding: var(--spacing-2xl) var(--spacing-lg);
+  gap: var(--spacing-sm);
+  /* Reduce padding to move heading closer to navbar while keeping clean spacing */
+  padding: var(--spacing-lg) var(--spacing-lg);
   border-radius: var(--radius-lg);
   background: linear-gradient(
     180deg,
@@ -123,7 +132,8 @@
   display: grid;
   grid-template-columns: 1.5fr 1fr;
   gap: var(--spacing-lg);
-  margin-top: var(--spacing-2xl);
+  /* Use space more efficiently by pulling grid higher */
+  margin-top: var(--spacing-lg);
 }
 
 .card {
@@ -182,10 +192,19 @@
   font-size: var(--small-size);
 }
 
+.analyticsCard {
+  /* Analytics card will often span full width; allow override via .fullWidth */
+  min-height: 360px;
+}
+
 .chartCard,
-.analyticsCard,
 .progressCard {
-  min-height: 320px;
+  /* Make skills and progress cards taller for improved balance */
+  min-height: 420px;
+}
+
+.fullWidth {
+  grid-column: 1 / -1;
 }
 
 .chartPlaceholder {
@@ -287,15 +306,16 @@
 
 .progressBody {
   display: grid;
-  grid-template-columns: 160px 1fr;
-  gap: var(--spacing-lg);
+  grid-template-columns: 200px 1fr;
+  gap: var(--spacing-xl);
   align-items: center;
-  min-height: 260px;
+  min-height: 420px; /* match skills card height for balance */
+  place-items: center;
 }
 
 .progressCircle {
-  width: 160px;
-  height: 160px;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   background: conic-gradient(
     rgba(37, 99, 235, 0.75) 0 89%,
@@ -308,8 +328,8 @@
 
 .progressCircle::before {
   content: "";
-  width: 110px;
-  height: 110px;
+  width: 140px;
+  height: 140px;
   border-radius: 50%;
   background: var(--white);
 }
@@ -349,7 +369,7 @@
 }
 
 .projectsSection {
-  margin-top: var(--spacing-2xl);
+  margin-top: var(--spacing-lg);
 }
 
 .sectionHeader {
