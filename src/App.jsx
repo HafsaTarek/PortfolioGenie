@@ -2,14 +2,15 @@ import { createBrowserRouter, Outlet, RouterProvider, useLocation } from 'react-
 import GitHubWorkflowManager from './pages/GitHubWorkflowManager/GitHubWorkflowManager';
 import NavBar from './components/NavBar';
 import Footer from './components/Footer';
-import Login from './pages/Login/Login';
-import Register from './pages/Register/Register';
-import Overview from './pages/Overview/Overview';
+import Login from './../client/src/pages/Login/Login';
+import Register from './../client/src/pages/Register/Register';
+import Overview from './../client/src/pages/Overview/Overview';
 import UserDashboard from './pages/UserDashboard/UserDashboard';
 import AdminDashboard from './pages/AdminDashboard/AdminDashboard';
 import PortfolioPage from './pages/PortfolioPage';
 
 import {
+
   aboutMeInitial,
   skillsInitial,
   projectsInitial,
