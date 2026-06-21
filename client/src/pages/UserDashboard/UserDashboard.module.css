@@ -8,7 +8,7 @@
   max-width: 1320px;
   margin: 0 auto;
 }
-/* 
+
 .navBar {
   width: 100%;
   gap: var(--spacing-md);
@@ -29,7 +29,7 @@
   height: auto;
   max-height: 48px;
   object-fit: contain;
-} */
+}
 
 .chartContainer {
   min-height: 320px;
