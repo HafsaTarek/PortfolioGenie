@@ -1,11 +1,11 @@
 .dashboardPage {
   min-height: 100vh;
-  padding: var(--spacing-xl) var(--spacing-md) var(--spacing-2xl);
+  padding: var(--spacing-lg) var(--spacing-md) var(--spacing-2xl);
   background-color: #f4f7fb;
 }
 
 .pageContainer {
-  max-width: 1320px;
+  max-width: 1180px;
   margin: 0 auto;
 }
 
@@ -16,24 +16,13 @@
   background: var(--white);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
-}
-
-.navBrand {
-  display: flex;
+  justify-content: space-between;
   align-items: center;
 }
 
-.logoImage {
-  display: block;
-  width: auto;
-  height: auto;
-  max-height: 48px;
-  object-fit: contain;
-}
-
 .navTitle {
+  text-align: left;
   flex: 1;
-  text-align: center;
 }
 
 .dashboardTitle {
@@ -71,18 +60,20 @@
 }
 
 .mainContent {
-  margin-top: var(--spacing-2xl);
+  /* Reduce top spacing so dashboard content starts higher */
+  margin-top: var(--spacing-lg);
 }
 
 .heroSection {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
-  padding: var(--spacing-2xl) var(--spacing-lg);
+  gap: var(--spacing-sm);
+  /* Reduce padding to bring welcome text closer to navbar while preserving spacing */
+  padding: var(--spacing-lg) var(--spacing-lg);
   border-radius: var(--radius-lg);
   background: linear-gradient(180deg, rgba(37, 99, 235, 0.08), transparent 100%);
   box-shadow: var(--shadow-sm);
-  margin-bottom: var(--spacing-2xl);
+  margin-bottom: var(--spacing-lg);
 }
 
 .smallTitle {
@@ -109,9 +100,37 @@
 
 .statsGrid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--spacing-lg);
+  align-items: stretch;
   margin-bottom: var(--spacing-2xl);
+}
+
+/* Reuse stat grid styles for GitHub stats card */
+.statGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--spacing-md);
+}
+
+.statItem {
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  background: var(--gray-1);
+  text-align: center;
+}
+
+.statLabel {
+  color: var(--gray-5);
+  font-size: var(--small-size);
+}
+
+.statValue {
+  display: block;
+  font-size: 1.8rem;
+  font-weight: var(--fw-bold);
+  color: var(--text-color);
+  margin-bottom: var(--spacing-xs);
 }
 
 .card {
@@ -126,7 +145,8 @@
   display: grid;
   grid-template-columns: auto 1fr;
   gap: var(--spacing-md);
-  align-items: start;
+  align-items: center;
+  min-height: 210px;
 }
 
 .statIcon {
@@ -202,10 +222,7 @@
   width: 100%;
 }
 
-.contentSection {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: var(--spacing-lg);
+.tableSection {
   margin-bottom: var(--spacing-2xl);
 }
 
@@ -220,6 +237,7 @@
 
 .dataTable {
   width: 100%;
+  min-width: 760px;
   border-collapse: collapse;
   margin-top: var(--spacing-md);
 }

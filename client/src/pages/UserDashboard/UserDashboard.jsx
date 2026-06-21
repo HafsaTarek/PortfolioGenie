@@ -2,10 +2,11 @@ import { Area, AreaChart, CartesianGrid, Legend, PolarAngleAxis, PolarGrid, Pola
 import styles from './UserDashboard.module.css';
 import CTAButton from '../../components/shared/button/CTAButton';
 
-const stats = [
-  { label: 'Repositories', value: '34' },
-  { label: 'Stars', value: '1k' },
-  { label: 'Commits', value: '980' },
+// Backend-friendly keys for easier API mapping in future: repo_count, connections_count, commits_count
+const githubStats = [
+  { key: 'repo_count', label: 'Repositories', value: 34 },
+  { key: 'connections_count', label: 'Connections', value: 24 }, // renamed from "Stars"
+  { key: 'commits_count', label: 'Commits', value: 980 },
 ];
 
 const radarData = [
@@ -93,25 +94,24 @@ export default function UserDashboard() {
                 <span className={styles.cardMeta}>Live overview</span>
               </div>
               <div className={styles.statGrid}>
-                {stats.map((item) => (
-                  <div key={item.label} className={styles.statItem}>
+                {githubStats.map((item) => (
+                  <div key={item.key} className={styles.statItem}>
                     <span className={styles.statValue}>{item.value}</span>
                     <span className={styles.statLabel}>{item.label}</span>
                   </div>
                 ))}
               </div>
             </article>
-
             <article className={`${styles.chartCard} ${styles.card}`}>
               <div className={styles.cardHeader}>
                 <h2 className={styles.cardTitle}>Skills Analytics</h2>
                 <span className={styles.cardMeta}>Radar view</span>
               </div>
-              <div className={styles.chartContainer}>
-                <ResponsiveContainer width="100%" height={320}>
-                  <RadarChart data={radarData} outerRadius="80%">
+              <div className={`${styles.chartContainer} ${styles.radarContainer}`}>
+                <ResponsiveContainer width="100%" height={420}>
+                  <RadarChart data={radarData} outerRadius="90%">
                     <PolarGrid stroke="#e5e7eb" />
-                    <PolarAngleAxis dataKey="skill" tick={{ fill: '#6b7280', fontSize: 12 }} />
+                    <PolarAngleAxis dataKey="skill" tick={{ fill: '#6b7280', fontSize: 13 }} />
                     <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} />
                     <Radar
                       name="Skill Score"
@@ -122,36 +122,6 @@ export default function UserDashboard() {
                     />
                     <Tooltip contentStyle={{ borderRadius: 16, borderColor: '#e5e7eb' }} />
                   </RadarChart>
-                </ResponsiveContainer>
-              </div>
-            </article>
-
-            <article className={`${styles.analyticsCard} ${styles.card}`}>
-              <div className={styles.cardHeader}>
-                <h2 className={styles.cardTitle}>Activity Analytics</h2>
-                <span className={styles.cardMeta}>Daily commits & activity</span>
-              </div>
-              <div className={styles.chartContainer}>
-                <ResponsiveContainer width="100%" height={320}>
-                  <AreaChart data={activityData} margin={{ top: 16, right: 8, left: 0, bottom: 0 }}>
-                    <defs>
-                      <linearGradient id="blueGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#2563eb" stopOpacity={0.35} />
-                        <stop offset="95%" stopColor="#2563eb" stopOpacity={0.05} />
-                      </linearGradient>
-                      <linearGradient id="purpleGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#7c3aed" stopOpacity={0.35} />
-                        <stop offset="95%" stopColor="#7c3aed" stopOpacity={0.05} />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid stroke="#e5e7eb" strokeDasharray="4 4" vertical={false} />
-                    <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#6b7280', fontSize: 12 }} />
-                    <YAxis axisLine={false} tickLine={false} tick={{ fill: '#6b7280', fontSize: 12 }} />
-                    <Tooltip contentStyle={{ borderRadius: 16, borderColor: '#e5e7eb' }} />
-                    <Legend verticalAlign="top" height={32} iconType="circle" />
-                    <Area type="monotone" dataKey="commits" stroke="#2563eb" fill="url(#blueGradient)" strokeWidth={3} />
-                    <Area type="monotone" dataKey="reviews" stroke="#7c3aed" fill="url(#purpleGradient)" strokeWidth={3} />
-                  </AreaChart>
                 </ResponsiveContainer>
               </div>
             </article>
@@ -173,6 +143,36 @@ export default function UserDashboard() {
                     </li>
                   ))}
                 </ul>
+              </div>
+            </article>
+
+            <article className={`${styles.analyticsCard} ${styles.card} ${styles.fullWidth}`}>
+              <div className={styles.cardHeader}>
+                <h2 className={styles.cardTitle}>Activity Analytics</h2>
+                <span className={styles.cardMeta}>Daily commits & activity</span>
+              </div>
+              <div className={styles.chartContainer}>
+                <ResponsiveContainer width="100%" height={380}>
+                  <AreaChart data={activityData} margin={{ top: 12, right: 8, left: 0, bottom: 0 }}>
+                    <defs>
+                      <linearGradient id="blueGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#2563eb" stopOpacity={0.35} />
+                        <stop offset="95%" stopColor="#2563eb" stopOpacity={0.05} />
+                      </linearGradient>
+                      <linearGradient id="purpleGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#7c3aed" stopOpacity={0.35} />
+                        <stop offset="95%" stopColor="#7c3aed" stopOpacity={0.05} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid stroke="#e5e7eb" strokeDasharray="4 4" vertical={false} />
+                    <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#6b7280', fontSize: 12 }} />
+                    <YAxis axisLine={false} tickLine={false} tick={{ fill: '#6b7280', fontSize: 12 }} />
+                    <Tooltip contentStyle={{ borderRadius: 16, borderColor: '#e5e7eb' }} />
+                    <Legend verticalAlign="top" height={32} iconType="circle" />
+                    <Area type="monotone" dataKey="commits" stroke="#2563eb" fill="url(#blueGradient)" strokeWidth={3} />
+                    <Area type="monotone" dataKey="reviews" stroke="#7c3aed" fill="url(#purpleGradient)" strokeWidth={3} />
+                  </AreaChart>
+                </ResponsiveContainer>
               </div>
             </article>
           </section>
