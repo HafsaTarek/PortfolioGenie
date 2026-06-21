@@ -17,7 +17,7 @@ export default function NavBar() {
 
   return (
     <nav
-      className="navbar navbar-expand-lg border-bottom py-2 py-lg-3 sticky-top"
+      className="navbar navbar-expand-lg border-bottom py-2 py-lg-3 sticky-top bg-white"
       style={{ backgroundColor: "var(--white)", borderBottomColor: "var(--gray-2)" }}
     >
       <div className="container">

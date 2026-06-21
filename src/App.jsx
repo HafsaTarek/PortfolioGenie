@@ -4,7 +4,7 @@ import NavBar from './components/NavBar';
 import Footer from './components/Footer';
 import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
-import Overview from './pages/Overview';
+import Overview from './pages/Overview/Overview';
 import UserDashboard from './pages/UserDashboard/UserDashboard';
 import AdminDashboard from './pages/AdminDashboard/AdminDashboard';
 import PortfolioPage from './pages/PortfolioPage';
