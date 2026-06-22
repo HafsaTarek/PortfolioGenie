@@ -118,7 +118,7 @@ export default function GitHubWorkflowManager() {
 
 
   const handleDisconnect = () => {
-    // Remove the token from storage
+  // Remove the token from storage
     AuthService.logout();
     setUserData(null);
     setRepositories([]);
@@ -209,7 +209,7 @@ export default function GitHubWorkflowManager() {
               </div>
             )}
 
-            {/* LIVE ACCOUNT & REPOSITORIES METRICS INTERFACE */}
+            {/* STEP 2: LIVE ACCOUNT & REPOSITORIES METRICS INTERFACE */}
             {currentStep === 'step2' && userData && (
               <div className="w-100 animate-fade-in">
                 <div className="alert alert-success d-flex align-items-center justify-content-between mb-4 border-0" style={{ backgroundColor: '#ecfdf5', color: 'var(--dark-success)' }}>
