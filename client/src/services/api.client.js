@@ -1,28 +1,41 @@
-import { API_BASE_URL } from "../config/api.js";
+import axios from "axios";
+import { API_BASE_URL } from "../config/api";
 
 /**
- * Core API Request Engine Wrapper
+ * Core API Request Engine Wrapper using Axios
  */
-export const apiClient = async (endpoint, options = {}) => {
-  const token = localStorage.getItem("portfolio_genie_token");
-
-  const headers = {
+export const apiClient = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
     "Content-Type": "application/json",
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    ...options.headers,
-  };
+  },
+});
 
-  const config = {
-    ...options,
-    headers,
-  };
+apiClient.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("portfolio_genie_token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  },
+);
 
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
+apiClient.interceptors.response.use(
+  (response) => {
+    return response.data;
+  },
+  (error) => {
+    const errorMessage = error.response?.data?.message || "API Request failed";
+    console.error("🚨 API Error:", errorMessage);
 
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.message || `API Request failed at ${endpoint}`);
-  }
+    if (error.response?.status === 401) {
+      localStorage.removeItem("portfolio_genie_token");
+    }
 
-  return response.json();
-};
+    return Promise.reject(new Error(errorMessage));
+  },
+);
