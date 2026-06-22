@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import LeftHeroCard from '../../components/LeftHeroCard/LeftHeroCard';
+import LeftHeroCard from '../../components/connect/LeftHeroCard/LeftHeroCard';
 import CTAButton from '../../components/shared/button/CTAButton';
-import RepoCard from '../../components/RepoCard/RepoCard';
+import RepoCard from '../../components/connect/RepoCard/RepoCard';
 import styles from './GitHubWorkflowManager.module.css';
 import { API_BASE_URL } from '../../config/api.js';
 
@@ -24,7 +24,7 @@ export default function GitHubWorkflowManager() {
   // Individual loading checks for the multi-step splash screen
   const [loadingTicks, setLoadingTicks] = useState({ profile: false, repos: false, patterns: false });
 
-  // Lifecycle Hook: Checks URL params for an authorized session bounce from backend
+  // This is used to get the token from the url after the user come from github authorized
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const tokenFromUrl = urlParams.get('token');
@@ -37,34 +37,31 @@ export default function GitHubWorkflowManager() {
   }, []);
 
 
+  // Fetch data and hydrate the states with it and handle animation of loading
   const triggerLoadingPipeline = async () => {
     setErrorMessage('');
     setCurrentStep('loading');
     setLoadingTicks({ profile: false, repos: false, patterns: false });
 
     try {
-      // 1. Fetch real backend data immediately in the background
+      // Fetch connected user account data in the background without await to display loading animation to the user while fetching the data
       const dataPromise = GitHubService.getConnectedAccount();
 
-      // 2. Animate Stage 1: Fetching Profile
+      // Animate Stage 1: Fetching Profile
       await new Promise((resolve) => setTimeout(resolve, 800));
       setLoadingTicks((p) => ({ ...p, profile: true }));
 
-      // 3. Animate Stage 2: Syncing Repositories
+      // Animate Stage 2: Syncing Repositories
       await new Promise((resolve) => setTimeout(resolve, 800));
       setLoadingTicks((p) => ({ ...p, repos: true }));
 
-      // 4. Await data resolution if the network request is still taking time
+      // Await data resolution if the network request is still taking time
       const data = await dataPromise;
-
-      // 5. Animate Stage 3: Code Pattern Evaluation
-      await new Promise((resolve) => setTimeout(resolve, 800));
-      setLoadingTicks((p) => ({ ...p, patterns: true }));
 
       // Final short pause for UI smoothness before mounting step 2
       await new Promise((resolve) => setTimeout(resolve, 500));
 
-      // Hydrate state with genuine backend data payloads
+      // set the states with backend data retieved
       setUserData(data.user);
       setRepositories(data.repositories);
       setSelectedRepos(data.repositories.map((repo) => repo._id));
@@ -77,7 +74,7 @@ export default function GitHubWorkflowManager() {
   };
 
   /**
-   * Kicks off the backend OAuth cycle redirection route
+   * When the user click on connect to github it goes to github auth.
    */
   const handleConnectGithub = () => {
     window.location.href = `${API_BASE_URL}/api/github/connect`;
@@ -113,12 +110,15 @@ export default function GitHubWorkflowManager() {
   };
 
   const toggleRepoSelection = (id) => {
+    // if there's id in selectedRepos it removes it if not it add it to all selected ones
     setSelectedRepos((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
   };
 
+
   const handleDisconnect = () => {
+    // Remove the token from storage
     AuthService.logout();
     setUserData(null);
     setRepositories([]);
@@ -144,7 +144,7 @@ export default function GitHubWorkflowManager() {
               </div>
             )}
 
-            {/* STEP 1: INITIAL CONNECT SCREEN */}
+            {/* INITIAL CONNECT SCREEN */}
             {currentStep === 'step1' && (
               <div className="w-100 animate-fade-in">
                 <div className="text-start mb-4">
@@ -184,7 +184,7 @@ export default function GitHubWorkflowManager() {
               </div>
             )}
 
-            {/* STEP 1 LOADING: THE ANIMATED SPLASH INTERFACE */}
+            {/* LOADING: THE ANIMATED SPLASH INTERFACE */}
             {currentStep === 'loading' && (
               <div className="w-100 text-center py-4 animate-fade-in">
                 <div className="spinner-border text-primary mb-4" role="status" style={{ width: '3rem', height: '3rem' }}>
@@ -209,7 +209,7 @@ export default function GitHubWorkflowManager() {
               </div>
             )}
 
-            {/* STEP 2: LIVE ACCOUNT & REPOSITORIES METRICS INTERFACE */}
+            {/* LIVE ACCOUNT & REPOSITORIES METRICS INTERFACE */}
             {currentStep === 'step2' && userData && (
               <div className="w-100 animate-fade-in">
                 <div className="alert alert-success d-flex align-items-center justify-content-between mb-4 border-0" style={{ backgroundColor: '#ecfdf5', color: 'var(--dark-success)' }}>
