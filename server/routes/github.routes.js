@@ -19,13 +19,13 @@ router.get(
   githubController.getConnectedAccountData,
 );
 
+router.get("/portfolio", authMiddleware, githubController.getUserPortfolio);
+
 // If the user is authenticated we generate a portfolio to him and save it in the db
 router.post(
   "/generate-portfolio",
   authMiddleware,
   githubController.generateAIPortfolio,
 );
-
-
 
 export default router;

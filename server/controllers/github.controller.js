@@ -169,3 +169,24 @@ export const generateAIPortfolio = async (req, res) => {
     });
   }
 };
+
+// This function gets the portfolio of the user
+export const getUserPortfolio = async (req, res) => {
+  try {
+    const portfolio = await Portfolio.findOne({ userId: req.user.id });
+
+    if (!portfolio) {
+      return res.status(404).json({
+        message:
+          "No generated portfolio found for this user. Please generate one first.",
+      });
+    }
+
+    return res.json(portfolio);
+  } catch (error) {
+    return res.status(500).json({
+      message: "Failed to fetch user portfolio structure.",
+      error: error.message,
+    });
+  }
+};

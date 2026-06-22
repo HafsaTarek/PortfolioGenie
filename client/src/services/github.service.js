@@ -10,4 +10,8 @@ export const GitHubService = {
   async getConnectedAccount() {
     return apiClient.get("/api/github/account");
   },
+
+  async getGeneratedPortfolio() {
+    return apiClient.get("/api/github/portfolio");
+  },
 };
