@@ -19,7 +19,7 @@ export default function GitHubWorkflowManager() {
   const [selectedRepos, setSelectedRepos] = useState([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   // Individual loading checks for the multi-step splash screen
   const [loadingTicks, setLoadingTicks] = useState({ profile: false, repos: false, patterns: false });
@@ -99,12 +99,12 @@ export default function GitHubWorkflowManager() {
       alert('✨ Portfolio content generated successfully!');
       console.log('Gemini Content:', result.portfolio.aiGeneratedContent);
 
-      // navigate('/portfolio-dashboard', {
-      //   state: {
-      //     aiContent: result.portfolio.aiGeneratedContent,
-      //     userRepos: selectedRepos
-      //   }
-      // });
+      navigate('/portfolio', {
+        state: {
+          aiContent: result.portfolio.aiGeneratedContent,
+          userRepos: selectedRepos
+        }
+      });
 
     } catch (error) {
       console.error('AI Processing Hook Error:', error.message);
