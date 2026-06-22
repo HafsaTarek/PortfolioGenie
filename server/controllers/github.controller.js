@@ -1,3 +1,5 @@
+// This is the controller used to connect all services with the models
+
 import jwt from "jsonwebtoken";
 import githubService from "../services/github.service.js";
 import aiService from "../services/ai.service.js";
@@ -8,7 +10,7 @@ import Portfolio from "../models/portfolio.model.js";
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 
 // Here when The user click on "Connect with GitHub" button, we redirect them to GitHub's OAuth page.
-// To enable portfolioGenie to access their public profile and repositories data for portfolio generation.
+// To enable the user to connect and authorize with github
 // The callback URL will be handled in the next function to process the OAuth response and fetch user data.
 export const redirectToGithub = (req, res) => {
   const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${process.env.GITHUB_CLIENT_ID}&redirect_uri=${encodeURIComponent(process.env.GITHUB_REDIRECT_URL)}&scope=user,repo`;
@@ -27,7 +29,7 @@ export const handleCallback = async (req, res) => {
       .json({ message: "Missing OAuth authorization code parameter." });
 
   try {
-    // Fetch all data needed using the code
+    // Fetch all data needed using the code exchanged with token
     const token = await githubService.getAccessToken(code);
     const ghProfile = await githubService.getUserProfile(token);
     const ghRepos = await githubService.getUserRepositories(
@@ -39,14 +41,13 @@ export const handleCallback = async (req, res) => {
     ghRepos.forEach((repo) => {
       if (repo.language) languagesSet.add(repo.language);
     });
-    // We only keep the top 5 unique languages for simplicity and relevance in the portfolio.
-    const topLanguages = Array.from(languagesSet).slice(0, 5);
+    // We only keep the top 10 unique languages for simplicity and relevance in the portfolio.
+    const topLanguages = Array.from(languagesSet).slice(0, 10);
 
     // We either create a new user or update the existing one with the latest GitHub data.
-    let user = await User.findOne({ githubId: ghProfile.id.toString() });
-    if (!user) {
-      user = new User({
-        githubId: ghProfile.id.toString(),
+    const user = await User.findOneAndUpdate(
+      { githubId: ghProfile.id.toString() },
+      {
         username: ghProfile.login,
         name: ghProfile.name,
         avatarUrl: ghProfile.avatar_url,
@@ -54,15 +55,14 @@ export const handleCallback = async (req, res) => {
         publicReposCount: ghProfile.public_repos || 0,
         topLanguages,
         accessToken: token,
-      });
-    } else {
-      user.name = ghProfile.name;
-      user.avatarUrl = ghProfile.avatar_url;
-      user.followers = ghProfile.followers || 0;
-      user.publicReposCount = ghProfile.public_repos || 0;
-      user.topLanguages = topLanguages;
-      user.accessToken = token;
-    }
+      },
+      {
+        upsert: true,
+        new: true,
+        setDefaultsOnInsert: true,
+      },
+    );
+
     await user.save();
 
     await Repository.deleteMany({ userId: user._id });
@@ -84,10 +84,13 @@ export const handleCallback = async (req, res) => {
       await newRepo.save();
     }
 
+    // JWT is a long encrypted string that identify the user here it's the userID to solve the problem that express is stateless and don't remember the user
+    // It's expired in 7 days
     const clientToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });
-    // Redirect back to the frontend with the JWT token in the query parameters for authentication and session management.
+
+    // Redirect back to the frontend with the JWT token (clientToken) in the query parameters for authentication and session management.
     return res.redirect(
       `${FRONTEND_URL}/connect?status=success&token=${clientToken}`,
     );
@@ -99,7 +102,7 @@ export const handleCallback = async (req, res) => {
   }
 };
 
-// This is used by frontend to get the connected GitHub account data (profile and repositories)
+// This is used by frontend to get the connected GitHub account data (profile and repositories) using the clientToken we store in the local storage
 // for display and portfolio generation after the user has authenticated and connected their GitHub account.
 // It fetches the user data from our database and returns it in the response.
 export const getConnectedAccountData = async (req, res) => {

@@ -1,4 +1,5 @@
 import express from "express";
+// This is used to enable our platform to communicate (send requests and recieve rescponses) with our server/backend
 import cors from "cors";
 import githubRoutes from "./routes/github.routes.js";
 

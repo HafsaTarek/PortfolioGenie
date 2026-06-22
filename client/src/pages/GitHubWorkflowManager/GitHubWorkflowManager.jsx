@@ -29,15 +29,13 @@ export default function GitHubWorkflowManager() {
     const urlParams = new URLSearchParams(window.location.search);
     const tokenFromUrl = urlParams.get('token');
     const status = urlParams.get('status');
-
     if (status === 'success' && tokenFromUrl) {
       AuthService.setToken(tokenFromUrl);
       window.history.replaceState({}, document.title, window.location.pathname);
       triggerLoadingPipeline();
-    } else if (AuthService.isAuthenticated()) {
-      triggerLoadingPipeline();
     }
   }, []);
+
 
   const triggerLoadingPipeline = async () => {
     setErrorMessage('');
