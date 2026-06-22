@@ -9,7 +9,7 @@ export const AIService = {
    * @param {Array<string>} repoIds - Selected MongoDB tracking IDs
    */
   async generatePortfolio(repoIds) {
-    return apiClient("/generate-portfolio", {
+    return apiClient("/api/github/generate-portfolio", {
       method: "POST",
       body: JSON.stringify({ repoIds }),
     });

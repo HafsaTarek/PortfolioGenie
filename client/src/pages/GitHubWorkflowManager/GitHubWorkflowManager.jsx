@@ -1,117 +1,239 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import LeftHeroCard from '../../components/LeftHeroCard/LeftHeroCard';
 import CTAButton from '../../components/shared/button/CTAButton';
 import RepoCard from '../../components/RepoCard/RepoCard';
 import styles from './GitHubWorkflowManager.module.css';
+import { API_BASE_URL } from '../../config/api.js';
 
-const MOCK_REPOSITORIES = [
-  { id: 1, name: 'portfolio-website', description: 'Personal portfolio built with React and Tailwind CSS', language: 'TypeScript', stars: 42, updated: '2 days ago' },
-  { id: 2, name: 'task-manager-app', description: 'Full-stack task management application with authentication', language: 'JavaScript', stars: 28, updated: '1 week ago' },
-  { id: 3, name: 'weather-dashboard', description: 'Real-time weather dashboard using OpenWeather API', language: 'React', stars: 15, updated: '3 weeks ago' },
-  { id: 4, name: 'blog-platform', description: 'Markdown-based blog platform with dark mode support', language: 'TypeScript', stars: 31, updated: '1 month ago' }
-];
+// Import domain-specific services
+import { AuthService } from '../../services/auth.service.js';
+import { GitHubService } from '../../services/github.service.js';
+import { AIService } from '../../services/ai.service.js';
+
 
 export default function GitHubWorkflowManager() {
   const [currentStep, setCurrentStep] = useState('step1'); // 'step1' | 'loading' | 'step2'
-  const [selectedRepos, setSelectedRepos] = useState([1, 2, 3, 4]);
+  const [userData, setUserData] = useState(null);
+  const [repositories, setRepositories] = useState([]);
+  const [selectedRepos, setSelectedRepos] = useState([]);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  // const navigate = useNavigate();
+
+  // Individual loading checks for the multi-step splash screen
   const [loadingTicks, setLoadingTicks] = useState({ profile: false, repos: false, patterns: false });
 
+  // Lifecycle Hook: Checks URL params for an authorized session bounce from backend
   useEffect(() => {
-    if (currentStep === 'loading') {
-      const t1 = setTimeout(() => setLoadingTicks(p => ({ ...p, profile: true })), 700);
-      const t2 = setTimeout(() => setLoadingTicks(p => ({ ...p, repos: true })), 1400);
-      const t3 = setTimeout(() => setLoadingTicks(p => ({ ...p, patterns: true })), 2100);
-      const t4 = setTimeout(() => setCurrentStep('step2'), 2800);
-      return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); };
-    } else {
-      setLoadingTicks({ profile: false, repos: false, patterns: false });
+    const urlParams = new URLSearchParams(window.location.search);
+    const tokenFromUrl = urlParams.get('token');
+    const status = urlParams.get('status');
+
+    if (status === 'success' && tokenFromUrl) {
+      AuthService.setToken(tokenFromUrl);
+      window.history.replaceState({}, document.title, window.location.pathname);
+      triggerLoadingPipeline();
+    } else if (AuthService.isAuthenticated()) {
+      triggerLoadingPipeline();
     }
-  }, [currentStep]);
+  }, []);
+
+  const triggerLoadingPipeline = async () => {
+    setErrorMessage('');
+    setCurrentStep('loading');
+    setLoadingTicks({ profile: false, repos: false, patterns: false });
+
+    try {
+      // 1. Fetch real backend data immediately in the background
+      const dataPromise = GitHubService.getConnectedAccount();
+
+      // 2. Animate Stage 1: Fetching Profile
+      await new Promise((resolve) => setTimeout(resolve, 800));
+      setLoadingTicks((p) => ({ ...p, profile: true }));
+
+      // 3. Animate Stage 2: Syncing Repositories
+      await new Promise((resolve) => setTimeout(resolve, 800));
+      setLoadingTicks((p) => ({ ...p, repos: true }));
+
+      // 4. Await data resolution if the network request is still taking time
+      const data = await dataPromise;
+
+      // 5. Animate Stage 3: Code Pattern Evaluation
+      await new Promise((resolve) => setTimeout(resolve, 800));
+      setLoadingTicks((p) => ({ ...p, patterns: true }));
+
+      // Final short pause for UI smoothness before mounting step 2
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      // Hydrate state with genuine backend data payloads
+      setUserData(data.user);
+      setRepositories(data.repositories);
+      setSelectedRepos(data.repositories.map((repo) => repo._id));
+      setCurrentStep('step2');
+    } catch (error) {
+      console.error('Data hydration failure:', error.message);
+      setErrorMessage('Failed to import account data. Please reconnect.');
+      handleDisconnect();
+    }
+  };
+
+  /**
+   * Kicks off the backend OAuth cycle redirection route
+   */
+  const handleConnectGithub = () => {
+    window.location.href = `${API_BASE_URL}/api/github/connect`;
+  };
+
+  /**
+   * Submits selected repo IDs to the Gemini portfolio generation pipeline
+   */
+  const handleGeneratePortfolio = async () => {
+    if (selectedRepos.length === 0) return;
+
+    setIsGenerating(true);
+    setErrorMessage('');
+    try {
+      const result = await AIService.generatePortfolio(selectedRepos);
+
+      alert('✨ Portfolio content generated successfully!');
+      console.log('Gemini Content:', result.portfolio.aiGeneratedContent);
+
+      // navigate('/portfolio-dashboard', {
+      //   state: {
+      //     aiContent: result.portfolio.aiGeneratedContent,
+      //     userRepos: selectedRepos
+      //   }
+      // });
+
+    } catch (error) {
+      console.error('AI Processing Hook Error:', error.message);
+      setErrorMessage(error.message);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   const toggleRepoSelection = (id) => {
-    setSelectedRepos(prev =>
-      prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
+    setSelectedRepos((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
   };
 
+  const handleDisconnect = () => {
+    AuthService.logout();
+    setUserData(null);
+    setRepositories([]);
+    setSelectedRepos([]);
+    setCurrentStep('step1');
+  };
+
   return (
-    <div className="min-vh-100 mt-3 d-flex align-items-center justify-content-center bg-light p-3">
+    <div className="min-vh-100 d-flex align-items-center justify-content-center bg-light p-3">
       <div className="container bg-white rounded-3 shadow-lg overflow-hidden" style={{ maxWidth: '1140px', minHeight: '640px' }}>
         <div className="row g-0 h-100 min-vh-md-75">
+
           <div className="col-12 col-lg-5 d-flex">
             <LeftHeroCard />
           </div>
 
           <div className="col-12 col-lg-7 d-flex flex-column p-4 p-md-5 justify-content-center bg-white">
-            {currentStep === 'step1' && (
-              <div className="w-100 text-center py-4">
-                <div className={`${styles.gitIconContainer} mx-auto mb-4`}>
-                  <svg
-                    viewBox="0 0 24 24"
-                    width="40"
-                    height="40"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
-                  </svg>
-                </div>
-                <h2 className="h2 mb-3 fw-bold text-dark">Ready to Get Started?</h2>
-                <p className="body-text text-muted mb-4 px-md-4">
-                  Connect your GitHub account to import your projects and start building your professional portfolio in minutes.
-                </p>
-                <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center mb-4">
-                  <CTAButton variant="primary" size="medium" onClick={() => setCurrentStep('loading')}>
-                    Connect Github account
-                  </CTAButton>
-                  <CTAButton variant="outline" size="medium" onClick={() => setCurrentStep('step2')}>
-                    Skip for now
-                  </CTAButton>
-                </div>
-                <p className="caption-text text-black-50 mt-4">
-                  We'll only access your public repositories
-                </p>
+
+            {/* Global Error Banner */}
+            {errorMessage && (
+              <div className="alert alert-danger mb-4 border-0 small py-2 animate-fade-in" role="alert">
+                ⚠️ {errorMessage}
               </div>
             )}
 
+            {/* STEP 1: INITIAL CONNECT SCREEN */}
+            {currentStep === 'step1' && (
+              <div className="w-100 animate-fade-in">
+                <div className="text-start mb-4">
+                  <h1 className="display-6 fw-bold text-dark mb-2" style={{ letterSpacing: '-0.5px' }}>
+                    Connect Your GitHub
+                  </h1>
+                  <p className="body-text text-muted" style={{ fontSize: '15px', lineHeight: '1.5' }}>
+                    Import your repositories, skills, and developer activity to generate your portfolio automatically.
+                  </p>
+                </div>
+
+                <div className="border border-light-subtle rounded-4 p-4 p-md-5 text-center bg-white shadow-sm mx-auto" style={{ maxWidth: '520px' }}>
+                  <div className="d-flex align-items-center justify-content-center bg-light rounded-3 mb-4 mx-auto" style={{ width: '64px', height: '64px' }}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" className="text-secondary" viewBox="0 0 16 16">
+                      <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8" />
+                    </svg>
+                  </div>
+
+                  <h2 className="h4 mb-2 fw-bold text-dark">Ready to Get Started?</h2>
+                  <p className="small text-muted mb-4 px-lg-3">
+                    Connect your GitHub account to import your projects and start building your professional portfolio in minutes.
+                  </p>
+
+                  <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center mb-4">
+                    <CTAButton variant="primary" size="medium" onClick={handleConnectGithub}>
+                      Connect Github account
+                    </CTAButton>
+                    <CTAButton variant="outline" size="medium" onClick={() => setCurrentStep('step2')}>
+                      Skip for now
+                    </CTAButton>
+                  </div>
+
+                  <p className="m-0 text-black-50" style={{ fontSize: '12px', fontWeight: '500' }}>
+                    We'll only access your public repositories
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* STEP 1 LOADING: THE ANIMATED SPLASH INTERFACE */}
             {currentStep === 'loading' && (
-              <div className="w-100 text-center py-4">
+              <div className="w-100 text-center py-4 animate-fade-in">
                 <div className="spinner-border text-primary mb-4" role="status" style={{ width: '3rem', height: '3rem' }}>
                   <span className="visually-hidden">Loading...</span>
                 </div>
                 <h2 className="h3 mb-2 text-dark fw-bold">Importing Your Repositories</h2>
-                <p className="body-text text-muted mb-4">
+                <p className="body-text text-muted mb-4 px-md-4">
                   We're analyzing your GitHub profile and importing your repositories. This will only take a moment...
                 </p>
-                <div className="d-inline-flex flex-column align-items-start gap-3 mt-3 text-start">
+
+                {/* Vertical Step Indicator Stack */}
+                <div className="d-inline-flex flex-column align-items-start gap-3 mt-2 text-start p-4 bg-light rounded-4 border border-light-subtle" style={{ minWidth: '290px' }}>
                   <div className="d-flex align-items-center gap-3">
-                    <span>{loadingTicks.profile ? '✅' : '🔄'}</span>
-                    <span className={loadingTicks.profile ? 'text-dark fw-medium' : 'text-muted'}>Fetching profile information</span>
+                    <span style={{ fontSize: '1.1rem' }}>{loadingTicks.profile ? '✅' : '🔄'}</span>
+                    <span className={loadingTicks.profile ? 'text-dark fw-semibold' : 'text-muted'}>Fetching profile information</span>
                   </div>
                   <div className="d-flex align-items-center gap-3">
-                    <span>{loadingTicks.repos ? '✅' : '🔄'}</span>
-                    <span className={loadingTicks.repos ? 'text-dark fw-medium' : 'text-muted'}>Importing repositories</span>
+                    <span style={{ fontSize: '1.1rem' }}>{loadingTicks.repos ? '✅' : '🔄'}</span>
+                    <span className={loadingTicks.repos ? 'text-dark fw-semibold' : 'text-muted'}>Importing repositories</span>
                   </div>
                 </div>
               </div>
             )}
 
-            {currentStep === 'step2' && (
+            {/* STEP 2: LIVE ACCOUNT & REPOSITORIES METRICS INTERFACE */}
+            {currentStep === 'step2' && userData && (
               <div className="w-100 animate-fade-in">
-                <div className="alert alert-success d-flex align-items-center gap-2 mb-4 border-0" style={{ backgroundColor: '#ecfdf5', color: 'var(--dark-success)' }}>
-                  <span className="fw-bold">✓ GitHub Connected Successfully!</span>
-                  <span>We've imported {MOCK_REPOSITORIES.length} repositories from your account.</span>
+                <div className="alert alert-success d-flex align-items-center justify-content-between mb-4 border-0" style={{ backgroundColor: '#ecfdf5', color: 'var(--dark-success)' }}>
+                  <div>
+                    <span className="fw-bold">✓ GitHub Connected Successfully! </span>
+                    <span>We've synchronized {repositories.length} public repositories.</span>
+                  </div>
                 </div>
 
-                <h3 className="h5 mb-3 text-dark fw-bold">Connected GitHub Account</h3>
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                  <h3 className="h5 m-0 text-dark fw-bold">Connected GitHub Account</h3>
+                  <button onClick={handleDisconnect} className="btn btn-sm btn-link text-danger p-0 text-decoration-none">Disconnect</button>
+                </div>
 
+                {/* Profile Summary Details Card */}
                 <div className="border border-light-subtle rounded-3 p-3 mb-4 shadow-sm bg-white">
                   <div className="d-flex align-items-center justify-content-between mb-3">
                     <div className="d-flex align-items-center gap-3">
-                      <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" className="rounded-circle" style={{ width: '48px', height: '48px', objectFit: 'cover' }} alt="Avatar" />
+                      <img src={userData.avatarUrl} className="rounded-circle" style={{ width: '48px', height: '48px', objectFit: 'cover' }} alt="Avatar" />
                       <div>
-                        <h4 className="m-0 h6 fw-bold text-dark">Sarah Ahmed</h4>
-                        <p className="m-0 text-muted small">@sarahj_dev</p>
+                        <h4 className="m-0 h6 fw-bold text-dark">{userData.name || userData.username}</h4>
+                        <p className="m-0 text-muted small">@{userData.username}</p>
                       </div>
                     </div>
                     <span className="badge rounded-pill text-success border border-success-subtle bg-success-subtle px-2 py-1">● Connected</span>
@@ -120,13 +242,13 @@ export default function GitHubWorkflowManager() {
                   <div className="row g-2">
                     <div className="col-4">
                       <div className="bg-light p-2 rounded text-center">
-                        <div className="fw-bold text-dark h5 mb-0">247</div>
+                        <div className="fw-bold text-dark h5 mb-0">{userData.followers}</div>
                         <div className="text-muted small" style={{ fontSize: '11px' }}>Followers</div>
                       </div>
                     </div>
                     <div className="col-4">
                       <div className="bg-light p-2 rounded text-center">
-                        <div className="fw-bold text-dark h5 mb-0">18</div>
+                        <div className="fw-bold text-dark h5 mb-0">{userData.publicReposCount || repositories.length}</div>
                         <div className="text-muted small" style={{ fontSize: '11px' }}>Repositories</div>
                       </div>
                     </div>
@@ -134,36 +256,43 @@ export default function GitHubWorkflowManager() {
                       <div className="bg-light p-2 rounded text-start h-100 d-flex flex-column justify-content-center">
                         <div className="text-muted mb-1" style={{ fontSize: '10px', fontWeight: '600' }}>LANGUAGES</div>
                         <div className="d-flex flex-wrap gap-1">
-                          <span className="badge text-primary bg-primary-subtle font-monospace" style={{ fontSize: '9px' }}>JS</span>
-                          <span className="badge text-primary bg-primary-subtle font-monospace" style={{ fontSize: '9px' }}>TS</span>
-                          <span className="badge text-primary bg-primary-subtle font-monospace" style={{ fontSize: '9px' }}>React</span>
+                          {userData.topLanguages?.map((lang, index) => (
+                            <span key={index} className="badge text-primary bg-primary-subtle font-monospace" style={{ fontSize: '9px' }}>{lang}</span>
+                          ))}
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <h3 className="h6 mb-2 fw-bold text-dark">Imported Repositories ({MOCK_REPOSITORIES.length})</h3>
+                <h3 className="h6 mb-2 fw-bold text-dark">Select Repositories for AI Analysis ({repositories.length})</h3>
 
-                <div className={`${styles.repoScroller} d-flex flex-column gap-2 mb-4`}>
-                  {MOCK_REPOSITORIES.map(repo => (
+                {/* Scrollable Repo Panel */}
+                <div className={`${styles.repoScroller} d-flex flex-column gap-2 mb-4`} style={{ maxHeight: '240px', overflowY: 'auto' }}>
+                  {repositories.map(repo => (
                     <RepoCard
-                      key={repo.id}
-                      repo={repo}
-                      isSelected={selectedRepos.includes(repo.id)}
-                      onToggle={() => toggleRepoSelection(repo.id)}
+                      key={repo._id}
+                      repo={{
+                        name: repo.name,
+                        description: repo.description || 'No description provided.',
+                        language: repo.language || 'Documentation',
+                        updated: repo.updatedAtCustom || 'Recent'
+                      }}
+                      isSelected={selectedRepos.includes(repo._id)}
+                      onToggle={() => toggleRepoSelection(repo._id)}
                     />
                   ))}
                 </div>
 
                 <div className="d-flex justify-content-between align-items-center pt-2 border-top border-light-subtle">
-                  <CTAButton variant="outline" onClick={() => setCurrentStep('step1')}>Skip</CTAButton>
-                  <CTAButton variant="primary" onClick={() => alert(`Generated content layout for repo IDs: ${selectedRepos.join(', ')}`)}>
-                    Generate
+                  <CTAButton variant="outline" onClick={handleDisconnect}>Cancel</CTAButton>
+                  <CTAButton variant="primary" onClick={handleGeneratePortfolio} disabled={selectedRepos.length === 0 || isGenerating}>
+                    {isGenerating ? 'Analyzing with Gemini...' : 'Connect & Generate'}
                   </CTAButton>
                 </div>
               </div>
             )}
+
           </div>
         </div>
       </div>

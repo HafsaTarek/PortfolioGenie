@@ -8,6 +8,6 @@ export const GitHubService = {
    * Fetches the user profile and imported repository nodes
    */
   async getConnectedAccount() {
-    return apiClient("/account", { method: "GET" });
+    return apiClient("/api/github/account", { method: "GET" });
   },
 };

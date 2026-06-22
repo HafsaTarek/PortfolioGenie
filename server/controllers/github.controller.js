@@ -5,6 +5,8 @@ import User from "../models/user.model.js";
 import Repository from "../models/repository.model.js";
 import Portfolio from "../models/portfolio.model.js";
 
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
+
 // Here when The user click on "Connect with GitHub" button, we redirect them to GitHub's OAuth page.
 // To enable portfolioGenie to access their public profile and repositories data for portfolio generation.
 // The callback URL will be handled in the next function to process the OAuth response and fetch user data.
@@ -87,7 +89,7 @@ export const handleCallback = async (req, res) => {
     });
     // Redirect back to the frontend with the JWT token in the query parameters for authentication and session management.
     return res.redirect(
-      `http://localhost:5173?token=${clientToken}&status=success`,
+      `${FRONTEND_URL}/connect?status=success&token=${clientToken}`,
     );
   } catch (error) {
     console.error("❌ Callback Routing Failure:", error.message);
