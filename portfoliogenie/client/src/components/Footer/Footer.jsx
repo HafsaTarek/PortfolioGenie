@@ -20,13 +20,13 @@ export default function Footer() {
         </div>
 
         <div className={styles.links}>
-          <a href="/">Home</a>
+          <a href="/user-dashboard">Dahboard</a>
           <a href="/user-dashboard">Portfolio</a>
           <a href="/connect">Connect GitHub</a>
         </div>
 
         <div className={styles.bottom}>
-          <p>© 2025 PortfolioGenie. All rights reserved.</p>
+          <p>©2026 PortfolioGenie. All rights reserved.</p>
 
           <a
             href="https://github.com"

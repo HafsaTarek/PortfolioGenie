@@ -89,17 +89,21 @@ export default function GitHubWorkflowManager() {
     setIsGenerating(true);
     setErrorMessage('');
     try {
-      const result = await AIService.generatePortfolio(selectedRepos);
-
+      const result =
+        await AIService.generatePortfolio(
+          selectedRepos
+        );
       alert('✨ Portfolio content generated successfully!');
-      console.log('Gemini Content:', result.portfolio.aiGeneratedContent);
 
-      navigate('/portfolio', {
+      navigate("/portfolio", {
         state: {
-          aiContent: result.portfolio.aiGeneratedContent,
-          userRepos: selectedRepos
-        }
+          portfolio:
+            result.portfolio.aiGeneratedContent,
+        },
       });
+
+
+      console.log('Gemini Content:', result.portfolio.aiGeneratedContent);
 
     } catch (error) {
       console.error('AI Processing Hook Error:', error.message);
@@ -118,7 +122,7 @@ export default function GitHubWorkflowManager() {
 
 
   const handleDisconnect = () => {
-  // Remove the token from storage
+    // Remove the token from storage
     AuthService.logout();
     setUserData(null);
     setRepositories([]);

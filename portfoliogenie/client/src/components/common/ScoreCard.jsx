@@ -31,8 +31,12 @@ export default function ScoreCard({ label, score, max, tone, metrics }) {
       </header>
 
       <div className={styles.metrics}>
-        {metrics.map((metric) => (
-          <ProgressBar key={metric.label} label={metric.label} value={metric.value} />
+        {metrics?.map((metric) => (
+          <ProgressBar
+            key={metric.label}
+            label={metric.label}
+            value={metric.value}
+          />
         ))}
       </div>
     </section>
