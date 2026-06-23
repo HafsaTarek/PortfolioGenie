@@ -1,0 +1,172 @@
+.container {
+  position: relative;
+}
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+
+  min-height: 44px;
+  padding: 8px 12px;
+
+  background: var(--white);
+  border: 1px solid var(--gray-2);
+  border-radius: 15px;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.trigger:hover {
+  background: var(--gray-1);
+  border-color: var(--gray-3);
+}
+
+.trigger:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+.avatar,
+.avatarPlaceholder {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.avatar {
+  object-fit: cover;
+}
+
+.avatarPlaceholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--gray-1);
+  border: 1px solid var(--gray-2);
+  color: var(--gray-5);
+}
+
+.name {
+  font-size: var(--small-size);
+  font-weight: var(--fw-semibold);
+  color: var(--text-color);
+
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chevron {
+  color: var(--gray-4);
+  transition: transform 0.2s ease;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.menu {
+  position: absolute;
+  top: calc(100% + 10px);
+
+  left: 50%;
+  transform: translateX(-50%);
+
+  min-width: 260px;
+
+  background: var(--white);
+  border: 1px solid var(--gray-2);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+
+  padding: 8px;
+  z-index: 999;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  width: 100%;
+
+  padding: 14px 16px;
+
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-md);
+
+  text-align: left;
+
+  font-size: 15px;
+  font-weight: 500;
+
+  color: var(--text-color);
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.menuItem:hover {
+  background: var(--gray-1);
+}
+
+.menuIcon {
+  color: var(--gray-5);
+  flex-shrink: 0;
+}
+
+.logoutItem {
+  margin-top: 6px;
+  padding-top: 14px;
+
+  border-top: 1px solid var(--gray-2);
+
+  color: var(--danger-color);
+}
+
+.logoutItem .menuIcon {
+  color: var(--danger-color);
+}
+
+.logoutItem:hover {
+  background: rgba(231, 0, 11, 0.08);
+}
+
+@media (max-width: 768px) {
+  .trigger {
+    padding: 6px 10px;
+  }
+
+  .name {
+    display: block;
+    max-width: 100px;
+  }
+
+  .menu {
+    min-width: 220px;
+    right: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .avatar,
+  .avatarPlaceholder {
+    width: 36px;
+    height: 36px;
+  }
+
+  .name {
+    max-width: 80px;
+    font-size: 13px;
+  }
+
+  .menu {
+    min-width: 200px;
+  }
+}

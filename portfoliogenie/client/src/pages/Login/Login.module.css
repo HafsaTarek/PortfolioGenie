@@ -1,0 +1,168 @@
+.loginPage {
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: var(--spacing-3xl);
+
+  position: relative;
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(37, 99, 235, 0.15),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      rgba(124, 58, 237, 0.18),
+      transparent 35%
+    ),
+    linear-gradient(135deg, #f8faff 0%, #eef2ff 50%, #f8f4ff 100%);
+}
+
+.loginCard {
+  width: 100%;
+  max-width: 520px;
+
+  background: var(--white);
+
+  border-radius: var(--radius-xl);
+
+  padding: var(--spacing-xl);
+
+  box-shadow: var(--shadow-lg);
+}
+
+.logo {
+  height: 60px;
+  display: block;
+  margin: 0 auto var(--spacing-xl);
+}
+
+.title {
+  text-align: center;
+
+  font-size: var(--h2-size);
+  line-height: var(--h2-line-height);
+
+  font-weight: var(--fw-bold);
+
+  color: var(--text-color);
+}
+
+.subtitle {
+  text-align: center;
+
+  margin-top: var(--spacing-sm);
+  margin-bottom: var(--spacing-xl);
+
+  color: var(--gray-5);
+
+  font-size: var(--body-size);
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+
+  gap: var(--spacing-md);
+
+  margin-bottom: var(--spacing-xl);
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  border-top: 1px solid var(--gray-2);
+}
+
+.divider span {
+  color: var(--gray-5);
+  font-size: var(--small-size);
+}
+
+.label {
+  margin-bottom: var(--spacing-xs);
+
+  font-weight: var(--fw-medium);
+
+  color: var(--text-color);
+}
+
+.input {
+  height: 52px;
+
+  border: 1px solid var(--gray-3);
+
+  border-radius: var(--radius-md);
+
+  transition: var(--transition-fast);
+}
+
+.input:focus {
+  border-color: var(--primary-blue);
+
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+}
+
+.loginButton {
+  width: 100%;
+
+  padding: 14px;
+
+  border: none;
+
+  border-radius: var(--radius-md);
+
+  background: var(--gradient-primary);
+
+  color: var(--white);
+
+  font-weight: var(--fw-semibold);
+
+  transition: var(--transition-fast);
+}
+
+.loginButton:hover {
+  transform: translateY(-2px);
+
+  box-shadow: var(--shadow-md);
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin-top: var(--spacing-xl);
+
+  gap: var(--spacing-sm);
+}
+
+.footer span {
+  color: var(--gray-5);
+}
+
+.signupBtn {
+  border: none;
+  background: transparent;
+
+  color: var(--primary-blue);
+
+  font-weight: var(--fw-bold);
+
+  cursor: pointer;
+}
+
+.signupBtn:hover {
+  color: var(--primary-purple);
+}
+
+.fullWidthBtn {
+  width: 100%;
+}
