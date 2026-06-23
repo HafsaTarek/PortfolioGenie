@@ -9,8 +9,15 @@ import UserDashboard from './pages/UserDashboard/UserDashboard';
 import AdminDashboard from './pages/AdminDashboard/AdminDashboard';
 import PortfolioPage from './pages/PortfolioPage';
 
-import { useState, useEffect } from "react";
-import { PortfolioService } from "./services/portfolio.service";
+// import { useState, useEffect } from "react";
+// import { PortfolioService } from "./services/portfolio.service";
+
+const aboutMeInitial = {};
+const skillsInitial = [];
+const projectsInitial = [];
+const contentScore = 0;
+const seoScore = 0;
+const quickTips = [];
 
 function Layout() {
   const location = useLocation();

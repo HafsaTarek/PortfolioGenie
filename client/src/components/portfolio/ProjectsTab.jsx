@@ -16,6 +16,7 @@ export default function ProjectsTab({
     setProjects(initialProjects || []);
   }, [initialProjects]);
 
+
   const handleAdd = async () => {
     try {
       const response =

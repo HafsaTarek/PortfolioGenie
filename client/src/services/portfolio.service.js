@@ -16,6 +16,7 @@ export const PortfolioService = {
     return apiClient.post("/api/portfolio/skills", skill);
   },
 
+
   async updateSkill(skillId, data) {
     return apiClient.put(
       `/api/portfolio/skills/${skillId}`,

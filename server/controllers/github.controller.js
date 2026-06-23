@@ -3,7 +3,7 @@
 import jwt from "jsonwebtoken";
 import githubService from "../services/github.service.js";
 import aiService from "../services/ai.service.js";
-import User from "../models/user.model.js";
+import User from "../models/User.model.js";
 import Repository from "../models/repository.model.js";
 import Portfolio from "../models/portfolio.model.js";
 
@@ -48,7 +48,9 @@ export const handleCallback = async (req, res) => {
     const user = await User.findOneAndUpdate(
       { githubId: ghProfile.id.toString() },
       {
-        username: ghProfile.login,
+        githubId: ghProfile.id.toString(),
+
+        githubUsername: ghProfile.login,
         name: ghProfile.name,
         avatarUrl: ghProfile.avatar_url,
         followers: ghProfile.followers || 0,
@@ -108,6 +110,7 @@ export const handleCallback = async (req, res) => {
 export const getConnectedAccountData = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-accessToken");
+    // const user = await GithubUser.findById(req.user.id).select("-accessToken");
     if (!user)
       return res
         .status(404)
@@ -134,6 +137,7 @@ export const generateAIPortfolio = async (req, res) => {
 
   try {
     const user = await User.findById(req.user.id);
+    // const user = await GithubUser.findById(req.user.id);
     const selectedRepos = await Repository.find({
       _id: { $in: repoIds },
       userId: user._id,

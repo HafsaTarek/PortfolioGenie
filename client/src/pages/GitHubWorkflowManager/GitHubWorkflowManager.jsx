@@ -7,7 +7,7 @@ import styles from './GitHubWorkflowManager.module.css';
 import { API_BASE_URL } from '../../config/api.js';
 
 // Import domain-specific services
-import { AuthService } from '../../services/auth.service.js';
+import { AuthService } from '../../services/githubAuth.js';
 import { GitHubService } from '../../services/github.service.js';
 import { AIService } from '../../services/ai.service.js';
 
