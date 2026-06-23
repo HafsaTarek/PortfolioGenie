@@ -1,25 +1,41 @@
 import styles from "./ReadyToBuild.module.css";
 import { FaGithub } from "react-icons/fa";
+import CTAButton from "../../components/shared/button/CTAButton";
+import { useNavigate } from "react-router-dom";
+
 export default function ReadyToBuild() {
+  const navigate = useNavigate();
+
   return (
-    <section className="py-5 bg-white">
-      <div className="container ">
+    <section className={styles.section}>
+      <div className="container">
         <div className={styles.ctaBox}>
-          <h2>Ready to Build Your Dream Portfolio?</h2>
+
+          <span className={styles.badge}>
+            🚀 Get Started Today
+          </span>
+
+          <h2>
+            Ready to Build Your
+            <span className={styles.gradientText}>
+              {" "}Dream Portfolio?
+            </span>
+          </h2>
 
           <p>
-            Join over 10,000 junior developers who've transformed their careers
-            with AI-powered portfolios
+            Join thousands of developers transforming GitHub activity
+            into recruiter-ready portfolios with AI.
           </p>
 
           <div className={styles.buttons}>
-            <button className={styles.primaryBtn}>
-              <FaGithub size={20} />               Start Building for Free
-            </button>
-
-            <button className={styles.secondaryBtn}>
-              View Example Portfolios
-            </button>
+            <CTAButton
+              variant="secondary"
+              size="large"
+              onClick={() => navigate("/connect")}
+            >
+              <FaGithub  className="me-2"/>
+              Start Building for Free
+            </CTAButton>
           </div>
 
           <span className={styles.note}>

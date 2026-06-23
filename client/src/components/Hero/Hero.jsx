@@ -1,44 +1,53 @@
 import React from "react";
 import styles from "./Hero.module.css";
 import { FaGithub } from "react-icons/fa";
+import CTAButton from "../../components/shared/button/CTAButton";
+import { useNavigate } from "react-router-dom";
+
 
 export default function Hero() {
-    return (
-        <div className="hero my-5">
-            <div className="content container w-75 m-auto">
-                <p className={`${styles.p_color} rounded-3 p-1 mx-auto my-5`}>
-                    AI-Powered Developer Portfolio Builder
-                </p>
+    const navigate = useNavigate();
 
-                <h1 className="fw-bold text-center">
-                    Turn Your Github Into a
+    return (
+        <section className={styles.hero}>
+            <div className={styles.heroGlow}></div>
+
+            <div className={styles.content}>
+                <span className={styles.badge}>
+                    ✨ AI-Powered Developer Portfolio Builder
+                </span>
+
+                <h1 className={styles.title}>
+                    Turn Your GitHub Into a
                     <br />
-                    <span className={`${styles.mainColor} fw-bold`}>
+                    <span className={styles.gradientText}>
                         Stunning Developer Portfolio
                     </span>
                 </h1>
 
-                <p className={`${styles.h2_color} text-center`}>
+                <p className={styles.subtitle}>
                     PortfolioGenie helps junior developers create professional,
-                    high-performance portfolios by analyzing their GitHub activity and
-                    generating optimized content that's readable, SEO-friendly, and
-                    visually polished.
+                    high-performance portfolios by analyzing GitHub activity and
+                    generating recruiter-ready content that's SEO-friendly,
+                    readable, and visually polished.
                 </p>
 
-                <div className="buttons mx-auto w-50 d-flex flex-column flex-md-row gap-2 my-5">
-                    <button
-                        className={`${styles.btn_1} ${styles.step1} text-white p-3 border-0 rounded-2`}
+                <div className={styles.actions}>
+                    <CTAButton
+                        variant="primary"
+                        size="large"
+                        onClick={() => navigate("/connect")}
                     >
-                        <FaGithub size={20} /> Connect GitHub & Start
-                    </button>
-
-                    <button
-                        className={`${styles.btn_1} bg-white p-3 border-0 rounded-2`}
+                        <FaGithub className="me-2" />
+                        Connect GitHub & Start
+                    </CTAButton>
+                    <CTAButton variant="outline" size="large"
+                        onClick={() => navigate("/portfolio")}
                     >
-                        View Demo Portfolio
-                    </button>
+                        View Portfolio
+                    </CTAButton>
                 </div>
             </div>
-        </div>
+        </section>
     );
 }

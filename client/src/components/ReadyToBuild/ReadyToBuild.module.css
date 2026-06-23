@@ -1,101 +1,210 @@
+.section {
+  padding: var(--spacing-3xl) 0;
+  background: var(--white);
+}
+
 .ctaBox {
-  background: linear-gradient(135deg, #7c3aed 0%, #2563eb 50%, #06b6d4 100%);
-  border-radius: 24px;
-  padding: 80px 20px;
+  position: relative;
+  overflow: hidden;
+
   text-align: center;
+
+  padding: 56px 48px;
+
+  border-radius: var(--radius-xl);
+
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(6, 182, 212, 0.15),
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at bottom left,
+      rgba(124, 58, 237, 0.2),
+      transparent 30%
+    ),
+    linear-gradient(135deg, #1e293b 0%, #1e1b4b 50%, #312e81 100%);
+
+  box-shadow: var(--shadow-lg);
+}
+
+/* Glow Effect */
+.ctaBox::before {
+  content: "";
+
+  position: absolute;
+
+  width: 280px;
+  height: 280px;
+
+  top: -120px;
+  right: -120px;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.12);
+
+  filter: blur(80px);
+
+  pointer-events: none;
+}
+
+.ctaBox::after {
+  content: "";
+
+  position: absolute;
+
+  width: 240px;
+  height: 240px;
+
+  bottom: -100px;
+  left: -100px;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.08);
+
+  filter: blur(60px);
+
+  pointer-events: none;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  margin-bottom: var(--spacing-lg);
+
+  border-radius: var(--radius-full);
+
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  color: var(--white);
+  font-size: var(--small-size);
+  font-weight: var(--fw-semibold);
 }
 
 .ctaBox h2 {
-  color: white;
-  font-size: 3rem;
-  font-weight: 700;
-  margin-bottom: 20px;
+  color: var(--white);
+
+  font-size: var(--h1-size);
+
+  line-height: 1.15;
+
+  font-weight: var(--fw-bold);
+
+  margin-bottom: var(--spacing-md);
+}
+
+.gradientText {
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .ctaBox p {
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 1.2rem;
-  margin-bottom: 35px;
+  max-width: 720px;
+
+  margin: 0 auto var(--spacing-xl);
+
+  color: rgba(255, 255, 255, 0.92);
+
+  font-size: var(--h5-size);
+
+  line-height: 1.6;
 }
 
 .buttons {
   display: flex;
   justify-content: center;
-  gap: 20px;
-  margin-bottom: 25px;
+  align-items: center;
+
+  gap: var(--spacing-md);
+
   flex-wrap: wrap;
-}
 
-.primaryBtn {
-  border: none;
-  padding: 14px 32px;
-  border-radius: 12px;
-  color: white;
-  font-size: 18px;
-  background: linear-gradient(135deg, #7c3aed, #4f46e5);
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.primaryBtn:hover {
-  transform: translateY(-3px);
-}
-
-.secondaryBtn {
-  border: none;
-  padding: 14px 32px;
-  border-radius: 12px;
-  background: white;
-  color: #333;
-  font-size: 18px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.secondaryBtn:hover {
-  transform: translateY(-3px);
+  margin-bottom: var(--spacing-xl);
 }
 
 .note {
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  gap: var(--spacing-lg);
+
+  flex-wrap: wrap;
+
   color: rgba(255, 255, 255, 0.9);
-  font-size: 17px;
+
+  font-size: var(--small-size);
+
+  font-weight: var(--fw-medium);
+}
+
+.noteItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Hover animation */
+.ctaBox:hover {
+  transform: translateY(-2px);
+  transition: var(--transition-normal);
 }
 
 /* Tablet */
 @media (max-width: 992px) {
+  .ctaBox {
+    padding: var(--spacing-2xl);
+  }
+
   .ctaBox h2 {
-    font-size: 2.3rem;
+    font-size: var(--h2-size);
+    line-height: var(--h2-line-height);
+  }
+
+  .ctaBox p {
+    font-size: var(--body-size);
   }
 }
 
 /* Mobile */
 @media (max-width: 768px) {
+  .section {
+    padding: var(--spacing-2xl) 0;
+  }
+
   .ctaBox {
-    padding: 50px 20px;
+    padding: var(--spacing-xl);
+  }
+
+  .badge {
+    font-size: var(--caption-size);
   }
 
   .ctaBox h2 {
-    font-size: 1.8rem;
+    font-size: var(--h3-size);
+    line-height: var(--h3-line-height);
   }
 
   .ctaBox p {
-    font-size: 1rem;
+    font-size: var(--body-size);
   }
 
   .buttons {
     flex-direction: column;
-    align-items: center;
+    width: 100%;
   }
 
-  .primaryBtn,
-  .secondaryBtn {
+  .buttons > * {
     width: 100%;
     max-width: 320px;
   }
 
   .note {
-    font-size: 14px;
-    line-height: 1.8;
+    gap: var(--spacing-sm);
+    flex-direction: column;
   }
 }
