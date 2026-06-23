@@ -1,6 +1,6 @@
 // Controller for authentication routes. It validates requests and returns consistent JSON responses.
 
-import authService from "../services/auth.service.js";
+import authService from "../../client/src/services/auth.service.js";
 import { successResponse, errorResponse } from "../utils/response.util.js";
 
 import { sanitizeUser } from "../utils/user.util.js";
@@ -8,7 +8,12 @@ import { sanitizeUser } from "../utils/user.util.js";
 export const register = async (req, res) => {
   try {
     const user = await authService.register(req.body);
-    return successResponse(res, { user: sanitizeUser(user) }, "User registered successfully", 201);
+    return successResponse(
+      res,
+      { user: sanitizeUser(user) },
+      "User registered successfully",
+      201,
+    );
   } catch (error) {
     return errorResponse(res, error.message, 400);
   }
@@ -17,7 +22,11 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { user, token } = await authService.login(req.body);
-    return successResponse(res, { user: sanitizeUser(user), token }, "Login successful");
+    return successResponse(
+      res,
+      { user: sanitizeUser(user), token },
+      "Login successful",
+    );
   } catch (error) {
     return errorResponse(res, error.message, 401);
   }

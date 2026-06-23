@@ -1,6 +1,6 @@
 // Controller for admin dashboard routes.
 
-import adminService from "../services/admin.service.js";
+import adminService from "../../client/src/services/admin.service.js";
 import { successResponse, errorResponse } from "../utils/response.util.js";
 
 export const getAdminStats = async (req, res) => {
