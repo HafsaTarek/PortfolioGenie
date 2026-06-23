@@ -2,7 +2,7 @@ import { createBrowserRouter, Outlet, RouterProvider, useLocation } from 'react-
 import GitHubWorkflowManager from './pages/GitHubWorkflowManager/GitHubWorkflowManager';
 import Overview from './pages/Overview/Overview';
 import NavBar from './components/NavBar';
-import Footer from './components/Footer';
+import Footer from './components/Footer/Footer';
 import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
 import UserDashboard from './pages/UserDashboard/UserDashboard';
