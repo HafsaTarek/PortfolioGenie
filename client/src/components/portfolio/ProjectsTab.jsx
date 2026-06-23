@@ -1,34 +1,49 @@
-import { useState } from 'react';
-import { Card, SectionHeader } from '../common';
-import ProjectCard from './ProjectCard';
-import CTAButton from '../shared/button/CTAButton';
-import { PlusIcon } from '../icons/icons';
-import styles from './ProjectsTab.module.css';
+import { useState, useEffect } from "react";
+import { Card, SectionHeader } from "../common";
+import ProjectCard from "./ProjectCard";
+import CTAButton from "../shared/button/CTAButton";
+import { PlusIcon } from "../icons/icons";
+import { PortfolioService } from "../../services/portfolio.service";
 
-let nextProjectId = 1000;
+import styles from "./ProjectsTab.module.css";
 
-export default function ProjectsTab({ projects: initialProjects }) {
-  const [projects, setProjects] = useState(initialProjects);
+export default function ProjectsTab({
+  projects: initialProjects,
+}) {
+  const [projects, setProjects] = useState([]);
 
-  const handleAdd = () => {
-    setProjects((current) => [
-      ...current,
-      {
-        id: `project-new-${nextProjectId++}`,
-        title: '',
-        description: '',
-        technologies: '',
-        highlights: [],
-      },
-    ]);
+  useEffect(() => {
+    setProjects(initialProjects || []);
+  }, [initialProjects]);
+
+  const handleAdd = async () => {
+    try {
+      const response =
+        await PortfolioService.addProject({
+          title: "New Project",
+          description: "",
+          technologies: [],
+          highlights: [],
+        });
+
+      setProjects(response.projects);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const handleRemove = (id) => {
-    setProjects((current) => current.filter((project) => project.id !== id));
-  };
+  const handleRemove = async (id) => {
+    try {
+      await PortfolioService.deleteProject(id);
 
-  const handleRegenerate = (id) => {
-    console.log('Regenerate project', id);
+      setProjects((current) =>
+        current.filter(
+          (project) => project._id !== id
+        )
+      );
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -36,7 +51,12 @@ export default function ProjectsTab({ projects: initialProjects }) {
       <SectionHeader
         title="Projects"
         actions={
-          <CTAButton variant="primary" size="small" icon={<PlusIcon />} onClick={handleAdd}>
+          <CTAButton
+            variant="primary"
+            size="small"
+            icon={<PlusIcon />}
+            onClick={handleAdd}
+          >
             Add Project
           </CTAButton>
         }
@@ -44,16 +64,16 @@ export default function ProjectsTab({ projects: initialProjects }) {
 
       {projects.length === 0 ? (
         <p className={styles.empty}>
-          No projects yet. Add your first project to start building your portfolio.
+          No projects yet. Add your first project to
+          start building your portfolio.
         </p>
       ) : (
         <div className={styles.list}>
           {projects.map((project, index) => (
             <ProjectCard
-              key={project.id}
+              key={project._id}
               project={project}
               index={index}
-              onRegenerate={handleRegenerate}
               onRemove={handleRemove}
             />
           ))}

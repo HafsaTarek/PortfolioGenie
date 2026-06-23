@@ -1,12 +1,12 @@
-import { useState, useEffect } from 'react';
-import { Card, SectionHeader } from '../common';
-import AITipBox from '../common/AITipBox';
-import SkillItem from './SkillItem';
-import CTAButton from '../shared/button/CTAButton';
-import { PlusIcon } from '../icons/icons'; 
-import styles from './SkillsTab.module.css';
+import { useState, useEffect } from "react";
+import { Card, SectionHeader } from "../common";
+import AITipBox from "../common/AITipBox";
+import SkillItem from "./SkillItem";
+import CTAButton from "../shared/button/CTAButton";
+import { PlusIcon } from "../icons/icons";
+import { PortfolioService } from "../../services/portfolio.service";
 
-let nextSkillId = 1000;
+import styles from "./SkillsTab.module.css";
 
 export default function SkillsTab({ skills: initialSkills, aiTip }) {
   const [skills, setSkills] = useState(initialSkills || []);
@@ -17,19 +17,45 @@ export default function SkillsTab({ skills: initialSkills, aiTip }) {
     }
   }, [initialSkills]);
 
-  const handleChangeName = (id, name) => {
-    setSkills((current) => current.map((s) => (s.id === id ? { ...s, name } : s)));
+  const handleChangeName = async (id, name) => {
+    try {
+      setSkills((current) =>
+        current.map((s) =>
+          s._id === id ? { ...s, name } : s
+        )
+      );
+
+      await PortfolioService.updateSkill(id, {
+        name,
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const handleRemove = (id) => {
-    setSkills((current) => current.filter((s) => s.id !== id));
+  const handleRemove = async (id) => {
+    try {
+      await PortfolioService.deleteSkill(id);
+
+      setSkills((current) =>
+        current.filter((s) => s._id !== id)
+      );
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const handleAdd = () => {
-    setSkills((current) => [
-      ...current,
-      { id: `skill-new-${nextSkillId++}`, name: 'New skill', level: 70 },
-    ]);
+  const handleAdd = async () => {
+    try {
+      const response = await PortfolioService.addSkill({
+        name: "New Skill",
+        proficiency: 70,
+      });
+
+      setSkills(response.skills);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -38,7 +64,12 @@ export default function SkillsTab({ skills: initialSkills, aiTip }) {
         title="Skills"
         actions={
           <div className={styles.actionsContainer}>
-            <CTAButton variant="primary" size="small" icon={<PlusIcon />} onClick={handleAdd}>
+            <CTAButton
+              variant="primary"
+              size="small"
+              icon={<PlusIcon />}
+              onClick={handleAdd}
+            >
               Add Skill
             </CTAButton>
           </div>
@@ -48,7 +79,7 @@ export default function SkillsTab({ skills: initialSkills, aiTip }) {
       <div className={styles.list}>
         {skills.map((skill) => (
           <SkillItem
-            key={skill.id}
+            key={skill._id}
             skill={skill}
             onChangeName={handleChangeName}
             onRemove={handleRemove}

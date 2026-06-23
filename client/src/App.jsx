@@ -9,14 +9,8 @@ import UserDashboard from './pages/UserDashboard/UserDashboard';
 import AdminDashboard from './pages/AdminDashboard/AdminDashboard';
 import PortfolioPage from './pages/PortfolioPage';
 
-import {
-  aboutMeInitial,
-  skillsInitial,
-  projectsInitial,
-  contentScore,
-  seoScore,
-  quickTips
-} from './data/mockData';
+import { useState, useEffect } from "react";
+import { PortfolioService } from "./services/portfolio.service";
 
 function Layout() {
   const location = useLocation();

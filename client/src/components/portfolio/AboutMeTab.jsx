@@ -1,33 +1,51 @@
-import { useState, useEffect } from 'react';
-import { Card, SectionHeader } from '../common';
-import CTAButton from '../shared/button/CTAButton';
-import Field from '../common/Field';
-import AITipBox from '../common/AITipBox';
-import styles from './AboutMeTab.module.css';
+import { useState, useEffect } from "react";
+import { Card, SectionHeader } from "../common";
+import CTAButton from "../shared/button/CTAButton";
+import Field from "../common/Field";
+import AITipBox from "../common/AITipBox";
+import { PortfolioService } from "../../services/portfolio.service";
+
+import styles from "./AboutMeTab.module.css";
 
 const BIO_MIN = 250;
 const BIO_MAX = 500;
 
-
 export default function AboutMeTab({ data }) {
-  const [headline, setHeadline] = useState(data?.headline || '');
-  const [biography, setBiography] = useState(data?.biography || '');
-  const [interests, setInterests] = useState(data?.interests || '');
+  const [headline, setHeadline] = useState(data?.headline || "");
+  const [biography, setBiography] = useState(data?.biography || "");
+  const [interests, setInterests] = useState(data?.interests || "");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (data) {
-      setHeadline(data.headline || '');
-      setBiography(data.biography || '');
-      setInterests(data.interests || '');
+      setHeadline(data.headline || "");
+      setBiography(data.biography || "");
+      setInterests(data.interests || "");
     }
   }, [data]);
 
+  const handleSave = async () => {
+    try {
+      setLoading(true);
+
+      await PortfolioService.updateAbout({
+        headline,
+        biography,
+        interests,
+      });
+
+      alert("About Me updated successfully!");
+    } catch (error) {
+      console.error(error);
+      alert("Failed to update About Me");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Card>
-      <SectionHeader
-        title="About Me"
-        
-      />
+      <SectionHeader title="About Me" />
 
       <div className={styles.fields}>
         <Field
@@ -58,6 +76,16 @@ export default function AboutMeTab({ data }) {
         />
 
         {data?.aiTip && <AITipBox>{data.aiTip}</AITipBox>}
+
+        <div style={{ marginTop: "16px" }}>
+          <CTAButton
+            variant="primary"
+            onClick={handleSave}
+            disabled={loading}
+          >
+            {loading ? "Saving..." : "Save Changes"}
+          </CTAButton>
+        </div>
       </div>
     </Card>
   );
