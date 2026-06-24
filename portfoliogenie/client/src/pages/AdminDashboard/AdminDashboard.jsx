@@ -64,6 +64,8 @@ export default function AdminDashboard() {
     fetchDashboardData();
   }, []);
 
+  console.log(users)
+
   // Action Handler: Remove individual user records
   const handleDeleteUser = async (id, name) => {
     if (!window.confirm(`Are you sure you want to delete user ${name}?`)) return;
@@ -71,12 +73,36 @@ export default function AdminDashboard() {
     try {
       await AdminService.deleteUser(id);
 
-      // Optimistic UI updates: strip deleted item immediately from current DOM array
-      setUsers(prevUsers => prevUsers.filter(user => user.id !== id));
+      setUsers(prevUsers => prevUsers.filter(user => user._id !== id));
 
-      // Optional: Refresh local metrics in case total calculation dynamically shifted
       const updatedStats = await AdminService.getStats();
-      setStats(updatedStats || []);
+
+      setStats([
+        {
+          label: "Total Users",
+          value: updatedStats.totalUsers,
+          icon: "👥",
+          trend: "Live",
+        },
+        {
+          label: "Portfolios Created",
+          value: updatedStats.portfoliosCreated,
+          icon: "📊",
+          trend: "Live",
+        },
+        {
+          label: "GitHub Connected",
+          value: updatedStats.githubConnected,
+          icon: "🔗",
+          trend: "Live",
+        },
+        {
+          label: "Repositories",
+          value: updatedStats.totalRepositories,
+          icon: "📁",
+          trend: "Live",
+        },
+      ]);
     } catch (err) {
       alert(`Could not remove user record: ${err.message || "Server Error"}`);
     }
@@ -112,6 +138,9 @@ export default function AdminDashboard() {
       </div>
     );
   }
+
+  console.log("STATS =", stats);
+  console.log("IS ARRAY =", Array.isArray(stats));
 
   return (
     <div className={`${styles.dashboardPage} bg-light`}>
@@ -188,23 +217,21 @@ export default function AdminDashboard() {
                           <td className={styles.userName}>{user.name}</td>
                           <td className={styles.userEmail}>{user.email}</td>
                           <td>
-                            <span className={`${styles.statusBadge} ${getStatusColor(user.status)}`}>
-                              {user.status}
+                            <span
+                              className={`${styles.statusBadge} ${styles.statusActive}`}
+                            >
+                              {user.role === "admin" ? "Admin" : "User"}
                             </span>
                           </td>
-                          <td className={styles.joinDate}>{user.joinDate}</td>
+                          <td className={styles.joinDate}>
+                            {new Date(user.createdAt).toLocaleDateString()}
+                          </td>
                           <td className={styles.actionButtons}>
-                            <button
-                              type="button"
-                              className={styles.actionBtn}
-                              onClick={() => handleViewUser(user.id)}
-                            >
-                              View
-                            </button>
+
                             <button
                               type="button"
                               className={`${styles.actionBtn} ${styles.deletBtn}`}
-                              onClick={() => handleDeleteUser(user.id, user.name)}
+                              onClick={() => handleDeleteUser(user._id, user.name)}
                             >
                               Delete
                             </button>
