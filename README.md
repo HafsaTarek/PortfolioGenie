@@ -1,6 +1,3 @@
-# 📎 Website Link:
-https://6a3808be5ac75d1138739b1b--portgenie.netlify.app/
-
 # 📎 Project Name
 PortfolioGenie – AI-Powered Developer Portfolio Builder
 
