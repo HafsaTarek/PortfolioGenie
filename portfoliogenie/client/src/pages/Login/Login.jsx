@@ -66,9 +66,7 @@ export default function Login() {
           Login to continue building your portfolio
         </p>
 
-        <div className={styles.divider}>
-          <span>Or continue with email</span>
-        </div>
+
 
         <form onSubmit={formik.handleSubmit}>
           {apiError && (

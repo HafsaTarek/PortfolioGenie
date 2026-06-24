@@ -2,22 +2,20 @@ import { apiClient } from "./api.client";
 
 export class AdminService {
   static async getStats() {
-    const response = await apiClient.get("/admin/stats");
-    return response.data;
+    return apiClient.get("/api/admin/stats");
   }
 
   static async getUsers() {
-    const response = await apiClient.get("/admin/users");
-    return response.data;
+    return apiClient.get("/api/admin/users");
   }
 
   static async getUser(id) {
-    const response = await apiClient.get(`/admin/users/${id}`);
+    const response = await apiClient.get(`api/admin/users/${id}`);
     return response.data;
   }
 
   static async deleteUser(id) {
-    const response = await apiClient.delete(`/admin/users/${id}`);
+    const response = await apiClient.delete(`api/admin/users/${id}`);
     return response.data;
   }
 }

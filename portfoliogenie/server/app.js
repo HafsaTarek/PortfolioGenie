@@ -50,6 +50,8 @@ app.get("/health", (req, res) => {
 });
 
 
+console.log("Mounting admin routes...");
+
 app.use("/api/admin", adminRoutes);
 
 export default app;

@@ -23,7 +23,8 @@ export default function Register() {
         values.name,
         values.email,
         values.password,
-        values.confirmPassword
+        values.confirmPassword,
+        values.role
       );
 
       navigate("/login");
@@ -64,6 +65,7 @@ export default function Register() {
       email: "",
       password: "",
       confirmPassword: "",
+      role: "user",
     },
     validationSchema,
     onSubmit: handleRegister,
@@ -85,10 +87,6 @@ export default function Register() {
         <p className={styles.subtitle}>
           Start building your professional portfolio today
         </p>
-
-        <div className={styles.divider}>
-          <span>Or continue with email</span>
-        </div>
 
         <form onSubmit={formik.handleSubmit}>
           {apiError && (
@@ -113,12 +111,11 @@ export default function Register() {
               value={formik.values.name}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className={`form-control ${styles.input} ${
-                formik.errors.name &&
+              className={`form-control ${styles.input} ${formik.errors.name &&
                 formik.touched.name
-                  ? "is-invalid"
-                  : ""
-              }`}
+                ? "is-invalid"
+                : ""
+                }`}
             />
 
             {formik.errors.name &&
@@ -142,12 +139,11 @@ export default function Register() {
               value={formik.values.email}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className={`form-control ${styles.input} ${
-                formik.errors.email &&
+              className={`form-control ${styles.input} ${formik.errors.email &&
                 formik.touched.email
-                  ? "is-invalid"
-                  : ""
-              }`}
+                ? "is-invalid"
+                : ""
+                }`}
             />
 
             {formik.errors.email &&
@@ -157,6 +153,7 @@ export default function Register() {
                 </div>
               )}
           </div>
+
 
           {/* Password */}
           <div className="mb-3">
@@ -170,12 +167,11 @@ export default function Register() {
               value={formik.values.password}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className={`form-control ${styles.input} ${
-                formik.errors.password &&
+              className={`form-control ${styles.input} ${formik.errors.password &&
                 formik.touched.password
-                  ? "is-invalid"
-                  : ""
-              }`}
+                ? "is-invalid"
+                : ""
+                }`}
             />
 
             {formik.errors.password &&
@@ -198,12 +194,11 @@ export default function Register() {
               value={formik.values.confirmPassword}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className={`form-control ${styles.input} ${
-                formik.errors.confirmPassword &&
+              className={`form-control ${styles.input} ${formik.errors.confirmPassword &&
                 formik.touched.confirmPassword
-                  ? "is-invalid"
-                  : ""
-              }`}
+                ? "is-invalid"
+                : ""
+                }`}
             />
 
             {formik.errors.confirmPassword &&

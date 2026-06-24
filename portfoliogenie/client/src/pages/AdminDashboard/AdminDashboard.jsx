@@ -18,15 +18,40 @@ export default function AdminDashboard() {
       try {
         setLoading(true);
         setError(null);
-        
+
         // Run requests concurrently for efficiency
         const [statsData, usersData] = await Promise.all([
           AdminService.getStats(),
-          AdminService.getUsers()
+          AdminService.getUsers(),
         ]);
 
-        // Map data safely assuming array backend payloads, fallback to structures if empty
-        setStats(statsData || []);
+        setStats([
+          {
+            label: "Total Users",
+            value: statsData.totalUsers,
+            icon: "👥",
+            trend: "Live",
+          },
+          {
+            label: "Portfolios Created",
+            value: statsData.portfoliosCreated,
+            icon: "📊",
+            trend: "Live",
+          },
+          {
+            label: "GitHub Connected",
+            value: statsData.githubConnected,
+            icon: "🔗",
+            trend: "Live",
+          },
+          {
+            label: "Repositories",
+            value: statsData.totalRepositories,
+            icon: "📁",
+            trend: "Live",
+          },
+        ]);
+
         setUsers(usersData || []);
       } catch (err) {
         console.error("Dashboard population failed:", err);
@@ -45,10 +70,10 @@ export default function AdminDashboard() {
 
     try {
       await AdminService.deleteUser(id);
-      
+
       // Optimistic UI updates: strip deleted item immediately from current DOM array
       setUsers(prevUsers => prevUsers.filter(user => user.id !== id));
-      
+
       // Optional: Refresh local metrics in case total calculation dynamically shifted
       const updatedStats = await AdminService.getStats();
       setStats(updatedStats || []);
@@ -169,15 +194,15 @@ export default function AdminDashboard() {
                           </td>
                           <td className={styles.joinDate}>{user.joinDate}</td>
                           <td className={styles.actionButtons}>
-                            <button 
-                              type="button" 
+                            <button
+                              type="button"
                               className={styles.actionBtn}
                               onClick={() => handleViewUser(user.id)}
                             >
                               View
                             </button>
-                            <button 
-                              type="button" 
+                            <button
+                              type="button"
                               className={`${styles.actionBtn} ${styles.deletBtn}`}
                               onClick={() => handleDeleteUser(user.id, user.name)}
                             >
