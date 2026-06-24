@@ -3,10 +3,14 @@ import styles from "./Hero.module.css";
 import { FaGithub } from "react-icons/fa";
 import CTAButton from "../../components/shared/button/CTAButton";
 import { useNavigate } from "react-router-dom";
+import { requireAuth } from "../../util/authNavigation";
+import { useAuth } from "../../context/AuthContext";
+
 
 
 export default function Hero() {
     const navigate = useNavigate();
+    const { user } = useAuth();
 
     return (
         <section className={styles.hero}>
@@ -36,13 +40,30 @@ export default function Hero() {
                     <CTAButton
                         variant="primary"
                         size="large"
-                        onClick={() => navigate("/connect")}
+                        onClick={() =>
+                            requireAuth(
+                                user,
+                                navigate,
+                                "/connect",
+                                "You need to login before connecting your GitHub account."
+                            )
+                        }
                     >
                         <FaGithub className="me-2" />
                         Connect GitHub & Start
                     </CTAButton>
-                    <CTAButton variant="outline" size="large"
-                        onClick={() => navigate("/portfolio")}
+
+                    <CTAButton
+                        variant="outline"
+                        size="large"
+                        onClick={() =>
+                            requireAuth(
+                                user,
+                                navigate,
+                                "/portfolio",
+                                "You need to login before viewing your portfolio."
+                            )
+                        }
                     >
                         View Portfolio
                     </CTAButton>

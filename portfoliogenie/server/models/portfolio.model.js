@@ -29,7 +29,6 @@ const PortfolioSchema = new mongoose.Schema(
       ],
     },
 
-
     aboutMe: {
       headline: {
         type: String,

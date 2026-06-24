@@ -2,9 +2,12 @@ import styles from "./ReadyToBuild.module.css";
 import { FaGithub } from "react-icons/fa";
 import CTAButton from "../../components/shared/button/CTAButton";
 import { useNavigate } from "react-router-dom";
+import { requireAuth } from "../../util/authNavigation";
+import { useAuth } from "../../context/AuthContext";
 
 export default function ReadyToBuild() {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   return (
     <section className={styles.section}>
@@ -31,9 +34,16 @@ export default function ReadyToBuild() {
             <CTAButton
               variant="secondary"
               size="large"
-              onClick={() => navigate("/connect")}
+              onClick={() =>
+                requireAuth(
+                  user,
+                  navigate,
+                  "/connect",
+                  "You need to login before connecting your GitHub account."
+                )
+              }
             >
-              <FaGithub  className="me-2"/>
+              <FaGithub className="me-2" />
               Start Building for Free
             </CTAButton>
           </div>

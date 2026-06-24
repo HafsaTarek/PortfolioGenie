@@ -41,10 +41,11 @@ export default function NavBar() {
     checkGithubConnection();
   }, [user]);
 
+
   const showLoginRequired = () => {
     Swal.fire({
       icon: "warning",
-      title: "Authentication Required",
+      title: "Login Required",
       text: "You should login first.",
       confirmButtonText: "Go to Login",
     }).then(() => {
