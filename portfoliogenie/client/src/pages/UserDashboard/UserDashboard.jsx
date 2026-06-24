@@ -1,144 +1,251 @@
-import { Area, AreaChart, CartesianGrid, Legend, PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import styles from './UserDashboard.module.css';
-import CTAButton from '../../components/shared/button/CTAButton';
+import { useEffect, useState } from "react";
+import {
+  PolarAngleAxis,
+  PolarGrid,
+  PolarRadiusAxis,
+  Radar,
+  RadarChart,
+  ResponsiveContainer,
+  Tooltip,
+} from "recharts";
 
-// Backend-friendly keys for easier API mapping in future: repo_count, connections_count, commits_count
-const githubStats = [
-  { key: 'repo_count', label: 'Repositories', value: 34 },
-  { key: 'connections_count', label: 'Connections', value: 24 }, // renamed from "Stars"
-  { key: 'commits_count', label: 'Commits', value: 980 },
-];
-
-const radarData = [
-  { skill: 'UI', score: 88 },
-  { skill: 'Backend', score: 76 },
-  { skill: 'DevOps', score: 72 },
-  { skill: 'Testing', score: 66 },
-  { skill: 'Docs', score: 84 },
-  { skill: 'CI/CD', score: 78 },
-];
-
-const activityData = [
-  { day: 'Mon', commits: 58, reviews: 28 },
-  { day: 'Tue', commits: 72, reviews: 34 },
-  { day: 'Wed', commits: 64, reviews: 42 },
-  { day: 'Thu', commits: 82, reviews: 48 },
-  { day: 'Fri', commits: 96, reviews: 60 },
-  { day: 'Sat', commits: 74, reviews: 38 },
-  { day: 'Sun', commits: 54, reviews: 24 },
-];
-
-const progressChecklist = [
-  'Bio Added',
-  'Skills Added',
-  'Recent Projects Synced',
-];
-
-const recentProjects = [
-  { title: 'AI Portfolio Builder', date: 'Updated 2 days ago', status: 'Live' },
-  { title: 'Contributions Tracker', date: 'Updated 5 days ago', status: 'Draft' },
-  { title: 'Dev Resume API', date: 'Updated 1 week ago', status: 'Review' },
-  { title: 'Landing Page Redesign', date: 'Updated 6 days ago', status: 'Live' },
-  { title: 'GitHub Insights', date: 'Updated 3 days ago', status: 'Draft' },
-  { title: 'Project Showcase', date: 'Updated 8 days ago', status: 'Live' },
-  { title: 'Component Library', date: 'Updated 4 days ago', status: 'Review' },
-  { title: 'Portfolio CMS', date: 'Updated 10 days ago', status: 'Draft' },
-];
-
-const statusClass = (status) => {
-  if (status === 'Live') return styles.badgeLive;
-  if (status === 'Review') return styles.badgeReview;
-  return styles.badgeDraft;
-};
+import styles from "./UserDashboard.module.css";
+import CTAButton from "../../components/shared/button/CTAButton";
+import { DashboardService } from "../../services/dashboard.service";
 
 export default function UserDashboard() {
+  const [dashboardData, setDashboardData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadDashboard();
+  }, []);
+
+  const loadDashboard = async () => {
+    try {
+      const data = await DashboardService.getDashboardData();
+
+      console.log("DASHBOARD DATA", data);
+      console.log("REPOSITORIES", data.repositories);
+
+      setDashboardData(data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  if (loading) {
+    return (
+      <div className={styles.dashboardPage}>
+        <div className={styles.pageContainer}>
+          <h2>Loading Dashboard...</h2>
+        </div>
+      </div>
+    );
+  }
+
+  const user = dashboardData?.user || {};
+  const repositories =
+    dashboardData?.recentRepositories || [];
+  const portfolio = dashboardData?.portfolio || null;
+
+  const githubStats = [
+    {
+      key: "repositories",
+      label: "Repositories",
+      value: user.publicReposCount || repositories.length || 0,
+    },
+    {
+      key: "followers",
+      label: "Followers",
+      value: user.followers || 0,
+    },
+    {
+      key: "languages",
+      label: "Languages",
+      value: user.topLanguages?.length || 0,
+    },
+  ];
+
+  const radarData =
+    portfolio?.skills?.map((skill) => ({
+      skill: skill.name,
+      score: skill.proficiency || 80,
+    })) ||
+    user.topLanguages?.map((lang, index) => ({
+      skill: lang,
+      score: 90 - index * 5,
+    })) ||
+    [];
+
+  const progressChecks = [
+    !!user.githubUsername,
+    !!user.bio,
+    repositories.length > 0,
+    !!portfolio,
+    portfolio?.skills?.length > 0,
+  ];
+
+  const completionPercent = Math.round(
+    (progressChecks.filter(Boolean).length /
+      progressChecks.length) *
+    100
+  );
+
+  const progressChecklist = [
+    user.githubUsername && "GitHub Connected",
+    user.bio && "Bio Added",
+    repositories.length > 0 &&
+    "Repositories Imported",
+    portfolio && "Portfolio Generated",
+    portfolio?.skills?.length > 0 &&
+    "Skills Extracted",
+  ].filter(Boolean);
+
+  const recentProjects = repositories.slice(0, 3);
+
   return (
     <div className={`${styles.dashboardPage} bg-light`}>
-      <div className={`${styles.pageContainer} container-fluid`}>
-        {/* <header className={`${styles.navBar} d-flex align-items-center justify-content-between flex-wrap`}>
-          <div className={styles.navBrand}>
-            <img src="/portfolio-genie-logo.svg" alt="Portfolio Genie" />
-          </div>
-
-          <nav className={`${styles.navLinks} d-none d-md-flex align-items-center`}>
-            <a href="#features" className={styles.navLink}>Features</a>
-            <a href="#how-it-works" className={styles.navLink}>How It Works</a>
-            <a href="#connect" className={styles.navLink}>Connect to GitHub</a>
-            <a href="#portfolio" className={styles.navLink}>Portfolio</a>
-          </nav>
-
-          <div className={`${styles.userBlock} d-flex align-items-center gap-2`}>
-            <div className={styles.avatar}>S</div>
-            <div>
-              <div className={styles.username}>Sarah Williams</div>
-              <div className={styles.userRole}>Product Designer</div>
-            </div>
-          </div>
-        </header> */}
-
+      <div
+        className={`${styles.pageContainer} container-fluid`}
+      >
         <main className={styles.mainContent}>
           <section className={styles.heroSection}>
             <div>
-              <p className={styles.smallTitle}>Dashboard</p>
-              <h1 className={styles.pageTitle}>Welcome, Sarah!</h1>
+              <p className={styles.smallTitle}>
+                Dashboard
+              </p>
+
+              <h1 className={styles.pageTitle}>
+                Welcome, {user.name || "Developer"}!
+              </h1>
+
               <p className={styles.pageSubtitle}>
-                Your GitHub portfolio is looking great. Track progress, analytics, and project updates all in one place.
+                {portfolio?.aboutMe?.headline ||
+                  "Connect GitHub and generate your portfolio to unlock insights and project analytics."}
               </p>
             </div>
           </section>
 
           <section className={styles.gridSection}>
-            <article className={`${styles.statsCard} ${styles.card}`}>
+            <article
+              className={`${styles.statsCard} ${styles.card}`}
+            >
               <div className={styles.cardHeader}>
-                <h2 className={styles.cardTitle}>GitHub Stats</h2>
-                <span className={styles.cardMeta}>Live overview</span>
+                <h2 className={styles.cardTitle}>
+                  GitHub Stats
+                </h2>
+
+                <span className={styles.cardMeta}>
+                  Live overview
+                </span>
               </div>
+
               <div className={styles.statGrid}>
                 {githubStats.map((item) => (
-                  <div key={item.key} className={styles.statItem}>
-                    <span className={styles.statValue}>{item.value}</span>
-                    <span className={styles.statLabel}>{item.label}</span>
+                  <div
+                    key={item.key}
+                    className={styles.statItem}
+                  >
+                    <span className={styles.statValue}>
+                      {item.value}
+                    </span>
+
+                    <span className={styles.statLabel}>
+                      {item.label}
+                    </span>
                   </div>
                 ))}
               </div>
             </article>
-            <article className={`${styles.chartCard} ${styles.card}`}>
+
+            <article
+              className={`${styles.chartCard} ${styles.card}`}
+            >
               <div className={styles.cardHeader}>
-                <h2 className={styles.cardTitle}>Skills Analytics</h2>
-                <span className={styles.cardMeta}>Radar view</span>
+                <h2 className={styles.cardTitle}>
+                  Skills Analytics
+                </h2>
+
+                <span className={styles.cardMeta}>
+                  Portfolio skills
+                </span>
               </div>
-              <div className={`${styles.chartContainer} ${styles.radarContainer}`}>
-                <ResponsiveContainer width="100%" height={420}>
-                  <RadarChart data={radarData} outerRadius="90%">
+
+              <div
+                className={`${styles.chartContainer} ${styles.radarContainer}`}
+              >
+                <ResponsiveContainer
+                  width="100%"
+                  height={420}
+                >
+                  <RadarChart
+                    data={radarData}
+                    outerRadius="85%"
+                  >
                     <PolarGrid stroke="#e5e7eb" />
-                    <PolarAngleAxis dataKey="skill" tick={{ fill: '#6b7280', fontSize: 13 }} />
-                    <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} />
+
+                    <PolarAngleAxis
+                      dataKey="skill"
+                      tick={{
+                        fill: "#6b7280",
+                        fontSize: 13,
+                      }}
+                    />
+
+                    <PolarRadiusAxis
+                      angle={30}
+                      domain={[0, 100]}
+                      tick={false}
+                    />
+
                     <Radar
-                      name="Skill Score"
+                      name="Skills"
                       dataKey="score"
                       stroke="#7c3aed"
                       fill="#7c3aed"
                       fillOpacity={0.25}
                     />
-                    <Tooltip contentStyle={{ borderRadius: 16, borderColor: '#e5e7eb' }} />
+
+                    <Tooltip />
                   </RadarChart>
                 </ResponsiveContainer>
               </div>
             </article>
 
-            <article className={`${styles.progressCard} ${styles.card}`}>
+            <article
+              className={`${styles.progressCard} ${styles.card}`}
+            >
               <div className={styles.cardHeader}>
-                <h2 className={styles.cardTitle}>Portfolio Progress</h2>
-                <span className={styles.cardMeta}>Profile completion</span>
+                <h2 className={styles.cardTitle}>
+                  Portfolio Progress
+                </h2>
+
+                <span className={styles.cardMeta}>
+                  Completion
+                </span>
               </div>
+
               <div className={styles.progressBody}>
                 <div className={styles.progressCircle}>
-                  <div className={styles.progressValue}>89%</div>
+                  <div className={styles.progressValue}>
+                    {completionPercent}%
+                  </div>
                 </div>
+
                 <ul className={styles.checklist}>
                   {progressChecklist.map((item) => (
-                    <li key={item} className={styles.checkItem}>
-                      <span className={styles.checkMark}>✓</span>
+                    <li
+                      key={item}
+                      className={styles.checkItem}
+                    >
+                      <span
+                        className={styles.checkMark}
+                      >
+                        ✓
+                      </span>
+
                       {item}
                     </li>
                   ))}
@@ -146,60 +253,78 @@ export default function UserDashboard() {
               </div>
             </article>
 
-            <article className={`${styles.analyticsCard} ${styles.card} ${styles.fullWidth}`}>
+            <article
+              className={`${styles.analyticsCard} ${styles.card} ${styles.fullWidth}`}
+            >
               <div className={styles.cardHeader}>
-                <h2 className={styles.cardTitle}>Activity Analytics</h2>
-                <span className={styles.cardMeta}>Daily commits & activity</span>
+                <h2 className={styles.cardTitle}>
+                  Top Technologies
+                </h2>
+
+                <span className={styles.cardMeta}>
+                  From GitHub profile
+                </span>
               </div>
-              <div className={styles.chartContainer}>
-                <ResponsiveContainer width="100%" height={380}>
-                  <AreaChart data={activityData} margin={{ top: 12, right: 8, left: 0, bottom: 0 }}>
-                    <defs>
-                      <linearGradient id="blueGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#2563eb" stopOpacity={0.35} />
-                        <stop offset="95%" stopColor="#2563eb" stopOpacity={0.05} />
-                      </linearGradient>
-                      <linearGradient id="purpleGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#7c3aed" stopOpacity={0.35} />
-                        <stop offset="95%" stopColor="#7c3aed" stopOpacity={0.05} />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid stroke="#e5e7eb" strokeDasharray="4 4" vertical={false} />
-                    <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#6b7280', fontSize: 12 }} />
-                    <YAxis axisLine={false} tickLine={false} tick={{ fill: '#6b7280', fontSize: 12 }} />
-                    <Tooltip contentStyle={{ borderRadius: 16, borderColor: '#e5e7eb' }} />
-                    <Legend verticalAlign="top" height={32} iconType="circle" />
-                    <Area type="monotone" dataKey="commits" stroke="#2563eb" fill="url(#blueGradient)" strokeWidth={3} />
-                    <Area type="monotone" dataKey="reviews" stroke="#7c3aed" fill="url(#purpleGradient)" strokeWidth={3} />
-                  </AreaChart>
-                </ResponsiveContainer>
+
+              <div className="d-flex flex-wrap gap-2">
+                {user.topLanguages?.map((lang) => (
+                  <span
+                    key={lang}
+                    className={`${styles.statusBadge} ${styles.badgeDraft}`}
+                  >
+                    {lang}
+                  </span>
+                ))}
               </div>
             </article>
           </section>
 
           <section className={styles.projectsSection}>
-            <div className={`${styles.sectionHeader} d-flex align-items-center justify-content-between flex-wrap`}>
+            <div className={styles.sectionHeader}>
               <div>
-                <h2 className={styles.sectionTitle}>Recent Projects</h2>
-                <p className={styles.sectionSubtitle}>All project summaries synced from GitHub and ready to publish.</p>
+                <h2 className={styles.sectionTitle}>
+                  Recent Repositories
+                </h2>
+
+                <p className={styles.sectionSubtitle}>
+                  Imported directly from GitHub
+                </p>
               </div>
-              <CTAButton variant="primary" size="small">
-                view all projects
-              </CTAButton>
             </div>
 
-            <div className={styles.projectsGrid}>
-              {recentProjects.map((project) => (
-                <article key={project.title} className={styles.projectCard}>
-                  <div className={styles.projectThumb} />
-                  <div className={styles.projectBody}>
-                    <h3 className={styles.projectTitle}>{project.title}</h3>
-                    <p className={styles.projectDate}>{project.date}</p>
-                    <span className={`${styles.statusBadge} ${statusClass(project.status)}`}>{project.status}</span>
+            {repositories.length === 0 ? (
+              <div className={styles.emptyState}>
+                No repositories found
+              </div>
+            ) : (
+              <div className={styles.repoList}>
+                {repositories.map((repo) => (
+                  <div
+                    key={repo._id}
+                    className={styles.repoCard}
+                  >
+                    <div className={styles.repoTop}>
+                      <h3>{repo.name}</h3>
+
+                      <span className={styles.languageBadge}>
+                        {repo.language || "General"}
+                      </span>
+                    </div>
+
+                    <p>
+                      {repo.description ||
+                        "No description available"}
+                    </p>
+
+                    <div className={styles.repoBottom}>
+                      <span>
+                        {repo.updatedAtCustom}
+                      </span>
+                    </div>
                   </div>
-                </article>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </section>
         </main>
       </div>

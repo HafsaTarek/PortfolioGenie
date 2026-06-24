@@ -22,6 +22,17 @@ export default function GitHubWorkflowManager() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
+  const params = new URLSearchParams(location.search);
+
+  const status = params.get("status");
+
+  useEffect(() => {
+    if (status === "github-already-linked") {
+      toast.error(
+        "This GitHub account is already linked to another PortfolioGenie account."
+      );
+    }
+  }, [status]);
 
   // Individual loading checks for the multi-step splash screen
   const [loadingTicks, setLoadingTicks] = useState({ profile: false, repos: false, patterns: false });
@@ -234,7 +245,8 @@ export default function GitHubWorkflowManager() {
                 <h2 className="h3 mb-2 text-dark fw-bold">Importing Your Repositories</h2>
                 <p className="body-text text-muted mb-4 px-md-4">
                   We're analyzing your GitHub profile and importing your repositories. This will only take a moment...
-                </p>
+                </p>import GithubLogin from './../../components/GithubLogin';
+
 
                 {/* Vertical Step Indicator Stack */}
                 <div className="d-inline-flex flex-column align-items-start gap-3 mt-2 text-start p-4 bg-light rounded-4 border border-light-subtle" style={{ minWidth: '290px' }}>
@@ -272,7 +284,7 @@ export default function GitHubWorkflowManager() {
                       <img src={userData.avatarUrl} className="rounded-circle" style={{ width: '48px', height: '48px', objectFit: 'cover' }} alt="Avatar" />
                       <div>
                         <h4 className="m-0 h6 fw-bold text-dark">{userData.name || userData.username}</h4>
-                        <p className="m-0 text-muted small">@{userData.username}</p>
+                        <p className="m-0 text-muted small">@{userData.githubUsername}</p>
                       </div>
                     </div>
                     <span className="badge rounded-pill text-success border border-success-subtle bg-success-subtle px-2 py-1">● Connected</span>

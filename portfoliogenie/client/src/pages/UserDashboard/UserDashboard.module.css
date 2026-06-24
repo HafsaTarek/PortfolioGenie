@@ -1,7 +1,8 @@
 .dashboardPage {
   min-height: 100vh;
   padding: var(--spacing-xl) var(--spacing-md) var(--spacing-2xl);
-  background-color: #f4f7fb;
+  /* Uses your --gray-1 layout base instead of generic background tones */
+  background-color: var(--gray-1);
 }
 
 .pageContainer {
@@ -9,101 +10,26 @@
   margin: 0 auto;
 }
 
-.navBar {
-  width: 100%;
-  gap: var(--spacing-md);
-  padding: var(--spacing-lg);
-  background: var(--white);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-}
-
-.navBrand {
-  display: flex;
-  align-items: center;
-}
-
-.logoImage {
-  display: block;
-  width: auto;
-  height: auto;
-  max-height: 48px;
-  object-fit: contain;
-}
-
-.chartContainer {
-  min-height: 320px;
-  width: 100%;
-}
-
-.radarContainer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--spacing-sm);
-}
-
-.navLinks {
-  gap: var(--spacing-lg);
-}
-
-.navLink {
-  color: var(--gray-5);
-  text-decoration: none;
-  font-size: var(--body-size);
-  transition: color var(--transition-normal);
-}
-
-.navLink:hover,
-.navLink:focus-visible {
-  color: var(--primary-blue);
-}
-
-.userBlock {
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--radius-lg);
-  background: var(--gray-1);
-}
-
-.avatar {
-  width: 44px;
-  height: 44px;
-  border-radius: var(--radius-full);
-  background: var(--primary-blue);
-  color: var(--white);
-  display: grid;
-  place-items: center;
-  font-weight: var(--fw-bold);
-}
-
-.username {
-  font-weight: var(--fw-semibold);
-  color: var(--text-color);
-}
-
-.userRole {
-  font-size: var(--small-size);
-  color: var(--gray-5);
-}
-
 .mainContent {
-  /* Reduce top spacing so dashboard content starts higher */
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
   margin-top: var(--spacing-lg);
 }
 
+/* Hero Section using subtle opacity variations of your primary color token */
 .heroSection {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-sm);
-  /* Reduce padding to move heading closer to navbar while keeping clean spacing */
-  padding: var(--spacing-lg) var(--spacing-lg);
+  padding: var(--spacing-xl);
   border-radius: var(--radius-lg);
   background: linear-gradient(
     180deg,
-    rgba(37, 99, 235, 0.08),
-    transparent 100%
+    rgba(37, 99, 235, 0.06) 0%,
+    transparent 100__
   );
-  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--gray-2);
 }
 
 .smallTitle {
@@ -111,7 +37,7 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--primary-blue);
-  margin-bottom: var(--spacing-sm);
+  font-weight: var(--fw-bold);
 }
 
 .pageTitle {
@@ -119,29 +45,38 @@
   line-height: 1.05;
   font-weight: var(--fw-bold);
   color: var(--text-color);
-  margin-bottom: var(--spacing-sm);
+  margin-bottom: var(--spacing-xs);
 }
 
 .pageSubtitle {
   max-width: 720px;
   font-size: var(--body-size);
   color: var(--gray-5);
+  line-height: var(--body-line-height);
 }
 
+/* Grid Layout Modernization */
 .gridSection {
   display: grid;
-  grid-template-columns: 1.5fr 1fr;
+  grid-template-columns: 1.6fr 1fr;
   gap: var(--spacing-lg);
-  /* Use space more efficiently by pulling grid higher */
-  margin-top: var(--spacing-lg);
 }
 
+/* Glassmorphism Surface Base with your exact --white and borders */
 .card {
-  background: var(--white);
+  background: rgba(250, 250, 250, 0.9); /* var(--white) with slight translucent blur */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-md);
   padding: var(--spacing-lg);
-  border: 1px solid rgba(15, 23, 42, 0.05);
+  border: 1px solid var(--gray-2);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
 }
 
 .cardHeader {
@@ -149,19 +84,25 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--spacing-sm);
-  margin-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
 }
 
 .cardTitle {
   font-size: var(--h5-size);
   font-weight: var(--fw-semibold);
+  color: var(--text-color);
 }
 
 .cardMeta {
   font-size: var(--small-size);
   color: var(--gray-5);
+  background: var(--gray-1);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-weight: var(--fw-medium);
 }
 
+/* Structural Metric Grid Blocks */
 .statsCard {
   grid-column: 1 / -1;
 }
@@ -173,170 +114,67 @@
 }
 
 .statItem {
-  padding: var(--spacing-md);
+  padding: var(--spacing-lg);
   border-radius: var(--radius-md);
-  background: var(--gray-1);
+  background: var(--white);
+  border: 1px solid var(--gray-2);
   text-align: center;
 }
 
 .statValue {
   display: block;
-  font-size: 2rem;
+  font-size: var(--h1-size);
   font-weight: var(--fw-bold);
-  color: var(--text-color);
+  /* Applies your exact multi-color primary gradient token beautifully onto text elements */
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   margin-bottom: var(--spacing-xs);
 }
 
 .statLabel {
   color: var(--gray-5);
   font-size: var(--small-size);
+  font-weight: var(--fw-medium);
 }
 
-.analyticsCard {
-  /* Analytics card will often span full width; allow override via .fullWidth */
-  min-height: 360px;
-}
-
-.chartCard,
-.progressCard {
-  /* Make skills and progress cards taller for improved balance */
-  min-height: 420px;
-}
-
-.fullWidth {
-  grid-column: 1 / -1;
-}
-
-.chartPlaceholder {
-  position: relative;
-  min-height: 260px;
-  display: grid;
-  place-items: center;
-  padding: var(--spacing-md);
-  background: linear-gradient(
-    180deg,
-    rgba(37, 99, 235, 0.06),
-    rgba(255, 255, 255, 0.85)
-  );
-  border-radius: var(--radius-md);
-}
-
-.radarCircle {
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
-  border: 2px dashed rgba(37, 99, 235, 0.35);
-  box-shadow: inset 0 0 0 6px rgba(37, 99, 235, 0.08);
-}
-
-.radarRing {
-  position: absolute;
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  border: 1px solid rgba(37, 99, 235, 0.18);
-}
-
-.radarLabel {
-  position: absolute;
-  bottom: var(--spacing-md);
-  font-size: var(--small-size);
-  color: var(--gray-5);
-}
-
-.areaPlaceholder {
-  min-height: 260px;
+/* Progress Section Balancing */
+.progressBody {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: var(--spacing-md);
-}
-
-.areaGraph {
-  height: 180px;
-  border-radius: var(--radius-md);
-  background: linear-gradient(
-    180deg,
-    rgba(37, 99, 235, 0.18) 0%,
-    rgba(37, 99, 235, 0.02) 100%
-  );
-  position: relative;
-  overflow: hidden;
-}
-
-.areaGraph::before,
-.areaGraph::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 26px;
-  background: linear-gradient(
-    135deg,
-    rgba(37, 99, 235, 0.45),
-    rgba(37, 99, 235, 0.05)
-  );
-  transform: skewX(-20deg);
-  border-radius: 50%;
-}
-
-.areaGraph::before {
-  top: 28px;
-}
-
-.areaGraph::after {
-  bottom: 36px;
-  width: 55%;
-  left: 18%;
-}
-
-.areaLegend {
-  display: flex;
-  justify-content: flex-start;
   align-items: center;
-  gap: var(--spacing-sm);
+  justify-content: center;
+  gap: var(--spacing-lg);
+  width: 100%;
 }
 
-.areaLegend span {
-  width: 60px;
-  height: 8px;
-  border-radius: 999px;
-  background: rgba(37, 99, 235, 0.3);
-}
-
-.progressBody {
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: var(--spacing-xl);
-  align-items: center;
-  min-height: 420px; /* match skills card height for balance */
-  place-items: center;
-}
-
+/* Radial / Conic Track using your specific design tokens dynamically */
 .progressCircle {
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
+  width: 160px;
+  height: 160px;
+  border-radius: var(--radius-full);
   background: conic-gradient(
-    rgba(37, 99, 235, 0.75) 0 89%,
-    rgba(37, 99, 235, 0.12) 89% 100%
+    var(--primary-purple) 0% var(--p, 0%),
+    var(--gray-2) var(--p, 0%) 100__
   );
   display: grid;
   place-items: center;
   position: relative;
+  box-shadow: var(--shadow-sm);
 }
 
 .progressCircle::before {
   content: "";
-  width: 140px;
-  height: 140px;
-  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  border-radius: var(--radius-full);
   background: var(--white);
+  position: absolute;
 }
 
 .progressValue {
   position: absolute;
-  font-size: 1.8rem;
+  font-size: var(--h3-size);
   font-weight: var(--fw-bold);
   color: var(--text-color);
 }
@@ -344,15 +182,18 @@
 .checklist {
   list-style: none;
   padding: 0;
-  display: grid;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
   gap: var(--spacing-sm);
 }
 
 .checkItem {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
-  color: var(--gray-5);
+  gap: var(--spacing-md);
+  color: var(--text-color);
+  font-size: var(--small-size);
   font-weight: var(--fw-medium);
 }
 
@@ -361,25 +202,53 @@
   width: 24px;
   height: 24px;
   border-radius: var(--radius-full);
-  background: rgba(16, 185, 129, 0.12);
+  background: var(--gray-2);
   color: var(--light-success);
   align-items: center;
   justify-content: center;
-  font-size: 0.85rem;
+  font-size: var(--small-size);
+  font-weight: var(--fw-bold);
 }
 
+/* Layout for Tech Badges and Chips */
+.analyticsCard {
+  min-height: auto;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: var(--caption-size);
+  font-weight: var(--fw-semibold);
+  width: fit-content;
+}
+
+.badgeDraft {
+  background: var(--gray-2);
+  color: var(--primary-purple);
+  border: 1px solid var(--gray-3);
+}
+
+.fullWidth {
+  grid-column: 1 / -1;
+}
+
+/* Repository Presentation Deck */
 .projectsSection {
   margin-top: var(--spacing-lg);
 }
 
 .sectionHeader {
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
 }
 
 .sectionTitle {
-  margin-bottom: var(--spacing-xs);
   font-size: var(--h4-size);
   font-weight: var(--fw-semibold);
+  color: var(--text-color);
 }
 
 .sectionSubtitle {
@@ -387,98 +256,83 @@
   font-size: var(--body-size);
 }
 
-.projectsGrid {
+/* Converted layout from an unstructured list to an adaptive row matrix layout */
+.repoList {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--spacing-lg);
-}
-
-.projectCard {
-  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: var(--spacing-md);
-  padding: var(--spacing-md);
-  border-radius: var(--radius-lg);
+}
+
+.repoCard {
   background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
   box-shadow: var(--shadow-sm);
-  border: 1px solid rgba(15, 23, 42, 0.05);
+  border: 1px solid var(--gray-2);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  transition: transform var(--transition-fast), border var(--transition-fast);
 }
 
-.projectThumb {
-  min-height: 120px;
-  border-radius: var(--radius-md);
-  background: linear-gradient(
-    135deg,
-    rgba(37, 99, 235, 0.15),
-    rgba(15, 23, 42, 0.08)
-  );
+.repoCard:hover {
+  transform: translateY(-3px);
+  border-color: var(--gray-4);
 }
 
-.projectBody {
-  display: grid;
+.repoTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   gap: var(--spacing-xs);
 }
 
-.projectTitle {
+.repoTop h3 {
   font-size: var(--body-size);
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-bold);
   color: var(--text-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.projectDate {
-  color: var(--gray-5);
-  font-size: var(--small-size);
-}
-
-.statusBadge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 6px 12px;
+.languageBadge {
+  background: var(--gray-1);
+  color: var(--primary-blue);
+  padding: 4px 12px;
   border-radius: var(--radius-full);
   font-size: var(--caption-size);
   font-weight: var(--fw-semibold);
-  width: fit-content;
+  border: 1px solid var(--gray-2);
+  white-space: nowrap;
 }
 
-.badgeLive {
-  background: rgba(16, 185, 129, 0.12);
-  color: #047857;
+.repoCard p {
+  color: var(--gray-5);
+  font-size: var(--small-size);
+  line-height: 1.5;
 }
 
-.badgeReview {
-  background: rgba(251, 191, 36, 0.12);
-  color: #92400e;
+.repoBottom {
+  display: flex;
+  justify-content: space-between;
+  color: var(--gray-4);
+  font-size: var(--caption-size);
+  font-weight: var(--fw-medium);
 }
 
-.badgeDraft {
-  background: rgba(59, 130, 246, 0.12);
-  color: #1d4ed8;
-}
-
-@media (max-width: 1199px) {
-  .projectsGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+/* Responsive Structural Adjustments */
+@media (max-width: 991px) {
+  .gridSection {
+    grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 767px) {
-  .navBar {
-    padding: var(--spacing-md);
-  }
-
-  .navLinks {
-    display: none !important;
-  }
-
-  .gridSection {
-    grid-template-columns: 1fr;
-  }
-
-  .progressBody {
-    grid-template-columns: 1fr;
-  }
-
-  .projectsGrid {
+  .gridSection,
+  .statGrid,
+  .repoList {
     grid-template-columns: 1fr;
   }
 }

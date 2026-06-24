@@ -7,6 +7,9 @@ import githubRoutes from "./routes/github.routes.js";
 import portfolioRoutes from "./routes/portfolio.routes.js";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import dashboardRoutes from "./routes/dashboard.routes.js";
+import adminRoutes from "./routes/admin.routes.js";
+
 
 const app = express();
 
@@ -37,6 +40,7 @@ app.use("/user", userRoutes);
 
 app.use("/api/github", githubRoutes);
 app.use("/api/portfolio", portfolioRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 app.get("/health", (req, res) => {
   res.json({
@@ -44,5 +48,8 @@ app.get("/health", (req, res) => {
     engine: "PortfolioGenie Core Engine",
   });
 });
+
+
+app.use("/api/admin", adminRoutes);
 
 export default app;

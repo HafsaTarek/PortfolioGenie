@@ -1,24 +1,93 @@
+import { useState, useEffect } from 'react';
+import { AdminService } from "../../services/admin.service";
 import styles from './AdminDashboard.module.css';
-
-const adminStats = [
-  { label: 'Total Users', value: '1,456', icon: '👥', trend: '+12%' },
-  { label: 'Portfolios Created', value: '892', icon: '📊', trend: '+8%' },
-  { label: 'GitHub Connected', value: '723', icon: '🔗', trend: '+15%' },
-];
-
-const userData = [
-  { id: 1, name: 'John Anderson', email: 'john@example.com', status: 'Active', joinDate: '2024-01-15' },
-  { id: 2, name: 'Sarah Williams', email: 'sarah@example.com', status: 'Active', joinDate: '2024-01-22' },
-  { id: 3, name: 'Michael Chen', email: 'michael@example.com', status: 'Active', joinDate: '2024-02-03' },
-  { id: 4, name: 'Emma Johnson', email: 'emma@example.com', status: 'Inactive', joinDate: '2024-02-10' },
-  { id: 5, name: 'David Martinez', email: 'david@example.com', status: 'Active', joinDate: '2024-02-18' },
-];
 
 const getStatusColor = (status) => {
   return status === 'Active' ? styles.statusActive : styles.statusInactive;
 };
 
 export default function AdminDashboard() {
+  const [stats, setStats] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch initial dashboard metrics and users list on mount
+  useEffect(() => {
+    async function fetchDashboardData() {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        // Run requests concurrently for efficiency
+        const [statsData, usersData] = await Promise.all([
+          AdminService.getStats(),
+          AdminService.getUsers()
+        ]);
+
+        // Map data safely assuming array backend payloads, fallback to structures if empty
+        setStats(statsData || []);
+        setUsers(usersData || []);
+      } catch (err) {
+        console.error("Dashboard population failed:", err);
+        setError(err.message || "Failed to load management metrics.");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchDashboardData();
+  }, []);
+
+  // Action Handler: Remove individual user records
+  const handleDeleteUser = async (id, name) => {
+    if (!window.confirm(`Are you sure you want to delete user ${name}?`)) return;
+
+    try {
+      await AdminService.deleteUser(id);
+      
+      // Optimistic UI updates: strip deleted item immediately from current DOM array
+      setUsers(prevUsers => prevUsers.filter(user => user.id !== id));
+      
+      // Optional: Refresh local metrics in case total calculation dynamically shifted
+      const updatedStats = await AdminService.getStats();
+      setStats(updatedStats || []);
+    } catch (err) {
+      alert(`Could not remove user record: ${err.message || "Server Error"}`);
+    }
+  };
+
+  // Action Handler: Pull up detail inspection summary context
+  const handleViewUser = async (id) => {
+    try {
+      const comprehensiveUserObj = await AdminService.getUser(id);
+      alert(`Inspecting detailed record for ${comprehensiveUserObj.name || 'User'}:\nEmail: ${comprehensiveUserObj.email}`);
+    } catch (err) {
+      alert(`Failed to fetch user profiles details: ${err.message}`);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-vh-100 d-flex align-items-center justify-content-center bg-light">
+        <div className="spinner-border text-primary" role="status" style={{ width: '3rem', height: '3rem' }}>
+          <span className="visually-hidden">Loading Administrative Systems...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-vh-100 d-flex flex-column align-items-center justify-content-center bg-light">
+        <div className="text-danger h1 mb-3">⚠️</div>
+        <h2 className="h4 text-dark fw-bold mb-2">Administrative Fetch Error</h2>
+        <p className="text-muted mb-4">{error}</p>
+        <button className="btn btn-primary" onClick={() => window.location.reload()}>Retry Handshake</button>
+      </div>
+    );
+  }
+
   return (
     <div className={`${styles.dashboardPage} bg-light`}>
       <div className={styles.pageContainer}>
@@ -47,10 +116,11 @@ export default function AdminDashboard() {
             </div>
           </section>
 
+          {/* DYNAMIC CARD GENERATION GRID */}
           <section className={styles.statsGrid}>
-            {adminStats.map((stat) => (
+            {stats.map((stat) => (
               <div key={stat.label} className={`${styles.statCard} ${styles.card}`}>
-                <div className={styles.statIcon}>{stat.icon}</div>
+                <div className={styles.statIcon}>{stat.icon || '📊'}</div>
                 <div className={styles.statContent}>
                   <p className={styles.statLabel}>{stat.label}</p>
                   <h3 className={styles.statValue}>{stat.value}</h3>
@@ -60,12 +130,13 @@ export default function AdminDashboard() {
             ))}
           </section>
 
+          {/* LIVE USER MANAGEMENT INTERACTION COMPONENT */}
           <section className={styles.tableSection}>
             <article className={`${styles.tableCard} ${styles.card}`}>
               <div className={styles.cardHeader}>
                 <div>
                   <h2 className={styles.cardTitle}>User Management</h2>
-                  <p className={styles.cardSubtitle}>Manage platform users</p>
+                  <p className={styles.cardSubtitle}>Manage platform users ({users.length})</p>
                 </div>
               </div>
               <div className={styles.tableWrapper}>
@@ -80,22 +151,42 @@ export default function AdminDashboard() {
                     </tr>
                   </thead>
                   <tbody>
-                    {userData.map((user) => (
-                      <tr key={user.id}>
-                        <td className={styles.userName}>{user.name}</td>
-                        <td className={styles.userEmail}>{user.email}</td>
-                        <td>
-                          <span className={`${styles.statusBadge} ${getStatusColor(user.status)}`}>
-                            {user.status}
-                          </span>
-                        </td>
-                        <td className={styles.joinDate}>{user.joinDate}</td>
-                        <td className={styles.actionButtons}>
-                          <button type="button" className={styles.actionBtn}>View</button>
-                          <button type="button" className={`${styles.actionBtn} ${styles.deletBtn}`}>Delete</button>
+                    {users.length === 0 ? (
+                      <tr>
+                        <td colSpan="5" className="text-center text-muted py-4">
+                          No active user registrations tracked in backend datastores.
                         </td>
                       </tr>
-                    ))}
+                    ) : (
+                      users.map((user) => (
+                        <tr key={user.id}>
+                          <td className={styles.userName}>{user.name}</td>
+                          <td className={styles.userEmail}>{user.email}</td>
+                          <td>
+                            <span className={`${styles.statusBadge} ${getStatusColor(user.status)}`}>
+                              {user.status}
+                            </span>
+                          </td>
+                          <td className={styles.joinDate}>{user.joinDate}</td>
+                          <td className={styles.actionButtons}>
+                            <button 
+                              type="button" 
+                              className={styles.actionBtn}
+                              onClick={() => handleViewUser(user.id)}
+                            >
+                              View
+                            </button>
+                            <button 
+                              type="button" 
+                              className={`${styles.actionBtn} ${styles.deletBtn}`}
+                              onClick={() => handleDeleteUser(user.id, user.name)}
+                            >
+                              Delete
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>

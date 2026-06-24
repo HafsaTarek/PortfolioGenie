@@ -68,16 +68,17 @@ export const handleCallback = async (req, res) => {
       throw new Error("User not found");
     }
 
-
     const existingGithubUser = await User.findOne({
       githubId: ghProfile.id.toString(),
     });
 
     if (
       existingGithubUser &&
-      existingGithubUser._id.toString() !== user._id.toString()
+      existingGithubUser._id.toString() !== currentUserId
     ) {
-      throw new Error("GitHub account already connected to another user.");
+      return res.redirect(
+        `${FRONTEND_URL}/connect?status=github-already-linked`,
+      );
     }
 
     // same user reconnecting → update

@@ -1,35 +1,23 @@
-// Admin service contains data aggregation and user management logic for admin APIs.
+import { apiClient } from "./api.client";
 
-import userRepository from "../repositories/user.repository.js";
-import dashboardStats from "../data/dashboard.js";
-
-const getAdminStats = async () => {
-  return dashboardStats.admin;
-};
-
-const getAllUsers = async () => {
-  return userRepository.findAll();
-};
-
-const getUserById = async (id) => {
-  const user = await userRepository.findById(id);
-  if (!user) {
-    throw new Error("User not found.");
+export class AdminService {
+  static async getStats() {
+    const response = await apiClient.get("/admin/stats");
+    return response.data;
   }
-  return user;
-};
 
-const deleteUserById = async (id) => {
-  const deletedUser = await userRepository.deleteUser(id);
-  if (!deletedUser) {
-    throw new Error("User not found.");
+  static async getUsers() {
+    const response = await apiClient.get("/admin/users");
+    return response.data;
   }
-  return deletedUser;
-};
 
-export default {
-  getAdminStats,
-  getAllUsers,
-  getUserById,
-  deleteUserById,
-};
+  static async getUser(id) {
+    const response = await apiClient.get(`/admin/users/${id}`);
+    return response.data;
+  }
+
+  static async deleteUser(id) {
+    const response = await apiClient.delete(`/admin/users/${id}`);
+    return response.data;
+  }
+}
