@@ -337,22 +337,19 @@ export default function GitHubWorkflowManager() {
 
                 <div className="d-flex justify-content-between align-items-center pt-2 border-top border-light-subtle">
                   <CTAButton variant="outline" onClick={handleDisconnect}>Cancel</CTAButton>
-                  <CTAButton variant="primary" onClick={handleGeneratePortfolio} disabled={selectedRepos.length === 0 || isGenerating}>
-                    <CTAButton
-                      variant="primary"
-                      disabled={isGenerating}
-                    >
-                      {isGenerating ? (
-                        <>
-                          <span
-                            className="spinner-border spinner-border-sm me-2"
-                          />
-                          Analyzing Repositories...
-                        </>
-                      ) : (
-                        "Generate Portfolio"
-                      )}
-                    </CTAButton>
+                  <CTAButton
+                    variant="primary"
+                    onClick={handleGeneratePortfolio}
+                    disabled={selectedRepos.length === 0 || isGenerating}
+                  >
+                    {isGenerating ? (
+                      <>
+                        <span className="spinner-border spinner-border-sm me-2" />
+                        Analyzing Repositories...
+                      </>
+                    ) : (
+                      "Generate Portfolio"
+                    )}
                   </CTAButton>
                 </div>
               </div>

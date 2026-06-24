@@ -97,13 +97,6 @@ export const handleCallback = async (req, res) => {
     user.accessToken = token;
 
     await user.save();
-    // const user = await User.findById(req.user.id);
-
-    // user.githubId = ghProfile.id.toString();
-    // user.githubUsername = ghProfile.login;
-    // user.avatarUrl = ghProfile.avatar_url;
-
-    // await user.save();
 
     await Repository.deleteMany({ userId: user._id });
 
@@ -194,7 +187,7 @@ export const generateAIPortfolio = async (req, res) => {
         selectedRepos,
       );
     } catch (error) {
-      console.error("Gemini failed:", error.message);
+      console.error("Gemini failed:", error);
 
       console.log("Using fallback portfolio data");
 

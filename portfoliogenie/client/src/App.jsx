@@ -17,9 +17,6 @@ import AdminDashboard from "./pages/AdminDashboard/AdminDashboard";
 import PortfolioPage from "./pages/PortfolioPage";
 import ProfileSetting from "./pages/ProfileSetting/ProfileSetting";
 
-// import { useState, useEffect } from "react";
-// import { PortfolioService } from "./services/portfolio.service";
-
 const aboutMeInitial = {};
 const skillsInitial = [];
 const projectsInitial = [];
