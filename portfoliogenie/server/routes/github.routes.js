@@ -7,8 +7,7 @@ import authMiddleware from "../middleware/auth.middleware.js";
 
 // Public end points
 // these entry points used to redirect the user to github to authenticate himself
-router.get("/connect", githubController.redirectToGithub);
-// This is the callback url the github back with it including the code so it goes to handleCallback to exchange the code with the token
+router.get("/connect", authMiddleware, githubController.redirectToGithub);
 router.get("/callback", githubController.handleCallback);
 
 // Protected workspace query hooks (requires headers validation tokens)

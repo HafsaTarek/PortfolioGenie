@@ -1,24 +1,40 @@
 import jwt from "jsonwebtoken";
 
 const authMiddleware = (req, res, next) => {
-  // Backend looks in request for authorization field inside the header
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res
-      .status(401)
-      .json({ message: "Authorization access denied. No token provided." });
-  }
+  console.log("URL:", req.originalUrl);
+  console.log("QUERY:", req.query);
+  console.log("AUTH HEADER:", req.headers.authorization);
 
-  const token = authHeader.split(" ")[1];
   try {
+    let token;
+
+    const authHeader = req.headers.authorization;
+
+    if (authHeader) {
+      token = authHeader.split(" ")[1];
+    } else if (req.query.token) {
+      token = req.query.token;
+    }
+
+    console.log("TOKEN:", token);
+
+    if (!token) {
+      return res.status(401).json({
+        message: "No token provided",
+      });
+    }
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // Attaches { id: user._id } to the request
+
+    req.user = decoded;
+
     next();
   } catch (error) {
-    return res
-      .status(401)
-      .json({ message: "Token validation failed or expired." });
+    console.log(error);
+
+    return res.status(401).json({
+      message: "Invalid token",
+    });
   }
 };
-
 export default authMiddleware;

@@ -5,6 +5,8 @@ import CTAButton from '../../components/shared/button/CTAButton';
 import RepoCard from '../../components/connect/RepoCard/RepoCard';
 import styles from './GitHubWorkflowManager.module.css';
 import { API_BASE_URL } from '../../config/api.js';
+import toast from "react-hot-toast";
+
 
 // Import domain-specific services
 import { AuthService } from '../../services/auth.service.js';
@@ -23,6 +25,25 @@ export default function GitHubWorkflowManager() {
 
   // Individual loading checks for the multi-step splash screen
   const [loadingTicks, setLoadingTicks] = useState({ profile: false, repos: false, patterns: false });
+
+  useEffect(() => {
+    const bootstrap = async () => {
+      try {
+        const data = await GitHubService.getConnectedAccount();
+
+        if (data.user?.githubId) {
+          setUserData(data.user);
+          setRepositories(data.repositories);
+          setSelectedRepos(data.repositories.map(repo => repo._id));
+          setCurrentStep('step2');
+        }
+      } catch (error) {
+        console.log("No GitHub connected yet");
+      }
+    };
+
+    bootstrap();
+  }, []);
 
   // This is used to get the token from the url after the user come from github authorized
   useEffect(() => {
@@ -77,23 +98,44 @@ export default function GitHubWorkflowManager() {
    * When the user click on connect to github it goes to github auth.
    */
   const handleConnectGithub = () => {
-    window.location.href = `${API_BASE_URL}/api/github/connect`;
+    const token = localStorage.getItem("portfolio_genie_token");
+
+    console.log("TOKEN FROM STORAGE:", token);
+
+    const url =
+      `${API_BASE_URL}/api/github/connect?token=${token}`;
+
+    console.log("REDIRECT URL:", url);
+
+    window.location.href = url;
   };
+
+  console.log(localStorage.getItem("portfolio_genie_token"))
 
   /**
    * Submits selected repo IDs to the Gemini portfolio generation pipeline
    */
+
   const handleGeneratePortfolio = async () => {
     if (selectedRepos.length === 0) return;
 
     setIsGenerating(true);
-    setErrorMessage('');
+
+    const loadingToast = toast.loading(
+      "Analyzing repositories..."
+    );
+
     try {
-      const result =
-        await AIService.generatePortfolio(
-          selectedRepos
-        );
-      alert('✨ Portfolio content generated successfully!');
+      const result = await AIService.generatePortfolio(
+        selectedRepos
+      );
+
+      toast.success(
+        "Portfolio generated successfully!",
+        {
+          id: loadingToast,
+        }
+      );
 
       navigate("/portfolio", {
         state: {
@@ -102,17 +144,14 @@ export default function GitHubWorkflowManager() {
         },
       });
 
-
-      console.log('Gemini Content:', result.portfolio.aiGeneratedContent);
-
     } catch (error) {
-      console.error('AI Processing Hook Error:', error.message);
-      setErrorMessage(error.message);
+      toast.error(error.message, {
+        id: loadingToast,
+      });
     } finally {
       setIsGenerating(false);
     }
   };
-
   const toggleRepoSelection = (id) => {
     // if there's id in selectedRepos it removes it if not it add it to all selected ones
     setSelectedRepos((prev) =>
@@ -122,8 +161,6 @@ export default function GitHubWorkflowManager() {
 
 
   const handleDisconnect = () => {
-    // Remove the token from storage
-    AuthService.logout();
     setUserData(null);
     setRepositories([]);
     setSelectedRepos([]);
@@ -289,7 +326,21 @@ export default function GitHubWorkflowManager() {
                 <div className="d-flex justify-content-between align-items-center pt-2 border-top border-light-subtle">
                   <CTAButton variant="outline" onClick={handleDisconnect}>Cancel</CTAButton>
                   <CTAButton variant="primary" onClick={handleGeneratePortfolio} disabled={selectedRepos.length === 0 || isGenerating}>
-                    {isGenerating ? 'Analyzing with Gemini...' : 'Connect & Generate'}
+                    <CTAButton
+                      variant="primary"
+                      disabled={isGenerating}
+                    >
+                      {isGenerating ? (
+                        <>
+                          <span
+                            className="spinner-border spinner-border-sm me-2"
+                          />
+                          Analyzing Repositories...
+                        </>
+                      ) : (
+                        "Generate Portfolio"
+                      )}
+                    </CTAButton>
                   </CTAButton>
                 </div>
               </div>

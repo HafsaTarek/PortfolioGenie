@@ -5,6 +5,7 @@ import {
   useLocation,
 } from "react-router-dom";
 
+import { Toaster } from "react-hot-toast";
 import GitHubWorkflowManager from "./pages/GitHubWorkflowManager/GitHubWorkflowManager";
 import Overview from "./pages/Overview/Overview";
 import NavBar from "./components/NavBar";
@@ -107,5 +108,8 @@ const router = createBrowserRouter([
 ]);
 
 export default function App() {
-  return <RouterProvider router={router} />;
+  return <>
+    <Toaster position="top-right" />
+    <RouterProvider router={router} />
+  </>
 }

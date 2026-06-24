@@ -27,9 +27,9 @@ export default function SkillItem({
         }
       />
 
-      <span className={styles.level}>
+      {/* <span className={styles.level}>
         {skill?.proficiency || 0}%
-      </span>
+      </span> */}
 
       <CTAButton
         variant="ghost"

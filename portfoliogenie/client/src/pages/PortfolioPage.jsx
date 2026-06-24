@@ -10,8 +10,9 @@ export default function PortfolioPage() {
   useEffect(() => {
     const loadPortfolio = async () => {
       try {
-        const data =
-          await PortfolioService.getPortfolio();
+        const data = await PortfolioService.getPortfolio();
+
+        console.log("PORTFOLIO DATA:", data);
 
         setPortfolio(data);
       } catch (error) {
@@ -23,11 +24,12 @@ export default function PortfolioPage() {
 
     loadPortfolio();
   }, []);
+  
 
   if (loading) {
     return (
       <div className="container py-5">
-        Loading...
+        <h3>Loading...</h3>
       </div>
     );
   }
@@ -35,7 +37,7 @@ export default function PortfolioPage() {
   if (!portfolio) {
     return (
       <div className="container py-5">
-        No portfolio found.
+        <h3>No portfolio generated yet.</h3>
       </div>
     );
   }
@@ -48,29 +50,9 @@ export default function PortfolioPage() {
       />
 
       <PortfolioContent
-        aboutMe={{
-          headline:
-            portfolio.aiGeneratedContent?.heroTitle ||
-            "",
-
-          biography:
-            portfolio.aiGeneratedContent?.aboutMe ||
-            "",
-
-          interests: "",
-        }}
-        skills={
-          portfolio.skills?.length
-            ? portfolio.skills
-            : portfolio.aiGeneratedContent
-              ?.skillsSummary || []
-        }
-        projects={
-          portfolio.projects?.length
-            ? portfolio.projects
-            : portfolio.aiGeneratedContent
-              ?.projectCaseStudies || []
-        }
+        skills={portfolio.skills}
+        projects={portfolio.projects}
+        aboutMe={portfolio.aboutMe}
       />
     </div>
   );

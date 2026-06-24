@@ -13,20 +13,31 @@ const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 // To enable the user to connect and authorize with github
 // The callback URL will be handled in the next function to process the OAuth response and fetch user data.
 export const redirectToGithub = (req, res) => {
-  const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${process.env.GITHUB_CLIENT_ID}&redirect_uri=${encodeURIComponent(process.env.GITHUB_REDIRECT_URL)}&scope=user,repo`;
+  const state = jwt.sign({ userId: req.user.id }, process.env.JWT_SECRET, {
+    expiresIn: "10m",
+  });
+
+  const githubAuthUrl =
+    `https://github.com/login/oauth/authorize` +
+    `?client_id=${process.env.GITHUB_CLIENT_ID}` +
+    `&redirect_uri=${encodeURIComponent(process.env.GITHUB_REDIRECT_URL)}` +
+    `&scope=user,repo` +
+    `&state=${state}`;
+
   return res.redirect(githubAuthUrl);
 };
 
 // This works when the user click on authorize
 export const handleCallback = async (req, res) => {
-  // When the user agree on connection
-  // the GitHub will redirect them back to our app with a code in the query parameters,
-  // we need to exchange that code for an access token to fetch their profile and repositories data.
-  const { code } = req.query;
+  const { code, state } = req.query;
+
   if (!code)
-    return res
-      .status(400)
-      .json({ message: "Missing OAuth authorization code parameter." });
+    return res.status(400).json({
+      message: "Missing OAuth authorization code parameter.",
+    });
+
+  const decoded = jwt.verify(state, process.env.JWT_SECRET);
+  const currentUserId = decoded.userId;
 
   try {
     // Fetch all data needed using the code exchanged with token
@@ -42,30 +53,56 @@ export const handleCallback = async (req, res) => {
       if (repo.language) languagesSet.add(repo.language);
     });
     // We only keep the top 10 unique languages for simplicity and relevance in the portfolio.
-    const topLanguages = Array.from(languagesSet).slice(0, 10);
+    const topLanguages = Array.from(languagesSet).slice(0, 20);
+
+    console.log("STATE:", state);
+
+    console.log("DECODED:", decoded);
+
+    console.log("CURRENT USER:", currentUserId);
 
     // We either create a new user or update the existing one with the latest GitHub data.
-    const user = await User.findOneAndUpdate(
-      { githubId: ghProfile.id.toString() },
-      {
-        githubId: ghProfile.id.toString(),
+    const user = await User.findById(currentUserId);
 
-        githubUsername: ghProfile.login,
-        name: ghProfile.name,
-        avatarUrl: ghProfile.avatar_url,
-        followers: ghProfile.followers || 0,
-        publicReposCount: ghProfile.public_repos || 0,
-        topLanguages,
-        accessToken: token,
-      },
-      {
-        upsert: true,
-        new: true,
-        setDefaultsOnInsert: true,
-      },
-    );
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+
+    const existingGithubUser = await User.findOne({
+      githubId: ghProfile.id.toString(),
+    });
+
+    if (
+      existingGithubUser &&
+      existingGithubUser._id.toString() !== user._id.toString()
+    ) {
+      throw new Error("GitHub account already connected to another user.");
+    }
+
+    // same user reconnecting → update
+    user.githubId = ghProfile.id.toString();
+
+    user.githubUsername = ghProfile.login;
+
+    user.avatarUrl = ghProfile.avatar_url;
+
+    user.followers = ghProfile.followers || 0;
+
+    user.publicReposCount = ghProfile.public_repos || 0;
+
+    user.topLanguages = topLanguages;
+
+    user.accessToken = token;
 
     await user.save();
+    // const user = await User.findById(req.user.id);
+
+    // user.githubId = ghProfile.id.toString();
+    // user.githubUsername = ghProfile.login;
+    // user.avatarUrl = ghProfile.avatar_url;
+
+    // await user.save();
 
     await Repository.deleteMany({ userId: user._id });
 
@@ -108,6 +145,7 @@ export const handleCallback = async (req, res) => {
 // for display and portfolio generation after the user has authenticated and connected their GitHub account.
 // It fetches the user data from our database and returns it in the response.
 export const getConnectedAccountData = async (req, res) => {
+  console.log("CONNECTED USER:", req.user.id);
   try {
     const user = await User.findById(req.user.id).select("-accessToken");
     // const user = await GithubUser.findById(req.user.id).select("-accessToken");
@@ -135,6 +173,8 @@ export const generateAIPortfolio = async (req, res) => {
     });
   }
 
+  console.log("GENERATE USER:", req.user.id);
+
   try {
     const user = await User.findById(req.user.id);
     // const user = await GithubUser.findById(req.user.id);
@@ -143,11 +183,35 @@ export const generateAIPortfolio = async (req, res) => {
       userId: user._id,
     });
 
+    console.log("Before Gemini");
     // Here we call our AI service to generate the portfolio content based on the user's profile and the selected repositories.
-    const generatedData = await aiService.generatePortfolioContent(
-      user,
-      selectedRepos,
-    );
+    let generatedData;
+
+    try {
+      generatedData = await aiService.generatePortfolioContent(
+        user,
+        selectedRepos,
+      );
+    } catch (error) {
+      console.error("Gemini failed:", error.message);
+
+      console.log("Using fallback portfolio data");
+
+      generatedData = {
+        heroTitle: "Frontend Developer",
+        aboutMe: "Passionate developer building modern web applications.",
+
+        skillsSummary: ["JavaScript", "React", "HTML", "CSS"],
+
+        projectCaseStudies: selectedRepos.map((repo) => ({
+          repoName: repo.name,
+          aiDescription: repo.description || "Project imported from GitHub.",
+
+          suggestedTags: [repo.language || "General"],
+        })),
+      };
+    }
+    console.log("After Gemini");
 
     let portfolio = await Portfolio.findOne({ userId: user._id });
     if (!portfolio) {
@@ -155,11 +219,48 @@ export const generateAIPortfolio = async (req, res) => {
         userId: user._id,
         selectedRepositories: repoIds,
         aiGeneratedContent: generatedData,
+
+        aboutMe: {
+          headline: generatedData.heroTitle,
+          biography: generatedData.aboutMe,
+          interests: "",
+        },
+
+        skills: generatedData.skillsSummary.map((skill) => ({
+          name: skill,
+          proficiency: 80,
+        })),
+
+        projects: generatedData.projectCaseStudies.map((project) => ({
+          title: project.repoName,
+          description: project.aiDescription,
+          technologies: project.suggestedTags || [],
+          highlights: [],
+        })),
       });
     } else {
       portfolio.selectedRepositories = repoIds;
       portfolio.aiGeneratedContent = generatedData;
+
+      portfolio.aboutMe = {
+        headline: generatedData.heroTitle,
+        biography: generatedData.aboutMe,
+        interests: "",
+      };
+
+      portfolio.skills = generatedData.skillsSummary.map((skill) => ({
+        name: skill,
+        proficiency: 80,
+      }));
+
+      portfolio.projects = generatedData.projectCaseStudies.map((project) => ({
+        title: project.repoName,
+        description: project.aiDescription,
+        technologies: project.suggestedTags || [],
+        highlights: [],
+      }));
     }
+
     await portfolio.save();
 
     return res.json({
@@ -176,9 +277,13 @@ export const generateAIPortfolio = async (req, res) => {
 
 // This function gets the portfolio of the user
 export const getUserPortfolio = async (req, res) => {
+  console.log("GET PORTFOLIO USER:", req.user.id);
   try {
     const portfolio = await Portfolio.findOne({ userId: req.user.id });
 
+    console.log("PORTFOLIO:", portfolio);
+
+    console.log("GET PORTFOLIO USER:", req.user.id);
     if (!portfolio) {
       return res.status(404).json({
         message:

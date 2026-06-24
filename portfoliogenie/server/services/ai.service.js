@@ -8,7 +8,6 @@ class AIService {
     this.ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
   }
 
-
   async generatePortfolioContent(profileData, repositories) {
     const safeRepos = repositories || [];
     const safeLanguages = profileData.topLanguages || [];
@@ -35,8 +34,20 @@ class AIService {
       Strict Composition Constraints:
       1. heroTitle: Look for a role title in the Bio/Readme. If none is found, combine the top languages into a direct engineering role title (e.g., "Frontend & Mobile Developer" or "Software Engineer"). Never use vague corporate fluff.
       2. aboutMe: Summarize the engineering focus. If Bio and Readme are completely blank, write a clean, direct 2-sentence summary detailing their focus on the explicit tech stack provided (e.g., "Software developer specializing in building clean user interfaces and mobile applications using JavaScript, Kotlin, and Python."). Do not invent hypothetical projects.
-      3. skillsSummary: Return an array containing only items verified in the Top Languages or repository language fields.
-      4. projectCaseStudies: Map every repo. For 'aiDescription', clean up the existing repository description. If the repository has no description, write a short, single-sentence technical specification stating exactly what the stack is based on the repository name and language (e.g., "A clean frontend application built with JavaScript."). Do not use guessing phrases like "This project likely involves...".
+      3. skillsSummary:
+      Return 8-15 technical skills.
+
+      Use:
+      - Top Languages
+      - Repository names
+      - Repository descriptions
+      - Common frameworks and technologies explicitly mentioned
+
+      Examples:
+      JavaScript, React, Node.js, Express, MongoDB, HTML, CSS, Bootstrap, Git, REST APIs.
+
+      Do not invent technologies that are not supported by the provided data.   
+    4. projectCaseStudies: Map every repo. For 'aiDescription', clean up the existing repository description. If the repository has no description, write a short, single-sentence technical specification stating exactly what the stack is based on the repository name and language (e.g., "A clean frontend application built with JavaScript."). Do not use guessing phrases like "This project likely involves...".
     `;
 
     try {

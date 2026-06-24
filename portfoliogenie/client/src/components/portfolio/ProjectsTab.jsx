@@ -95,7 +95,7 @@ export default function ProjectsTab({
       });
     }
   };
-  
+
   const handleRemove = async (id) => {
     try {
       console.log("Deleting project:", id);

@@ -3,7 +3,7 @@ import { apiClient } from "./api.client";
 export const PortfolioService = {
   // Get Portfolio Data
   async getPortfolio() {
-    return apiClient.get("/api/portfolio");
+    return apiClient.get("/api/github/portfolio");
   },
 
   // About Me
