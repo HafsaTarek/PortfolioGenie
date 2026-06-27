@@ -10,7 +10,6 @@ import userRoutes from "./routes/userRoutes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
 
-
 const app = express();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -48,7 +47,6 @@ app.get("/health", (req, res) => {
     engine: "PortfolioGenie Core Engine",
   });
 });
-
 
 console.log("Mounting admin routes...");
 

@@ -4,7 +4,8 @@ import ProjectCard from "./ProjectCard";
 import CTAButton from "../shared/button/CTAButton";
 import { PlusIcon } from "../icons/icons";
 import { PortfolioService } from "../../services/portfolio.service";
-import Swal from "sweetalert2";
+import ProjectModal from "./projectModal/ProjectModal";
+import toast from "react-hot-toast";
 
 import styles from "./ProjectsTab.module.css";
 
@@ -14,7 +15,15 @@ export default function ProjectsTab({
   const [projects, setProjects] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
+  const [showModal, setShowModal] = useState(false);
+  const [selectedProject, setSelectedProject] =
+    useState(null);
+
   const PROJECTS_PER_PAGE = 3;
+
+  useEffect(() => {
+    setProjects(initialProjects || []);
+  }, [initialProjects]);
 
   const totalPages = Math.ceil(
     projects.length / PROJECTS_PER_PAGE
@@ -28,152 +37,207 @@ export default function ProjectsTab({
     startIndex + PROJECTS_PER_PAGE
   );
 
-  useEffect(() => {
-    setProjects(initialProjects || []);
-  }, [initialProjects]);
+  // =============================
+  // Add / Update Project
+  // =============================
 
-
-  const handleAdd = async () => {
-    const { value: formValues } = await Swal.fire({
-      title: "Add New Project",
-      html: `
-      <input
-        id="projectTitle"
-        class="swal2-input"
-        placeholder="Project Title"
-      />
-
-      <textarea
-        id="projectDescription"
-        class="swal2-textarea"
-        placeholder="Project Description"
-      ></textarea>
-    `,
-      focusConfirm: false,
-      showCancelButton: true,
-      confirmButtonText: "Add Project",
-
-      preConfirm: () => ({
-        title:
-          document.getElementById(
-            "projectTitle"
-          ).value,
-
-        description:
-          document.getElementById(
-            "projectDescription"
-          ).value,
-      }),
-    });
-
-    if (!formValues) return;
+  const handleSaveProject = async (
+    projectData
+  ) => {
+    const loadingToast = toast.loading(
+      selectedProject
+        ? "Updating project..."
+        : "Adding project..."
+    );
 
     try {
-      const response =
-        await PortfolioService.addProject({
-          title: formValues.title,
-          description:
-            formValues.description,
-          technologies: [],
-          highlights: [],
-        });
+      let response;
+
+      if (selectedProject) {
+        response =
+          await PortfolioService.updateProject(
+            selectedProject._id,
+            projectData
+          );
+      } else {
+        response =
+          await PortfolioService.addProject(
+            projectData
+          );
+      }
 
       setProjects(response.projects);
 
-      Swal.fire({
-        icon: "success",
-        title: "Project Added",
-        timer: 1500,
-        showConfirmButton: false,
-      });
+      toast.success(
+        selectedProject
+          ? "Project updated successfully!"
+          : "Project added successfully!",
+        {
+          id: loadingToast,
+        }
+      );
+
+      setShowModal(false);
+      setSelectedProject(null);
     } catch (error) {
       console.error(error);
 
-      Swal.fire({
-        icon: "error",
-        title: "Failed to add project",
-      });
+      toast.error(
+        "Something went wrong.",
+        {
+          id: loadingToast,
+        }
+      );
     }
   };
 
-  const handleRemove = async (id) => {
-    try {
-      console.log("Deleting project:", id);
+  // =============================
+  // Delete Project
+  // =============================
 
+  const handleRemove = async (id) => {
+    const loadingToast = toast.loading(
+      "Deleting project..."
+    );
+
+    try {
       await PortfolioService.deleteProject(id);
 
-      setProjects((current) =>
-        current.filter(
+      setProjects((prev) =>
+        prev.filter(
           (project) => project._id !== id
         )
       );
+
+      toast.success(
+        "Project deleted successfully!",
+        {
+          id: loadingToast,
+        }
+      );
     } catch (error) {
       console.error(error);
+
+      toast.error(
+        "Couldn't delete project.",
+        {
+          id: loadingToast,
+        }
+      );
     }
   };
 
+  // =============================
+  // Edit Project
+  // =============================
+
+  const handleEdit = (project) => {
+    setSelectedProject(project);
+    setShowModal(true);
+  };
+
   return (
-    <Card>
-      <SectionHeader
-        title="Projects"
-        actions={
-          <CTAButton
-            variant="primary"
-            size="small"
-            icon={<PlusIcon />}
-            onClick={handleAdd}
+    <>
+      <Card>
+        <SectionHeader
+          title="Projects"
+          actions={
+            <CTAButton
+              variant="primary"
+              size="small"
+              icon={<PlusIcon />}
+              onClick={() => {
+                setSelectedProject(null);
+                setShowModal(true);
+              }}
+            >
+              Add Project
+            </CTAButton>
+          }
+        />
+
+        {projects.length === 0 ? (
+          <p className={styles.empty}>
+            No projects yet. Add your first
+            project to start building your
+            portfolio.
+          </p>
+        ) : (
+          <div className={styles.list}>
+            {currentProjects.map(
+              (project, index) => (
+                <ProjectCard
+                  key={project._id}
+                  project={project}
+                  index={
+                    startIndex + index
+                  }
+                  onEdit={() =>
+                    handleEdit(project)
+                  }
+                  onRemove={handleRemove}
+                />
+              )
+            )}
+          </div>
+        )}
+
+        {totalPages > 1 && (
+          <div
+            className={styles.pagination}
           >
-            Add Project
-          </CTAButton>
-        }
+            <CTAButton
+              variant="outline"
+              size="small"
+              disabled={
+                currentPage === 1
+              }
+              onClick={() =>
+                setCurrentPage(
+                  (prev) => prev - 1
+                )
+              }
+            >
+              Previous
+            </CTAButton>
+
+            <span
+              className={
+                styles.pageInfo
+              }
+            >
+              Page {currentPage} of{" "}
+              {totalPages}
+            </span>
+
+            <CTAButton
+              variant="outline"
+              size="small"
+              disabled={
+                currentPage ===
+                totalPages
+              }
+              onClick={() =>
+                setCurrentPage(
+                  (prev) => prev + 1
+                )
+              }
+            >
+              Next
+            </CTAButton>
+          </div>
+        )}
+      </Card>
+
+      <ProjectModal
+        show={showModal}
+        project={selectedProject}
+        onClose={() => {
+          setShowModal(false);
+          setSelectedProject(null);
+        }}
+        onSave={handleSaveProject}
       />
-
-      {projects.length === 0 ? (
-        <p className={styles.empty}>
-          No projects yet. Add your first project to
-          start building your portfolio.
-        </p>
-      ) : (
-        <div className={styles.list}>
-          {currentProjects.map((project, index) => (
-            <ProjectCard
-              key={project._id}
-              project={project}
-              index={startIndex + index}
-              onRemove={handleRemove}
-            />
-          ))}
-        </div>
-      )}
-      {totalPages > 1 && (
-        <div className={styles.pagination}>
-          <CTAButton
-            variant="outline"
-            size="small"
-            disabled={currentPage === 1}
-            onClick={() =>
-              setCurrentPage((prev) => prev - 1)
-            }
-          >
-            Previous
-          </CTAButton>
-
-          <span className={styles.pageInfo}>
-            Page {currentPage} of {totalPages}
-          </span>
-
-          <CTAButton
-            variant="outline"
-            size="small"
-            disabled={currentPage === totalPages}
-            onClick={() =>
-              setCurrentPage((prev) => prev + 1)
-            }
-          >
-            Next
-          </CTAButton>
-        </div>
-      )}
-    </Card>
+    </>
   );
 }

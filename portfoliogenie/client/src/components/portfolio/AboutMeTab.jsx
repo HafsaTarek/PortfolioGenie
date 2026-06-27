@@ -4,8 +4,8 @@ import CTAButton from "../shared/button/CTAButton";
 import Field from "../common/Field";
 import AITipBox from "../common/AITipBox";
 import { PortfolioService } from "../../services/portfolio.service";
-
 import styles from "./AboutMeTab.module.css";
+import toast from "react-hot-toast";
 
 const BIO_MIN = 250;
 const BIO_MAX = 500;
@@ -34,14 +34,16 @@ export default function AboutMeTab({ data }) {
         interests,
       });
 
-      alert("About Me updated successfully!");
+      toast.success("About Me updated successfully!");
     } catch (error) {
       console.error(error);
-      alert("Failed to update About Me");
+
+      toast.error("Failed to update About Me.");
     } finally {
       setLoading(false);
     }
   };
+
 
   return (
     <Card>
