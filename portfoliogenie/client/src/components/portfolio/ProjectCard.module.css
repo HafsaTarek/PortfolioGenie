@@ -1,0 +1,90 @@
+.card {
+  border: 1px solid var(--gray-2);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  background: #ffffff;
+}
+
+.card + .card {
+  margin-top: var(--spacing-lg);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.title {
+  font-size: var(--body-size);
+  font-weight: var(--fw-semibold);
+  color: var(--text-color);
+  margin: 0;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.deleteIconText {
+  color: #000000 !important; 
+  transition: color var(--transition-fast);
+}
+
+
+.headerActions :global(.button):hover .deleteIconText {
+  color: var(--danger-color);
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.descriptionField textarea {
+  min-height: 100px;
+}
+
+.highlights {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.highlightsLabel {
+  font-size: var(--small-size);
+  font-weight: var(--fw-semibold);
+  color: var(--gray-5);
+}
+
+.highlightsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.highlightItem {
+  display: flex;
+  align-items: start;
+  gap: var(--spacing-sm);
+  font-size: var(--small-size);
+  color: var(--text-color);
+  background: var(--gray-1);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+}
+
+.highlightIcon {
+  flex-shrink: 0;
+  color: var(--light-success);
+  margin-top: 2px;
+}
