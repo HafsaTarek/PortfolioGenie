@@ -3,6 +3,11 @@ PortfolioGenie – AI-Powered Developer Portfolio Builder
 
 ---
 
+# 📎 Project Name
+https://www.canva.com/design/DAHN5TL5Elk?ui=eyJFIjp7Im0iOnRydWUsIkE_IjoibiJ9LCJLIjp7IkEiOiJmNDAyZDNiOC0xYzM0LTRkNTctYmJlMy00NzQ0MmIxOTBlZGUifX0
+
+---
+
 ## 📌 Project Overview
 PortfolioGenie is an AI-powered platform that helps junior developers build professional, high-quality portfolios with minimal effort.  
 The platform analyzes developers’ GitHub activity and project data to automatically generate optimized portfolio content that clearly showcases their skills, experience, and coding style in a modern and visually appealing way.
