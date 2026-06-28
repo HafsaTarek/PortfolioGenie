@@ -3,7 +3,7 @@ PortfolioGenie – AI-Powered Developer Portfolio Builder
 
 ---
 
-# 📎 Project Name
+# 📎 Project Presentation
 https://www.canva.com/design/DAHN5TL5Elk?ui=eyJFIjp7Im0iOnRydWUsIkE_IjoibiJ9LCJLIjp7IkEiOiJmNDAyZDNiOC0xYzM0LTRkNTctYmJlMy00NzQ0MmIxOTBlZGUifX0
 
 ---
