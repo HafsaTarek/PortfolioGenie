@@ -107,7 +107,7 @@ export default function PortfolioPreview({
           <CTAButton
             onClick={handleExport}
           >
-            <Download size={18} />
+            <Download size={18} className="me-2" />
             Export PDF
           </CTAButton>
 
