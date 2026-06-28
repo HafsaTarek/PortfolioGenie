@@ -8,10 +8,9 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from "recharts";
-
 import styles from "./UserDashboard.module.css";
-import CTAButton from "../../components/shared/button/CTAButton";
 import { DashboardService } from "../../services/dashboard.service";
+import Loading from './../../components/shared/loading/Loading';
 
 export default function UserDashboard() {
   const [dashboardData, setDashboardData] = useState(null);
@@ -35,13 +34,12 @@ export default function UserDashboard() {
       setLoading(false);
     }
   };
+
   if (loading) {
     return (
-      <div className={styles.dashboardPage}>
-        <div className={styles.pageContainer}>
-          <h2>Loading Dashboard...</h2>
-        </div>
-      </div>
+      <Loading
+        message="Loading your dashboard..."
+      />
     );
   }
 

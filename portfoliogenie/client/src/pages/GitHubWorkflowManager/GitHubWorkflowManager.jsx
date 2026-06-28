@@ -105,9 +105,6 @@ export default function GitHubWorkflowManager() {
     }
   };
 
-  /**
-   * When the user click on connect to github it goes to github auth.
-   */
   const handleConnectGithub = () => {
     const token = localStorage.getItem("portfolio_genie_token");
 
@@ -120,12 +117,6 @@ export default function GitHubWorkflowManager() {
 
     window.location.href = url;
   };
-
-  console.log(localStorage.getItem("portfolio_genie_token"))
-
-  /**
-   * Submits selected repo IDs to the Gemini portfolio generation pipeline
-   */
 
   const handleGeneratePortfolio = async () => {
     if (selectedRepos.length === 0) return;

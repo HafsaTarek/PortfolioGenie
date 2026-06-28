@@ -12,6 +12,9 @@
   "dependencies": {
     "bootstrap": "^5.3.8",
     "formik": "^2.4.9",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^4.2.1",
+    "lucide-react": "^1.21.0",
     "react": "^19.2.6",
     "react-bootstrap": "^2.10.10",
     "react-dom": "^19.2.6",
