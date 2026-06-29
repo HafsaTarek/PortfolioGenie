@@ -167,12 +167,7 @@ export const deleteSkill = async (req, res) => {
 
 // Add Project
 export const addProject = async (req, res) => {
-  const {
-    title,
-    description,
-    technologies,
-    highlights,
-  } = req.body;
+  const { title, description, technologies, highlights } = req.body;
 
   try {
     const portfolio = await Portfolio.findOne({

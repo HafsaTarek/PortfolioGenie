@@ -5,7 +5,6 @@ import SkillItem from "./SkillItem";
 import CTAButton from "../shared/button/CTAButton";
 import { PlusIcon } from "../icons/icons";
 import { PortfolioService } from "../../services/portfolio.service";
-
 import styles from "./SkillsTab.module.css";
 
 export default function SkillsTab({ skills: initialSkills, aiTip }) {
@@ -53,6 +52,7 @@ export default function SkillsTab({ skills: initialSkills, aiTip }) {
       });
 
       setSkills(response.skills);
+
     } catch (error) {
       console.error(error);
     }

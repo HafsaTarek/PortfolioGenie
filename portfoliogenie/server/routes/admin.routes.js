@@ -8,8 +8,6 @@ import adminMiddleware from "../middleware/admin.middleware.js";
 
 const router = express.Router();
 
-console.log("✅ ADMIN ROUTES REGISTERED");
-
 router.get(
   "/stats",
   authMiddleware,

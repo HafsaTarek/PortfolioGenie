@@ -59,6 +59,7 @@ export default function ProjectsTab({
             selectedProject._id,
             projectData
           );
+
       } else {
         response =
           await PortfolioService.addProject(
@@ -108,6 +109,7 @@ export default function ProjectsTab({
           (project) => project._id !== id
         )
       );
+
 
       toast.success(
         "Project deleted successfully!",

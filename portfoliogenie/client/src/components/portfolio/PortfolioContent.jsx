@@ -8,6 +8,7 @@ export default function PortfolioContent({
   aboutMe,
   skills,
   projects,
+  onRefresh
 }) {
   const [activeId, setActiveId] = useState("about");
 
@@ -36,18 +37,25 @@ export default function PortfolioContent({
 
       <div className="mt-4">
         {activeId === "about" && (
-          <AboutMeTab data={aboutMe} />
+          <AboutMeTab
+            data={aboutMe}
+            onRefresh={onRefresh}
+          />
         )}
 
         {activeId === "skills" && (
           <SkillsTab
             skills={skills}
-            aiTip="Highlight your strongest technical skills and keep them relevant to your target role."
+            aiTip="Highlight your strongest technical skills..."
+            onRefresh={onRefresh}
           />
         )}
 
         {activeId === "projects" && (
-          <ProjectsTab projects={projects} />
+          <ProjectsTab
+            projects={projects}
+            onRefresh={onRefresh}
+          />
         )}
       </div>
     </div>

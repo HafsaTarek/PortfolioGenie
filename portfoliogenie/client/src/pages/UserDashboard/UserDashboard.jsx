@@ -8,6 +8,7 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from "recharts";
+import { useLocation } from "react-router-dom";
 import styles from "./UserDashboard.module.css";
 import { DashboardService } from "../../services/dashboard.service";
 import Loading from './../../components/shared/loading/Loading';
@@ -15,10 +16,12 @@ import Loading from './../../components/shared/loading/Loading';
 export default function UserDashboard() {
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const location = useLocation();
 
   useEffect(() => {
     loadDashboard();
-  }, []);
+  }, [location]);
+
 
   const loadDashboard = async () => {
     try {
@@ -44,15 +47,15 @@ export default function UserDashboard() {
   }
 
   const user = dashboardData?.user || {};
-  const repositories =
-    dashboardData?.recentRepositories || [];
   const portfolio = dashboardData?.portfolio || null;
+  const projects =
+    portfolio?.projects || [];
 
   const githubStats = [
     {
       key: "repositories",
       label: "Repositories",
-      value: user.publicReposCount || repositories.length || 0,
+      value: user.publicReposCount || 0,
     },
     {
       key: "followers",
@@ -60,9 +63,9 @@ export default function UserDashboard() {
       value: user.followers || 0,
     },
     {
-      key: "languages",
-      label: "Languages",
-      value: user.topLanguages?.length || 0,
+      key: "skills",
+      label: "Portfolio Skills",
+      value: portfolio?.skills?.length || 0,
     },
   ];
 
@@ -78,11 +81,11 @@ export default function UserDashboard() {
     [];
 
   const progressChecks = [
-    !!user.githubUsername,
-    !!user.bio,
-    repositories.length > 0,
-    !!portfolio,
-    portfolio?.skills?.length > 0,
+    !!portfolio?.aboutMe?.headline?.trim(),
+    !!portfolio?.aboutMe?.biography?.trim(),
+    !!portfolio?.aboutMe?.interests?.trim(),
+    portfolio?.skills?.length >= 5,
+    portfolio?.projects?.length >= 3,
   ];
 
   const completionPercent = Math.round(
@@ -92,16 +95,13 @@ export default function UserDashboard() {
   );
 
   const progressChecklist = [
-    user.githubUsername && "GitHub Connected",
-    user.bio && "Bio Added",
-    repositories.length > 0 &&
-    "Repositories Imported",
-    portfolio && "Portfolio Generated",
-    portfolio?.skills?.length > 0 &&
-    "Skills Extracted",
+    portfolio?.aboutMe?.headline && "Headline Added",
+    portfolio?.aboutMe?.biography && "Biography Added",
+    portfolio?.aboutMe?.interests && "Interests Added",
+    portfolio?.skills?.length >= 5 && "Skills Added",
+    portfolio?.projects?.length >= 3 && "Projects Added",
   ].filter(Boolean);
 
-  const recentProjects = repositories.slice(0, 3);
 
   return (
     <div className={`${styles.dashboardPage} bg-light`}>
@@ -255,22 +255,22 @@ export default function UserDashboard() {
               className={`${styles.analyticsCard} ${styles.card} ${styles.fullWidth}`}
             >
               <div className={styles.cardHeader}>
-                <h2 className={styles.cardTitle}>
-                  Top Technologies
+                <h2 className={styles.sectionTitle}>
+                  Featured Projects
                 </h2>
 
-                <span className={styles.cardMeta}>
-                  From GitHub profile
-                </span>
+                <p className={styles.sectionSubtitle}>
+                  Projects included in your portfolio
+                </p>
               </div>
 
               <div className="d-flex flex-wrap gap-2">
-                {user.topLanguages?.map((lang) => (
+                {portfolio?.skills?.map((skill) => (
                   <span
-                    key={lang}
+                    key={skill._id}
                     className={`${styles.statusBadge} ${styles.badgeDraft}`}
                   >
-                    {lang}
+                    {skill.name}
                   </span>
                 ))}
               </div>
@@ -290,34 +290,32 @@ export default function UserDashboard() {
               </div>
             </div>
 
-            {repositories.length === 0 ? (
+            {projects.length === 0 ? (
               <div className={styles.emptyState}>
                 No repositories found
               </div>
             ) : (
               <div className={styles.repoList}>
-                {repositories.map((repo) => (
+                {projects.slice(0, 6).map((project) => (
                   <div
-                    key={repo._id}
+                    key={project._id}
                     className={styles.repoCard}
                   >
                     <div className={styles.repoTop}>
-                      <h3>{repo.name}</h3>
-
-                      <span className={styles.languageBadge}>
-                        {repo.language || "General"}
-                      </span>
+                      <h3>{project.title}</h3>
                     </div>
 
-                    <p>
-                      {repo.description ||
-                        "No description available"}
-                    </p>
+                    <p>{project.description}</p>
 
-                    <div className={styles.repoBottom}>
-                      <span>
-                        {repo.updatedAtCustom}
-                      </span>
+                    <div className={styles.tags}>
+                      {project.technologies?.map((tech) => (
+                        <span
+                          key={tech}
+                          className={styles.languageBadge}
+                        >
+                          {tech}
+                        </span>
+                      ))}
                     </div>
                   </div>
                 ))}
