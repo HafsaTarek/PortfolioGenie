@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { AdminService } from "../../services/admin.service";
 import styles from './AdminDashboard.module.css';
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const getStatusColor = (status) => {
   return status === 'Active' ? styles.statusActive : styles.statusInactive;
@@ -11,6 +13,14 @@ export default function AdminDashboard() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const navigate = useNavigate();
+  const { logout, user } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   // Fetch initial dashboard metrics and users list on mount
   useEffect(() => {
@@ -64,8 +74,14 @@ export default function AdminDashboard() {
     fetchDashboardData();
   }, []);
 
-  console.log(users)
+  useEffect(() => {
+    if (!user) return;
 
+    if (user.role !== "admin") {
+      navigate("/");
+    }
+  }, [user, navigate]);
+  
   // Action Handler: Remove individual user records
   const handleDeleteUser = async (id, name) => {
     if (!window.confirm(`Are you sure you want to delete user ${name}?`)) return;
@@ -151,11 +167,25 @@ export default function AdminDashboard() {
           </div>
 
           <div className={`${styles.userBlock} d-flex align-items-center gap-2`}>
-            <div className={styles.avatar}>A</div>
-            <div>
-              <div className={styles.username}>Admin User</div>
-              <div className={styles.userRole}>Administrator</div>
+            <div className={styles.avatar}>
+              {user?.name?.charAt(0).toUpperCase()}
             </div>
+
+            <div>
+              <div className={styles.username}>
+                {user?.name}
+              </div>
+
+              <div className={styles.userRole}>
+                {user?.role}
+              </div>
+            </div>
+            <button
+              className="btn btn-outline-danger ms-5"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
           </div>
         </header>
 
@@ -170,7 +200,6 @@ export default function AdminDashboard() {
             </div>
           </section>
 
-          {/* DYNAMIC CARD GENERATION GRID */}
           <section className={styles.statsGrid}>
             {stats.map((stat) => (
               <div key={stat.label} className={`${styles.statCard} ${styles.card}`}>
@@ -184,7 +213,6 @@ export default function AdminDashboard() {
             ))}
           </section>
 
-          {/* LIVE USER MANAGEMENT INTERACTION COMPONENT */}
           <section className={styles.tableSection}>
             <article className={`${styles.tableCard} ${styles.card}`}>
               <div className={styles.cardHeader}>

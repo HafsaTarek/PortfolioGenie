@@ -38,9 +38,13 @@ export default function Login() {
         setApiError(null);
         setIsLoading(true);
 
-        await login(values.email, values.password);
+        const user = await login(values.email, values.password);
 
-        navigate("/");
+        if (user.role === "admin") {
+          navigate("/admin-dashboard");
+        } else {
+          navigate("/");
+        }
       } catch (err) {
         setApiError(
           err.message || "Login failed. Please check your credentials."
