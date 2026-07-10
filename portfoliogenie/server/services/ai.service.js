@@ -419,21 +419,97 @@ Return exactly this schema.
     }
   }
 
-  // Smart Local Generator (No Gemini Needed if gemini failed)
+  // Detect developer role
+  detectDeveloperRole(profileData, repositories) {
+    const languages = [
+      ...(profileData.topLanguages || []),
+      ...repositories.map((repo) => repo.language).filter(Boolean),
+    ].map((lang) => lang.toLowerCase());
 
+    const hasFrontend = languages.some((lang) =>
+      ["javascript", "typescript", "html", "css"].includes(lang),
+    );
+
+    const hasBackend = languages.some((lang) =>
+      [
+        "node.js",
+        "javascript",
+        "typescript",
+        "python",
+        "java",
+        "php",
+        "go",
+      ].includes(lang),
+    );
+
+    if (hasFrontend && hasBackend) return "Full Stack Developer";
+    if (hasFrontend) return "Frontend Developer";
+    if (hasBackend) return "Backend Developer";
+
+    return "Software Developer";
+  }
+
+  // Hero Title
+  buildHeroTitle(role) {
+    return role;
+  }
+
+  // About Me
+  buildAboutMe(profileData, repositories, role) {
+    const languages = this.extractSkills(profileData, repositories)
+      .slice(0, 5)
+      .join(", ");
+
+    return `${profileData.name || "Software Developer"} is a ${role} with experience building practical software projects using ${languages}. Their portfolio demonstrates hands-on development across multiple applications while following modern software engineering practices such as reusable components, version control, responsive design, and clean code principles.`;
+  }
+
+  // Skills
+  extractSkills(profileData, repositories) {
+    const skills = new Set();
+
+    (profileData.topLanguages || []).forEach((lang) => skills.add(lang));
+
+    repositories.forEach((repo) => {
+      if (repo.language) {
+        skills.add(repo.language);
+      }
+    });
+
+    return [...skills];
+  }
+
+  // Analyze Repository
+  analyzeRepository(repo) {
+    const tags = new Set();
+
+    // Add repository language
+    if (repo.language) {
+      tags.add(repo.language);
+    }
+
+    // Add GitHub topics if available
+    (repo.topics || []).forEach((topic) => tags.add(topic));
+
+    return {
+      repoName: repo.name,
+
+      aiDescription:
+        repo.description ||
+        `A software project built using ${repo.language || "modern technologies"}.`,
+
+      suggestedTags: [...tags].slice(0, 5),
+    };
+  }
+
+  // Smart Local Generator (No Gemini Needed if gemini failed)
   generateFallback(profileData, repositories) {
     const safeRepos = repositories || [];
     const role = this.detectDeveloperRole(profileData, safeRepos);
-
-    const rankedRepos = this.rankRepositories(safeRepos);
 
     return {
       heroTitle: this.buildHeroTitle(role),
       aboutMe: this.buildAboutMe(profileData, rankedRepos, role),
       skillsSummary: this.extractSkills(profileData, rankedRepos),
-      projectCaseStudies: rankedRepos.map((repo) =>
-        this.analyzeRepository(repo),
-      ),
     };
   }
 }

@@ -3,6 +3,7 @@ import { API_BASE_URL } from "../config/api";
 
 /**
  * Core API Request Engine Wrapper using Axios with specific properties to use directly
+ * instead of passing the url every time we make a request to the backend we can use apiClient object.
  */
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,

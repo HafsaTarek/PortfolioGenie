@@ -7,6 +7,7 @@ import axios from "axios";
 class GitHubService {
   async getAccessToken(code) {
     const response = await axios.post(
+      // Github Auth URL to exchange the temporary code for an access token
       "https://github.com/login/oauth/access_token",
       {
         client_id: process.env.GITHUB_CLIENT_ID,

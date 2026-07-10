@@ -1,6 +1,6 @@
 /**
- * PortfolioGenie API Endpoint Configuration Switchboard
- * Automatically detects environment states to prevent hardcoded URL bugs.
+  -PortfolioGenie API Endpoint Configuration Switchboard
+  -Automatically detects environment states to prevent hardcoded URL bugs.
  */
 
 const PRODUCTION_URL = "https://api.portfoliogenie.com";
