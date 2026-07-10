@@ -256,11 +256,11 @@ export default function UserDashboard() {
             >
               <div className={styles.cardHeader}>
                 <h2 className={styles.sectionTitle}>
-                  Featured Projects
+                  Skills
                 </h2>
 
                 <p className={styles.sectionSubtitle}>
-                  Projects included in your portfolio
+                  Skills included in your portfolio
                 </p>
               </div>
 

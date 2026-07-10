@@ -1,24 +1,29 @@
 # 📎 Website Link:
+
 https://6a3808be5ac75d1138739b1b--portgenie.netlify.app/
 
 # 📎 Project Name
+
 PortfolioGenie – AI-Powered Developer Portfolio Builder
 
 ---
 
 ## 📌 Project Overview
+
 PortfolioGenie is an AI-powered platform that helps junior developers build professional, high-quality portfolios with minimal effort.  
 The platform analyzes developers’ GitHub activity and project data to automatically generate optimized portfolio content that clearly showcases their skills, experience, and coding style in a modern and visually appealing way.
 
 ---
 
 ## 👥 Team Members
-- Hafsa Tarek  
-- Mennatullah Ahmed  
-- Mennatullah Fathii  
+
+- Hafsa Tarek
+- Mennatullah Ahmed
+- Mennatullah Fathii
 - Mariam Gad
 
 ## 🎯 Project Objective
+
 **PortfolioGenie** is an AI-powered web platform that helps junior developers create a professional, high-performance portfolio by analyzing their GitHub activity and generating optimized portfolio content.  
 The goal is to reduce the time and effort needed to write strong portfolio sections (Projects, About Me, Skills) while ensuring the output is **readable, SEO-friendly, accessible, and visually polished**.
 
@@ -27,12 +32,14 @@ The goal is to reduce the time and effort needed to write strong portfolio secti
 ## 📌 Project Scope
 
 #### 1) UX/UI & Product Design
+
 - Apply **Design Thinking** to define the problem, users, and solution direction.
 - Create:
   - High Fidelity Wireframes
-  - Basic style guide  (colors, typography, components)
+  - Basic style guide (colors, typography, components)
 
 #### 2) Core Frontend (React + Hooks)
+
 - React app with a **multi-step portfolio builder** form:
   - Personal info
   - GitHub username import
@@ -47,12 +54,14 @@ The goal is to reduce the time and effort needed to write strong portfolio secti
   - Final export page
 
 #### 3) GitHub Integration
+
 - Fetch public GitHub data:
   - Profile info (name, bio, avatar)
   - Repositories (name, description, languages, stars, links)
 - Allow user to **select repos** to include and edit details.
 
 #### 4) AI Prompt Engineering Integration
+
 - AI-assisted content generation for:
   - SEO-optimized project descriptions
   - Professional “About Me” suggestions based on:
@@ -60,6 +69,7 @@ The goal is to reduce the time and effort needed to write strong portfolio secti
 - Prompt templates + guardrails (tone, length, keywords, role targeting).
 
 #### 5) Best Practices & Code Quality
+
 - Clean component structure, reusable UI components.
 - Form validation and error handling.
 - Responsive layout + performance-friendly rendering.
@@ -70,7 +80,9 @@ The goal is to reduce the time and effort needed to write strong portfolio secti
 ## 🗓️ 5-Week Plan (Delivery Roadmap)
 
 ### Week 1 — Discovery + UX Foundations
+
 **Deliverables**
+
 - Problem statement + target users
 - Personas + user journey
 - Feature list + MVP definition
@@ -78,6 +90,7 @@ The goal is to reduce the time and effort needed to write strong portfolio secti
 - Initial project setup (React, routing skeleton)
 
 **Tasks**
+
 - Define flows: Import GitHub → Select projects → Generate content → Preview → Export
 - Create layout structure and navigation map
 - Decide the portfolio template structure (sections order)
@@ -85,12 +98,15 @@ The goal is to reduce the time and effort needed to write strong portfolio secti
 ---
 
 ### Week 2 — Frontend Builder (Core Form + State)
+
 **Deliverables**
+
 - Multi-step form working end-to-end (manual input)
 - React state management strategy (custom hooks / context if needed)
 - Basic UI components (inputs, stepper, cards)
 
 **Tasks**
+
 - Build steps:
   - Personal info
   - Skills/tech stack
@@ -101,12 +117,15 @@ The goal is to reduce the time and effort needed to write strong portfolio secti
 ---
 
 ### Week 3 — GitHub Import + Live Preview Improvements
+
 **Deliverables**
+
 - GitHub integration working (public API)
 - Repo selection screen + mapping into the builder
 - Enhanced live preview (responsive + clean layout)
 
 **Tasks**
+
 - Fetch GitHub profile + repos using username
 - Let user choose which repos to include
 - Auto-fill projects and allow editing
@@ -115,12 +134,15 @@ The goal is to reduce the time and effort needed to write strong portfolio secti
 ---
 
 ### Week 4 — AI Content Generation (Prompt Engineering)
+
 **Deliverables**
+
 - AI module integrated (About Me + Project description optimizer)
 - Prompt templates documented
 - Editable AI output with regenerate option
 
 **Tasks**
+
 - Build “Generate About Me” feature with:
   - role target (e.g., Frontend / Backend / Fullstack)
   - tone options (professional / friendly / concise)
@@ -133,7 +155,9 @@ The goal is to reduce the time and effort needed to write strong portfolio secti
 ---
 
 ### Week 5 — Polishing + Export + Documentation
+
 **Deliverables**
+
 - Stable MVP demo-ready
 - Export options:
   - Copy to clipboard (Markdown/HTML)
@@ -143,6 +167,7 @@ The goal is to reduce the time and effort needed to write strong portfolio secti
 - Testing + bug fixes
 
 **Tasks**
+
 - Performance + accessibility check (focus states, contrast, keyboard nav)
 - UI polish (spacing, typography, mobile layout)
 - Write final documentation:
